@@ -1,3 +1,64 @@
+<?php
+// TEST: Conectare și preluare date dintr-o bază de date Oracle (folosind PL/SQL)
+$sheltersData = [];
+$username = 'CoA'; 
+$password = 'CoA_admin'; 
+$connection_string = 'localhost:1521/XE';
+
+$db_error = '';
+if (!function_exists('oci_connect')) {
+    $db_error = "Extensia OCI8 nu este activată în PHP. Trebuie activată în php.ini.";
+    $conn = false;
+} else {
+    $conn = @oci_connect($username, $password, $connection_string);
+    if (!$conn) {
+        $e = oci_error();
+        $db_error = "Eroare Oracle: " . htmlentities($e['message'], ENT_QUOTES);
+    }
+}
+
+if ($conn) {
+    // Procedură PL/SQL care returnează adăposturile publice printr-un Ref Cursor
+    $sql = "BEGIN get_public_shelters(:shelters_cursor); END;";
+    $stid = oci_parse($conn, $sql);
+    
+    $p_cursor = oci_new_cursor($conn);
+    oci_bind_by_name($stid, ':shelters_cursor', $p_cursor, -1, OCI_B_CURSOR);
+    
+    oci_execute($stid);
+    oci_execute($p_cursor);
+    
+    while (($row = oci_fetch_array($p_cursor, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+        $sheltersData[] = [
+            'type' => $row['TIP'], 
+            'name' => $row['NUME'], 
+            'filterType' => $row['FILTER_TYPE'], 
+            'address' => $row['ADRESA'],
+            'details' => $row['DETALII'],
+            'lat' => (float)$row['LAT'],
+            'lng' => (float)$row['LNG'],
+            'colorClass' => $row['COLOR_CLASS'], 
+            'badgeClass' => $row['BADGE_CLASS']
+        ];
+    }
+    oci_free_statement($stid);
+    oci_free_statement($p_cursor);
+    oci_close($conn);
+} 
+
+// FALLBACK DE TEST: Folosim datele statice (mock data) dacă nu s-a obținut nimic din baza de date
+$dbStatusMessage = '';
+if (empty($sheltersData)) {
+    $dbStatusMessage = '<div style="background-color: var(--color-monotorizare); color: white; padding: 10px; border-radius: 8px; margin-top: 1.5rem; text-align: center;">⚠️ <b>Mod Test:</b> Datele afișate sunt de rezervă. <br><small><b>Motiv:</b> ' . $db_error . '</small></div>';
+    $sheltersData = [
+        [ 'type' => "Buncăr", 'name' => "Școala Gimnazială (Centru)", 'filterType' => "buncar", 'address' => "Str. Palat, nr. 1", 'details' => "Capacitate 200 persoane • Acces Deschis", 'lat' => 47.1573, 'lng' => 27.5869, 'colorClass' => "border-teal", 'badgeClass' => "bg-teal" ],
+        [ 'type' => "Punct Medical", 'name' => "Spitalul Sf. Spiridon - Cort Triage", 'filterType' => "medical", 'address' => "Bd. Independenței, nr. 1", 'details' => "Capacitate 50 paturi • Triage rapid", 'lat' => 47.1670, 'lng' => 27.5815, 'colorClass' => "border-orange", 'badgeClass' => "bg-orange" ],
+        [ 'type' => "Provizii", 'name' => "Centrul Comunitar Copou", 'filterType' => "provizii", 'address' => "Bd. Carol I, nr. 11", 'details' => "Apă potabilă, pături, alimente neperisabile", 'lat' => 47.1745, 'lng' => 27.5722, 'colorClass' => "border-red", 'badgeClass' => "bg-red" ]
+    ];
+} else {
+    $dbStatusMessage = '<div style="background-color: var(--color-rezolvat); color: white; padding: 10px; border-radius: 8px; margin-top: 1.5rem; text-align: center;">✅ <b>Live:</b> Date încărcate cu succes din baza de date Oracle!</div>';
+}
+?>
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -19,6 +80,10 @@
     <?php include '../layouts/header.php'; ?> 
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
+
+        <!-- Status conexiune Bază de Date -->
+        <?php echo $dbStatusMessage; ?>
+
         <!-- Bara de Filtre -->
         <div class="filters-bar" style="margin-top: 1.5rem;">
             <button class="filter-btn active" data-filter="all">Toate</button>
@@ -52,23 +117,8 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var shelters = [
-            { 
-                type: "Buncăr", name: "Școala Gimnazială (Centru)", filterType: "buncar",
-                address: "Str. Palat, nr. 1", details: "Capacitate 200 persoane • Acces Deschis", 
-                lat: 47.1573, lng: 27.5869, colorClass: "border-teal", badgeClass: "bg-teal"
-            },
-            { 
-                type: "Punct Medical", name: "Spitalul Sf. Spiridon - Cort Triage", filterType: "medical",
-                address: "Bd. Independenței, nr. 1", details: "Capacitate 50 paturi • Triage rapid", 
-                lat: 47.1670, lng: 27.5815, colorClass: "border-orange", badgeClass: "bg-orange"
-            },
-            { 
-                type: "Provizii", name: "Centrul Comunitar Copou", filterType: "provizii",
-                address: "Bd. Carol I, nr. 11", details: "Apă potabilă, pături, alimente neperisabile", 
-                lat: 47.1745, lng: 27.5722, colorClass: "border-red", badgeClass: "bg-red"
-            }
-        ];
+        // Preluăm rezultatele PHP și le trecem direct în JavaScript ca JSON
+        var shelters = <?php echo json_encode($sheltersData); ?>;
 
         var listContainer = document.getElementById('shelters-list');
 
