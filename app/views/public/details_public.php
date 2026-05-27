@@ -57,7 +57,20 @@ $event = $eventsData[$eventId];
 
 <body>
     <!-- Navbar (Același ca pe restul paginilor publice) -->
-      <?php include '../layouts/header.php'; ?> 
+    <nav class="navbar">
+        <div class="logo">
+            <div class="dot"></div>
+            <strong>CoA</strong>
+        </div>
+        <button class="menu-toggle" id="mobile-menu-btn">☰</button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/CoA-project/public/index.html">Acasă</a></li>
+            <li><a href="/CoA-project/app/views/public/events_public.php" class="active">Evenimente</a></li>
+            <li><a href="/CoA-project/app/views/public/shelter_public.php">Adăposturi</a></li>
+            <li class="mobile-login"><a href="/CoA-project/app/views/public/login.html" class="btn-login">Login </a></li>
+        </ul>
+        <a href="/CoA-project/app/views/public/login.html" class="btn-login desktop-login">Login </a>
+    </nav>
 
     <!-- Container principal (centrat) -->
     <div style="padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%;">

@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evenimente și Alerte - CoA</title>
     
-    <!-- CSS Global -->
+    <!-- css global -->
     <link rel="stylesheet" href="/CoA-project/public/css/global.css">
     
-    <!-- Leaflet.js CSS pentru hartă -->
+    <!-- leaflet pt harta -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- CSS Layout Hartă + Listă -->
+    <!-- css layout harta + lista -->
     <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
 </head>
 <body>
-    <!-- Navbar -->
-      <?php include '../layouts/header.php'; ?> 
+    <!-- meniu navigare -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="dot"></div>
+            <strong>CoA</strong>
+        </div>
+        <button class="menu-toggle" id="mobile-menu-btn">☰</button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/CoA-project/public/index.html">Acasă</a></li>
+            <li><a href="/CoA-project/app/views/public/events_public.php" class="active">Evenimente</a></li>
+            <li><a href="/CoA-project/app/views/public/shelter_public.php">Adăposturi</a></li>
+            <li class="mobile-login"><a href="/CoA-project/app/views/public/login.html" class="btn-login">Login </a></li>
+        </ul>
+        <a href="/CoA-project/app/views/public/login.html" class="btn-login desktop-login">Login </a>
+    </nav>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
-        <!-- Bara de Filtre -->
+        <!-- butoane filtrare -->
         <div class="filters-bar" style="margin-top: 1.5rem;">
             <button class="filter-btn active" data-filter="all">Toate</button>
             <button class="filter-btn" data-filter="activ">Active</button>
@@ -27,26 +41,26 @@
             <button class="filter-btn" data-filter="rezolvat">Rezolvate</button>
         </div>
 
-        <!-- Container Hartă și Listă -->
+        <!-- container principal harta + lista -->
         <div class="page-layout-split">
             
-            <!-- Secțiunea Hărții -->
+            <!-- harta -->
             <div class="map-container">
                 <div id="events-map" style="height: 100%; width: 100%; border-radius: var(--radius-md); z-index: 1;"></div>
             </div>
 
-            <!-- Secțiunea Listei (Flashcard-uri) -->
+            <!-- lista evenimente -->
             <div class="list-container events-list" id="events-list">
-                <!-- Cardurile vor fi generate din JavaScript -->
+                <!-- gen dinamica js -->
             </div>
 
         </div>
     </div>
 
-    <!-- Scripturi Leaflet -->
+    <!-- script leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Centrare hartă pe România
+        // setare view ro
         var map = L.map('events-map').setView([45.9, 25.0], 6);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -97,5 +111,7 @@
     </script>
     
     <script src="/CoA-project/public/js/main.js"></script>
+
+  
 </body>
 </html>
