@@ -12,20 +12,10 @@
     <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-            <div class="dot"></div>
-            <strong>CoA</strong>
-        </div>
-        <button class="menu-toggle" id="mobile-menu-btn">☰</button>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="Events.php">Acasă</a></li>
-            <li><a href="/CoA-project/app/views/public/events_public.php">Evenimente</a></li>
-            <li><a href="/CoA-project/app/views/public/shelter_public.php" class="active">Adăposturi</a></li>
-            <li class="mobile-login"><a href="/CoA-project/app/views/public/login.html" class="btn-login">Login </a></li>
-        </ul>
-        <a href="/CoA-project/app/views/public/login.html" class="btn-login desktop-login">Login </a>
-    </nav>
+    <?php
+    $active_page = 'shelters';
+    include '../layouts/header.php';
+    ?>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
         <div class="filters-bar" style="margin-top: 1.5rem;">
@@ -73,7 +63,7 @@
                     return;
                 }
 
-                 Afișăm în consolă datele brute primite de la PHP
+                // Afișăm în consolă datele brute primite de la PHP
                 console.log("Date primite din DB:", shelters);
 
                 // Array pentru a tine evidenta markerelor de pe harta

@@ -1,58 +1,42 @@
 <?php
 header('Content-Type: application/json');
 
-// date conectare db
-$host = 'localhost';
-$port = '1521';
-$db   = 'xe';           
-$user = 'CoA';          
-$pass = 'CoA_admin';    
-
-// initializare pdo
-$dsn = "oci:dbname=//$host:$port/$db;charset=AL32UTF8";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_CASE               => PDO::CASE_LOWER, 
-];
+require_once 'db.php';
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-    
     // luam toate cutremurele din tabel
-    $sql = $pdo->prepare("SELECT * FROM CUTREMURE");   
+    $sql = $pdo->prepare("SELECT * FROM INCIDENTE_CUTREMUR");   
     
     $events = [];
     
     if ($sql->execute()) {
         while ($row = $sql->fetch()) {
-            $status = strtolower($row['status']); 
-            
             // formatam rezultatul pt frontend
-            $event = [
-                'id'       => $row['id_cutremur'], 
-                'title'    => $row['titlu'],
-                'status'   => $row['status'],
-                'location' => $row['locatie'],
-                'details'  => $row['detalii'],
-                'lat'      => $row['latitudine'],
-                'lng'      => $row['longitudine']
+           $event = [
+                'id'             => $row['id_cutremur'], 
+                'type'           => 'cutremur',
+                'title'          => $row['titlu'],
+                'status'         => $row['stadiu'],       
+                'location'       => $row['localitate'],   
+                'details'        => $row['descriere'],   
+                'echipe_alocate' => $row['echipe_alocate'],
+                'echipe_retrase' => $row['echipe_retrase'],
+                'lat'            => $row['latitudine'],
+                'lng'            => $row['longitudine'],
+                'mag'            => $row['magnitudine'],
+                'adancime'       => $row['adancime'],
+                'arie'           => $row['arie'],
+                'raza'           => $row['raza_afectata'],
+                'instructiuni'   => $row['instructiuni'],
+                'date'           => $row['data_incident'],
+                'localitate'     => $row['localitate'],   
             ];
 
-            // setam clasele css in fct de status
-            if (strpos($status, 'activ') !== false) {
-                $event['filtertype'] = 'activ';
-                $event['colorclass'] = 'border-red';
-                $event['badgeclass'] = 'bg-red';
-            } elseif (strpos($status, 'monitorizare') !== false) {
-                $event['filtertype'] = 'monitorizare';
-                $event['colorclass'] = 'border-orange';
-                $event['badgeclass'] = 'bg-orange';
-            } else {
-                $event['filtertype'] = 'rezolvat';
-                $event['colorclass'] = 'border-teal';
-                $event['badgeclass'] = 'bg-teal';
-            }
+            $styles = getEventStyles($event['status']);
+            $event['filtertype'] = $styles['filtertype'];
+            $event['colorclass'] = $styles['colorclass'];
+            $event['badgeclass'] = $styles['badgeclass'];
+            
             $events[] = $event;
         }
     }

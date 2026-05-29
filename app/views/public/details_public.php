@@ -1,43 +1,90 @@
 <?php
-// Preluăm ID-ul din URL (ex: details_public.php?id=2). Dacă nu există, folosim 1.
-$eventId = isset($_GET['id']) ? (int)$_GET['id'] : 1;
+require_once '../../../database/db.php';
 
-// Bază de date simulată (array PHP) pentru evenimente
-$eventsData = [
-    1 => [
-        'title' => 'Cutremur M4.2 Vrancea', 'status' => 'ACTIV', 'badge' => 'bg-red', 'color' => 'var(--color-activ)',
-        'date' => '14:23, Azi', 'lat' => 45.75, 'lng' => 26.65, 'epicenter' => 'Zona Vrancea',
-        'stat1_label' => 'Magnitudine', 'stat1_val' => '4.2 Mw',
-        'stat2_label' => 'Adâncime', 'stat2_val' => '127 km',
-        'stat3_label' => 'Arie resimțită', 'stat3_val' => '~80 km',
-        'instruction' => 'Păstrați-vă calmul. Adăpostiți-vă sub un birou sau o masă solidă. Stați departe de ferestre, oglinzi și obiecte care pot cădea. Nu folosiți liftul sub nicio formă.',
-        'description' => 'Seism înregistrat în zona seismică Vrancea, resimțit ușor în județele adiacente. Până în acest moment nu au fost raportate pagube materiale sau victime.'
-    ],
-    2 => [
-        'title' => 'Inundație Severă Galați', 'status' => 'MONITORIZARE', 'badge' => 'bg-orange', 'color' => 'var(--color-monotorizare)',
-        'date' => '09:20, Ieri', 'lat' => 45.43, 'lng' => 28.05, 'epicenter' => 'Județul Galați',
-        'stat1_label' => 'Nivel Apă', 'stat1_val' => '+1.5 m',
-        'stat2_label' => 'Debit Siret', 'stat2_val' => 'Crescut',
-        'stat3_label' => 'Gospodării', 'stat3_val' => '~150 afectate',
-        'instruction' => 'Evitați zonele joase și malurile râurilor. Pregătiți un rucsac de urgență. Urmați instrucțiunile autorităților locale pentru evacuare în caz de necesitate.',
-        'description' => 'Cote de atenție depășite pe râul Siret, cu risc ridicat de inundații pentru gospodăriile din lunca râului. Echipele de intervenție ISU sunt pe teren pentru monitorizare și asistență.'
-    ],
-    3 => [
-        'title' => 'Incendiu de Vegetație Brașov', 'status' => 'REZOLVAT', 'badge' => 'bg-teal', 'color' => 'var(--color-rezolvat)',
-        'date' => '18:50, 7 Apr', 'lat' => 45.65, 'lng' => 25.60, 'epicenter' => 'Zona Brașov',
-        'stat1_label' => 'Suprafață', 'stat1_val' => '10 ha',
-        'stat2_label' => 'Focare', 'stat2_val' => '0',
-        'stat3_label' => 'Echipe', 'stat3_val' => 'Retrase',
-        'instruction' => 'Nu mai există niciun pericol imediat. Vă rugăm să evitați deplasările off-road în zona afectată pentru a permite regenerarea solului și a evita inhalarea de cenușă rămasă.',
-        'description' => 'Incendiul a fost lichidat cu succes după intervenția a 3 echipaje de pompieri pe parcursul a 6 ore. Nu au fost afectate zone rezidențiale sau cabane.'
-    ]
-];
+// Preluăm ID-ul și TIPUL din URL (ex: details_public.php?id=2&type=cutremur)
+$eventId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$eventType = isset($_GET['type']) ? $_GET['type'] : '';
 
-// Dacă cineva pune un ID inexistent, îi dăm primul eveniment
-if (!isset($eventsData[$eventId])) {
-    $eventId = 1;
+$event = null;
+
+if ($eventId > 0 && $eventType) {
+    // Mapăm tipurile de culori exact ca în array-ul vechi
+    $colorMap = [
+        'activ' => 'var(--color-activ)', 
+        'monitorizare' => 'var(--color-monotorizare)', 
+        'rezolvat' => 'var(--color-rezolvat)'
+    ];
+
+    if ($eventType === 'cutremur') {
+        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_CUTREMUR WHERE id_cutremur = :id");
+        $stmt->execute(['id' => $eventId]);
+        if ($row = $stmt->fetch()) {
+            $styles = getEventStyles($row['stadiu']);
+            $event = [
+                'title' => $row['titlu'],
+                'status' => strtoupper($row['stadiu']),
+                'badge' => $styles['badgeclass'],
+                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
+                'date' => $row['data_incident'] ?? 'Dată necunoscută',
+                'lat' => $row['latitudine'],
+                'lng' => $row['longitudine'],
+                'epicenter' => $row['localitate'] ?? 'Necunoscut',
+                'stat1_label' => 'Magnitudine', 'stat1_val' => ($row['magnitudine'] ?? '-') . ' Mw',
+                'stat2_label' => 'Adâncime', 'stat2_val' => ($row['adancime'] ?? '-') . ' km',
+                'stat3_label' => 'Echipe Alocate', 'stat3_val' => $row['echipe_alocate'] ?? '0',
+                'instruction' => $row['instructiuni'] ?? 'Urmați indicațiile autorităților.',
+                'description' => $row['descriere'] ?? 'Fără descriere.'
+            ];
+        }
+    } elseif ($eventType === 'inundatie') {
+        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_INUNDATIE WHERE id_inundatie = :id");
+        $stmt->execute(['id' => $eventId]);
+        if ($row = $stmt->fetch()) {
+            $styles = getEventStyles($row['status']);
+            $event = [
+                'title' => $row['titlu'],
+                'status' => strtoupper($row['status']),
+                'badge' => $styles['badgeclass'],
+                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
+                'date' => 'Dată necunoscută',
+                'lat' => $row['latitudine'],
+                'lng' => $row['longitudine'],
+                'epicenter' => $row['locatie'] ?? 'Necunoscut',
+                'stat1_label' => 'Statut', 'stat1_val' => 'În desfășurare',
+                'stat2_label' => 'Victime', 'stat2_val' => '-',
+                'stat3_label' => 'Echipe', 'stat3_val' => '-',
+                'instruction' => $row['detalii'] ?? 'Evitați zonele inundabile.',
+                'description' => $row['detalii'] ?? 'Fără descriere.'
+            ];
+        }
+    } elseif ($eventType === 'incendiu') {
+        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_FOC WHERE id_incendiu = :id");
+        $stmt->execute(['id' => $eventId]);
+        if ($row = $stmt->fetch()) {
+            $styles = getEventStyles($row['status']);
+            $event = [
+                'title' => $row['titlu'],
+                'status' => strtoupper($row['status']),
+                'badge' => $styles['badgeclass'],
+                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
+                'date' => 'Dată necunoscută',
+                'lat' => $row['latitudine'],
+                'lng' => $row['longitudine'],
+                'epicenter' => $row['locatie'] ?? 'Necunoscut',
+                'stat1_label' => 'Suprafață', 'stat1_val' => 'Necunoscută',
+                'stat2_label' => 'Focare', 'stat2_val' => '-',
+                'stat3_label' => 'Echipe', 'stat3_val' => '-',
+                'instruction' => $row['detalii'] ?? 'Nu vă apropiați de zonele afectate.',
+                'description' => $row['detalii'] ?? 'Fără descriere.'
+            ];
+        }
+    }
 }
-$event = $eventsData[$eventId];
+
+// Dacă nu găsim evenimentul în baza de date (ID greșit sau a fost șters), oprim afișarea și dăm mesaj
+if (!$event) {
+    die("<div style='padding: 3rem; text-align: center; font-family: sans-serif;'><h2>Evenimentul nu a fost găsit!</h2><br><a href='/CoA-project/app/views/public/events_public.php'>← Înapoi la hartă</a></div>");
+}
 ?>
 <!DOCTYPE html>
 <html lang="ro">
@@ -56,21 +103,10 @@ $event = $eventsData[$eventId];
 </head>
 
 <body>
-    <!-- Navbar (Același ca pe restul paginilor publice) -->
-    <nav class="navbar">
-        <div class="logo">
-            <div class="dot"></div>
-            <strong>CoA</strong>
-        </div>
-        <button class="menu-toggle" id="mobile-menu-btn">☰</button>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="/CoA-project/public/index.html">Acasă</a></li>
-            <li><a href="/CoA-project/app/views/public/events_public.php" class="active">Evenimente</a></li>
-            <li><a href="/CoA-project/app/views/public/shelter_public.php">Adăposturi</a></li>
-            <li class="mobile-login"><a href="/CoA-project/app/views/public/login.html" class="btn-login">Login </a></li>
-        </ul>
-        <a href="/CoA-project/app/views/public/login.html" class="btn-login desktop-login">Login </a>
-    </nav>
+    <?php
+    $active_page = 'events';
+    include '../layouts/header.php';
+    ?>
 
     <!-- Container principal (centrat) -->
     <div style="padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%;">
