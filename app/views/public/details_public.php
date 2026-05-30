@@ -1,89 +1,11 @@
 <?php
-require_once '../../../database/db.php';
-
-// Preluăm ID-ul și TIPUL din URL (ex: details_public.php?id=2&type=cutremur)
-$eventId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$eventType = isset($_GET['type']) ? $_GET['type'] : '';
-
-$event = null;
-
-if ($eventId > 0 && $eventType) {
-    // Mapăm tipurile de culori exact ca în array-ul vechi
-    $colorMap = [
-        'activ' => 'var(--color-activ)', 
-        'monitorizare' => 'var(--color-monotorizare)', 
-        'rezolvat' => 'var(--color-rezolvat)'
-    ];
-
-    if ($eventType === 'cutremur') {
-        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_CUTREMUR WHERE id_cutremur = :id");
-        $stmt->execute(['id' => $eventId]);
-        if ($row = $stmt->fetch()) {
-            $styles = getEventStyles($row['stadiu']);
-            $event = [
-                'title' => $row['titlu'],
-                'status' => strtoupper($row['stadiu']),
-                'badge' => $styles['badgeclass'],
-                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
-                'date' => $row['data_incident'] ?? 'Dată necunoscută',
-                'lat' => $row['latitudine'],
-                'lng' => $row['longitudine'],
-                'epicenter' => $row['localitate'] ?? 'Necunoscut',
-                'stat1_label' => 'Magnitudine', 'stat1_val' => ($row['magnitudine'] ?? '-') . ' Mw',
-                'stat2_label' => 'Adâncime', 'stat2_val' => ($row['adancime'] ?? '-') . ' km',
-                'stat3_label' => 'Echipe Alocate', 'stat3_val' => $row['echipe_alocate'] ?? '0',
-                'instruction' => $row['instructiuni'] ?? 'Urmați indicațiile autorităților.',
-                'description' => $row['descriere'] ?? 'Fără descriere.'
-            ];
-        }
-    } elseif ($eventType === 'inundatie') {
-        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_INUNDATIE WHERE id_inundatie = :id");
-        $stmt->execute(['id' => $eventId]);
-        if ($row = $stmt->fetch()) {
-            $styles = getEventStyles($row['status']);
-            $event = [
-                'title' => $row['titlu'],
-                'status' => strtoupper($row['status']),
-                'badge' => $styles['badgeclass'],
-                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
-                'date' => 'Dată necunoscută',
-                'lat' => $row['latitudine'],
-                'lng' => $row['longitudine'],
-                'epicenter' => $row['locatie'] ?? 'Necunoscut',
-                'stat1_label' => 'Statut', 'stat1_val' => 'În desfășurare',
-                'stat2_label' => 'Victime', 'stat2_val' => '-',
-                'stat3_label' => 'Echipe', 'stat3_val' => '-',
-                'instruction' => $row['detalii'] ?? 'Evitați zonele inundabile.',
-                'description' => $row['detalii'] ?? 'Fără descriere.'
-            ];
-        }
-    } elseif ($eventType === 'incendiu') {
-        $stmt = $pdo->prepare("SELECT * FROM INCIDENTE_FOC WHERE id_incendiu = :id");
-        $stmt->execute(['id' => $eventId]);
-        if ($row = $stmt->fetch()) {
-            $styles = getEventStyles($row['status']);
-            $event = [
-                'title' => $row['titlu'],
-                'status' => strtoupper($row['status']),
-                'badge' => $styles['badgeclass'],
-                'color' => $colorMap[$styles['filtertype']] ?? 'var(--text-main)',
-                'date' => 'Dată necunoscută',
-                'lat' => $row['latitudine'],
-                'lng' => $row['longitudine'],
-                'epicenter' => $row['locatie'] ?? 'Necunoscut',
-                'stat1_label' => 'Suprafață', 'stat1_val' => 'Necunoscută',
-                'stat2_label' => 'Focare', 'stat2_val' => '-',
-                'stat3_label' => 'Echipe', 'stat3_val' => '-',
-                'instruction' => $row['detalii'] ?? 'Nu vă apropiați de zonele afectate.',
-                'description' => $row['detalii'] ?? 'Fără descriere.'
-            ];
-        }
-    }
-}
-
-// Dacă nu găsim evenimentul în baza de date (ID greșit sau a fost șters), oprim afișarea și dăm mesaj
-if (!$event) {
-    die("<div style='padding: 3rem; text-align: center; font-family: sans-serif;'><h2>Evenimentul nu a fost găsit!</h2><br><a href='/CoA-project/app/views/public/events_public.php'>← Înapoi la hartă</a></div>");
+if (!isset($is_included)) {
+    // Dacă fisierul este apelat direct din browser (cum e acum, fara ruter complet)
+    // inițializăm noi Controller-ul care va apela Modelul și va randa acest fisier din nou, cu datele gata pregatite.
+    require_once __DIR__ . '/../../controllers/EventController.php';
+    $controller = new EventController();
+    $controller->showDetails($_GET['id'] ?? 0, $_GET['type'] ?? '');
+    exit;
 }
 ?>
 <!DOCTYPE html>

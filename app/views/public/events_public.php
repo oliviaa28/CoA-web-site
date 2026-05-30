@@ -58,32 +58,55 @@
 
         var listContainer = document.getElementById('events-list');
 
-        // Apelăm simultan toate cele 3 tipuri de incidente
-        Promise.all([
-            fetch('/CoA-project/database/get_incident_cutremur.php').then(r => r.json()).catch(() => []),
-            fetch('/CoA-project/database/get_incident_inundatie.php').then(r => r.json()).catch(() => []),
-            fetch('/CoA-project/database/get_incident_foc.php').then(r => r.json()).catch(() => [])
-        ]).then(([cutremure, inundatii, incendii]) => {
-            
-            var events = [];
-            // Combinăm rezultatele (dacă vin cu erori, le ignorăm pentru a nu pica pagina)
-            if (!cutremure.error) events = events.concat(cutremure);
-            if (!inundatii.error) events = events.concat(inundatii);
-            if (!incendii.error)  events = events.concat(incendii);
+        // Apelăm endpoint-ul unificat pentru evenimente
+        fetch('/CoA-project/api/events.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(events => {
+                
+                if (events.error) {
+                    console.error("Eroare DB: ", events.error);
+                    listContainer.innerHTML = '<p>Eroare la încărcarea evenimentelor.</p>';
+                    return;
+                }
 
-            if (events.length === 0) {
-                listContainer.innerHTML = '<p>Nu s-au găsit evenimente.</p>';
-                return;
-            }
+                if (events.length === 0) {
+                    listContainer.innerHTML = '<p>Nu s-au găsit evenimente.</p>';
+                    return;
+                }
+
+            // Array pentru a ține evidența markerelor de pe hartă
+            var allMarkers = [];
 
             events.forEach(function(ev) {
+                // Determinăm clasele CSS pe frontend (UI logic), nu în PHP
+                let filtertype = 'rezolvat', colorclass = 'border-teal', badgeclass = 'bg-teal';
+                if (ev.status) {
+                    let stat = ev.status.toLowerCase();
+                    if (stat.includes('activ')) {
+                        filtertype = 'activ'; colorclass = 'border-red'; badgeclass = 'bg-red';
+                    } else if (stat.includes('monitorizare')) {
+                        filtertype = 'monitorizare'; colorclass = 'border-orange'; badgeclass = 'bg-orange';
+                    }
+                }
+
                 var marker = L.marker([parseFloat(ev.lat), parseFloat(ev.lng)]).addTo(map);
                 marker.bindPopup(`<b>${ev.title}</b><br>${ev.location}`);
 
+                // Salvăm referința markerului pentru a-l filtra mai jos
+                allMarkers.push({
+                    marker: marker,
+                    filterType: filtertype
+                });
+
                 var cardHTML = `
-                    <div class="card ${ev.colorclass}" data-type="${ev.filtertype}">
+                    <div class="card ${colorclass}" data-type="${filtertype}">
                         <div class="card-badges">
-                            <span class="badge ${ev.badgeclass}">${ev.status ? ev.status.toUpperCase() : ''}</span>
+                            <span class="badge ${badgeclass}">${ev.status ? ev.status.toUpperCase() : ''}</span>
                         </div>
                         <h3>${ev.title}</h3>
                         <p class="location"> ${ev.location}</p>
@@ -97,6 +120,41 @@
                 
                 listContainer.innerHTML += cardHTML;
             });
+
+            // FILTRARE BUTOANE
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Schimbăm clasa 'active' pe butoane
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Filtrăm cardurile
+                    const cards = document.querySelectorAll('#events-list .card');
+                    cards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-type') === filterValue) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    // Filtrăm markerele de pe hartă
+                    allMarkers.forEach(item => {
+                        if (filterValue === 'all' || item.filterType === filterValue) {
+                            if (!map.hasLayer(item.marker)) map.addLayer(item.marker);
+                        } else {
+                            if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
+                        }
+                    });
+                });
+            });
+        })
+        .catch(error => {
+            console.error("Eroare la preluarea datelor:", error);
+            listContainer.innerHTML = `<p>Nu s-au putut încărca evenimentele. Verificați conexiunea.</p>`;
         });
     </script>
     

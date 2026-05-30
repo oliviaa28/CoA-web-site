@@ -47,7 +47,7 @@
         var listContainer = document.getElementById('shelters-list');
 
         // fetch date db
-            fetch('/CoA-project/database/get_shelters.php')
+            fetch('/CoA-project/api/shelters.php')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -75,8 +75,15 @@
                     const lat = parseFloat(shelter.lat);
                     const lng = parseFloat(shelter.lng);
 
-                    // DEBUG: Verificăm dacă locațiile sunt valide
-                    // console.log("Locație procesată:", lat, lng);
+
+                    // Determinăm culorile din JavaScript
+                    let filtertype = 'provizii', colorclass = 'border-teal', badgeclass = 'bg-teal';
+                    let tip = shelter.type ? shelter.type.toLowerCase() : '';
+                    if (tip.includes('medical') || tip.includes('ajutor')) {
+                        filtertype = 'medical'; colorclass = 'border-red'; badgeclass = 'bg-red';
+                    } else if (tip.includes('buncar') || tip.includes('buncăr') || tip.includes('subteran')) {
+                        filtertype = 'buncar'; colorclass = 'border-orange'; badgeclass = 'bg-orange';
+                    }
 
                     // Marker pe hartă
                     var marker = L.marker([lat, lng]).addTo(map);
@@ -85,14 +92,14 @@
                     // Salvăm referința markerului pentru a-l filtra mai jos
                     allMarkers.push({
                         marker: marker,
-                        filterType: shelter.filtertype
+                        filterType: filtertype
                     });
 
                     // Generare Card HTML
                     var cardHTML = `
-                        <div class="card ${shelter.colorclass}" data-type="${shelter.filtertype}">
+                        <div class="card ${colorclass}" data-type="${filtertype}">
                             <div class="card-badges">
-                                <span class="badge ${shelter.badgeclass}">${shelter.type}</span>
+                                <span class="badge ${badgeclass}">${shelter.type}</span>
                             </div>
                             <h3>${shelter.name}</h3>
                             <p class="location"> ${shelter.address}</p>
