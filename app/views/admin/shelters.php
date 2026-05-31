@@ -27,18 +27,6 @@
                 </button>
             </div>
  
-            <!-- Filtru disponibilitate -->
-            <div class="filter-event-banner">
-                <div class="filter-event-field">
-                    <label for="shelter_status">Status disponibilitate</label>
-                    <select id="shelter_status" name="shelter_status">
-                        <option value="">Toate</option>
-                        <option value="disponibil">Disponibil</option>
-                        <option value="partial">Partial ocupat</option>
-                        <option value="plin">Plin</option>
-                    </select>
-                </div>
-            </div>
  
             <!-- Tabel adaposturi -->
             <table class="list-events">
