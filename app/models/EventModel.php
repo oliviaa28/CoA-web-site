@@ -3,8 +3,8 @@
 class EventModel {
     private $pdo;
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
+    public function __construct($pdo) { // se executa automat cand obiectul este creeat
+        $this->pdo = $pdo;              //salveaza conexiunea primita
     }
 
     public function getEventDetails($id, $type) {
@@ -63,4 +63,75 @@ class EventModel {
 
         return $events;
     }
+ 
+    // ------ insert ---- update --- delete -------------
+
+    public function createEvent($type, $data){ 
+        $tabele = [
+          'cutremur' => 'INCIDENTE_CUTREMUR',
+          'inundatie' => 'INCIDENTE_INUNDATIE',
+          'incendiu' => 'INCIDENTE_FOC'
+        ];
+
+        if (!array_key_exists($type, $tabele)) return false;
+        $tabela = $tabele[$type];
+
+        $sql = $this->pdo->prepare("INSERT INTO $tabela (titlu, descriere, localitate, latitudine, longitudine, stadiu) 
+                                    VALUES (?, ?, ?, ?, ?, ?)");
+    
+        $sql->execute([
+            $data['titlu'], $data['descriere'],
+            $data['localitate'], $data['lat'], $data['lng'],
+            $data['stadiu']
+         ]);
+
+    return true;
+    }
+
+    public function deleteEvent($type, $id){
+
+       $tabele =[
+         'cutremur' => ['table' => 'INCIDENTE_CUTREMUR', 'id_col' => 'id_cutremur'] ,
+         'inundatie' => ['table' => 'INCIDENTE_INUNDATIE', 'id_col'=> 'id_inundatie'],
+         'incendiu' => ['table' => 'INCIDENTE_FOC', 'id_col' =>'id_foc']
+       ];
+
+       if( ! array_key_exists($type, $tabele))
+            return false;
+
+       $tabela = $tabele[$type]['table'];
+       $id_col = $tabele[$type]['id_col'];
+
+       $sql = $this->pdo->prepare("DELETE FROM $tabela WHERE $id_col = :id" );
+       $sql->execute(['id' => $id]);
+       return true;
+    }
+
+    public function updateEvent($type, $id, $data){
+    
+       $tabele =[
+         'cutremur' => ['table' => 'INCIDENTE_CUTREMUR', 'id_col' => 'id_cutremur'] ,
+         'inundatie' => ['table' => 'INCIDENTE_INUNDATIE', 'id_col'=> 'id_inundatie'],
+         'incendiu' => ['table' => 'INCIDENTE_FOC', 'id_col' =>'id_foc']
+       ];
+
+        if( ! array_key_exists($type, $tabele))
+            return false;
+
+        $tabela = $tabele[$type]['table'];
+        $id_col = $tabele[$type]['id_col'];
+
+        $sql = $this->pdo->prepare("UPDATE $tabela SET titlu = ?, descriere = ?, localitate = ?, 
+                                                        latitudine = ?, longitudine = ?, stadiu = ? 
+                                        WHERE $id_col = ?");
+        $sql->execute([
+            $data['titlu'], $data['descriere'],
+            $data['localitate'], $data['lat'], $data['lng'],
+            $data['stadiu'], $id 
+         ]);
+
+       return true;
+
+    }
+
 }

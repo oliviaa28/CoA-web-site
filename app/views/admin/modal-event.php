@@ -53,21 +53,21 @@
             </div>
 
             <div class="form-field">
-                <label for="event_city">Localitate</label>
+                <label for="event_city" required>Localitate</label>
                 <input type="text" id="event_city" name="event_city" placeholder="ex: Suceava">
             </div>
 
             <div class="form-field">
                 <label>Coordonate</label>
                 <div class="coords-row">
-                    <input type="text" name="lat" placeholder="Latitudine" >
-                    <input type="text" name="lng" placeholder="Longitudine" >
+                    <input type="text" name="lat" placeholder="Latitudine" required>
+                    <input type="text" name="lng" placeholder="Longitudine" required>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="closeModal('modal-add')"> Anuleaza </button>
-                <button type="submit" id="modal-btn" class="btn-submit">Salveaza evenimentul</button> <!--id ul vine de la titlul h2 -->
+                <button type="button" id="modal-btn" onclick="salveazaEveniment()">Salveaza evenimentul</button> <!--id ul vine de la titlul h2 -->
             </div>
 
         </form>
