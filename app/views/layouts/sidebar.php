@@ -6,12 +6,12 @@
 
     <nav>
             <ul class="sidebar-list">
-            <li><a href="/CoA-project/app/views/admin/dashboard.php">Dashboard</a></li>
-            <li><a href="/CoA-project/app/views/admin/events.php">Evenimente</a></li>
-            <li><a href="/CoA-project/app/views/admin/shelters.php">Adaposturi</a></li>
-            <li><a href="/CoA-project/app/views/admin/alerts.php">Alerte CAP</a></li>
-            <li><a href="/CoA-project/app/views/admin/users.php">Utilizatori</a></li>
-            <li><a href="/CoA-project/app/views/admin/import-export.php">Import/Export</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="events.php">Evenimente</a></li>
+            <li><a href="shelters.php">Adaposturi</a></li>
+            <li><a href="alerts.php">Alerte CAP</a></li>
+            <li><a href="users.php">Utilizatori</a></li>
+            <li><a href="import-export.php">Import/Export</a></li>
         </ul>
     </nav>
 

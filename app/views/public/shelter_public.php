@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adăposturi și Puncte de Sprijin - CoA</title>
     
-    <!-- CSS Global -->
-    <link rel="stylesheet" href="/CoA-project/public/css/global.css">
+    <link rel="stylesheet" href="../../../public/css/global.css">
     
-    <!-- Leaflet.js CSS pentru hartă -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- CSS Layout Hartă + Listă -->
-    <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
+    <link rel="stylesheet" href="../../../public/css/map-page.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <?php include '../layouts/header.php'; ?> 
+    <?php
+    $active_page = 'shelters';
+    include '../layouts/header.php';
+    ?>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
-        <!-- Bara de Filtre -->
         <div class="filters-bar" style="margin-top: 1.5rem;">
             <button class="filter-btn active" data-filter="all">Toate</button>
             <button class="filter-btn" data-filter="buncar">Buncăre Subterane</button>
@@ -27,72 +25,129 @@
             <button class="filter-btn" data-filter="provizii">Centre Provizii</button>
         </div>
 
-        <!-- Container Hartă și Listă -->
         <div class="page-layout-split">
-            
-            <!-- Secțiunea Hărții -->
             <div class="map-container">
                 <div id="shelters-map" style="height: 100%; width: 100%; border-radius: var(--radius-md); z-index: 1;"></div>
             </div>
 
-            <!-- Secțiunea Listei (Flashcard-uri) -->
             <div class="list-container events-list" id="shelters-list">
-                <!-- Cardurile vor fi generate din JavaScript -->
-            </div>
-
+                </div>
         </div>
     </div>
 
-    <!-- Scripturi Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // init harta
         var map = L.map('shelters-map').setView([47.165, 27.58], 14);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var shelters = [
-            { 
-                type: "Buncăr", name: "Școala Gimnazială (Centru)", filterType: "buncar",
-                address: "Str. Palat, nr. 1", details: "Capacitate 200 persoane • Acces Deschis", 
-                lat: 47.1573, lng: 27.5869, colorClass: "border-teal", badgeClass: "bg-teal"
-            },
-            { 
-                type: "Punct Medical", name: "Spitalul Sf. Spiridon - Cort Triage", filterType: "medical",
-                address: "Bd. Independenței, nr. 1", details: "Capacitate 50 paturi • Triage rapid", 
-                lat: 47.1670, lng: 27.5815, colorClass: "border-orange", badgeClass: "bg-orange"
-            },
-            { 
-                type: "Provizii", name: "Centrul Comunitar Copou", filterType: "provizii",
-                address: "Bd. Carol I, nr. 11", details: "Apă potabilă, pături, alimente neperisabile", 
-                lat: 47.1745, lng: 27.5722, colorClass: "border-red", badgeClass: "bg-red"
-            }
-        ];
-
         var listContainer = document.getElementById('shelters-list');
 
-        shelters.forEach(function(shelter) {
-            // Marker pe hartă
-            var marker = L.marker([shelter.lat, shelter.lng]).addTo(map);
-            marker.bindPopup(`<b>${shelter.name}</b><br>${shelter.type}`);
+        // fetch date db
+            fetch('../../../api/shelters.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(shelters => {
+                
+                // Verificam daca am primit eroare de la PHP
+                if(shelters.error) {
+                    console.error("Eroare DB: ", shelters.error);
+                    listContainer.innerHTML = `<p>Eroare la încărcarea datelor.</p>`;
+                    return;
+                }
 
-            var cardHTML = `
-                <div class="card ${shelter.colorClass}" data-type="${shelter.filterType}">
-                    <div class="card-badges">
-                        <span class="badge ${shelter.badgeClass}">${shelter.type}</span>
-                    </div>
-                    <h3>${shelter.name}</h3>
-                    <p class="location"> ⚲  ${shelter.address}</p>
-                    <p class="time">🛈 ${shelter.details}</p>
-                    <a href="#" class="btn-link" onclick="map.setView([${shelter.lat}, ${shelter.lng}], 16); return false;">Vezi pe hartă &rarr;</a>
-                </div>
-            `;
-            
-            listContainer.innerHTML += cardHTML;
-        });
+                // Afișăm în consolă datele brute primite de la PHP
+                console.log("Date primite din DB:", shelters);
+
+                // Array pentru a tine evidenta markerelor de pe harta
+                var allMarkers = [];
+
+                //  markerele și cardurile
+                shelters.forEach(function(shelter) {
+                    // Asigurăm formatul corect pentru coordonate (le transformăm în numere)
+                    const lat = parseFloat(shelter.lat);
+                    const lng = parseFloat(shelter.lng);
+
+
+                    // Determinăm culorile din JavaScript
+                    let filtertype = 'provizii', colorclass = 'border-teal', badgeclass = 'bg-teal';
+                    let tip = shelter.type ? shelter.type.toLowerCase() : '';
+                    if (tip.includes('medical') || tip.includes('ajutor')) {
+                        filtertype = 'medical'; colorclass = 'border-red'; badgeclass = 'bg-red';
+                    } else if (tip.includes('buncar') || tip.includes('buncăr') || tip.includes('subteran')) {
+                        filtertype = 'buncar'; colorclass = 'border-orange'; badgeclass = 'bg-orange';
+                    }
+
+                    // Marker pe hartă
+                    var marker = L.marker([lat, lng]).addTo(map);
+                    marker.bindPopup(`<b>${shelter.name}</b><br>${shelter.type}`);
+
+                    // Salvăm referința markerului pentru a-l filtra mai jos
+                    allMarkers.push({
+                        marker: marker,
+                        filterType: filtertype
+                    });
+
+                    // Generare Card HTML
+                    var cardHTML = `
+                        <div class="card ${colorclass}" data-type="${filtertype}">
+                            <div class="card-badges">
+                                <span class="badge ${badgeclass}">${shelter.type}</span>
+                            </div>
+                            <h3>${shelter.name}</h3>
+                            <p class="location"> ${shelter.address}</p>
+                            <p class="time"> ${shelter.details}</p>
+                            <a href="#" class="btn-link" onclick="map.setView([${lat}, ${lng}], 16); return false;">Vezi pe hartă &rarr;</a>
+                        </div>
+                    `;
+                    
+                    listContainer.innerHTML += cardHTML;
+                });
+
+                // FILTRARE
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Schimbăm clasa 'active' pe butoane
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+
+                        const filterValue = this.getAttribute('data-filter');
+                        
+                        // Filtrăm cardurile
+                        const cards = document.querySelectorAll('#shelters-list .card');
+                        cards.forEach(card => {
+                            if (filterValue === 'all' || card.getAttribute('data-type') === filterValue) {
+                                card.style.display = '';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+
+                        // 3. Filtrăm markerele de pe hartă
+                        allMarkers.forEach(item => {
+                            if (filterValue === 'all' || item.filterType === filterValue) {
+                                if (!map.hasLayer(item.marker)) map.addLayer(item.marker);
+                            } else {
+                                if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
+                            }
+                        });
+                    });
+                });
+            })
+            .catch(error => {
+                console.error("Eroare la preluarea datelor:", error);
+                listContainer.innerHTML = `<p>Nu s-au putut încărca adăposturile. Verificați conexiunea.</p>`;
+            });
     </script>
     
-    <script src="/CoA-project/public/js/main.js"></script>
+    <script src="../../../public/js/main.js"></script>
 </body>
 </html>

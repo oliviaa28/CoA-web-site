@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evenimente și Alerte - CoA</title>
     
-    <!-- CSS Global -->
-    <link rel="stylesheet" href="/CoA-project/public/css/global.css">
+    <!-- css global -->
+    <link rel="stylesheet" href="../../../public/css/global.css">
     
-    <!-- Leaflet.js CSS pentru hartă -->
+    <!-- leaflet pt harta -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- CSS Layout Hartă + Listă -->
-    <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
+    <!-- css layout harta + lista -->
+    <link rel="stylesheet" href="../../../public/css/map-page.css">
 </head>
 <body>
-    <!-- Navbar -->
-      <?php include '../layouts/header.php'; ?> 
+    <?php
+    $active_page = 'events';
+    include '../layouts/header.php';
+    ?>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
-        <!-- Bara de Filtre -->
+        <!-- butoane filtrare -->
         <div class="filters-bar" style="margin-top: 1.5rem;">
             <button class="filter-btn active" data-filter="all">Toate</button>
             <button class="filter-btn" data-filter="activ">Active</button>
@@ -27,75 +30,136 @@
             <button class="filter-btn" data-filter="rezolvat">Rezolvate</button>
         </div>
 
-        <!-- Container Hartă și Listă -->
+        <!-- container principal harta + lista -->
         <div class="page-layout-split">
             
-            <!-- Secțiunea Hărții -->
+            <!-- harta -->
             <div class="map-container">
                 <div id="events-map" style="height: 100%; width: 100%; border-radius: var(--radius-md); z-index: 1;"></div>
             </div>
 
-            <!-- Secțiunea Listei (Flashcard-uri) -->
+            <!-- lista evenimente -->
             <div class="list-container events-list" id="events-list">
-                <!-- Cardurile vor fi generate din JavaScript -->
+                <!-- gen dinamica js -->
             </div>
 
         </div>
     </div>
 
-    <!-- Scripturi Leaflet -->
+    <!-- script leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Centrare hartă pe România
+        // setare view ro
         var map = L.map('events-map').setView([45.9, 25.0], 6);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var events = [
-            { 
-                id: 1, title: "Cutremur M4.2", filterType: "activ", status: "ACTIV",
-                location: "Vrancea, România", details: "14:23, Azi • Adâncime 127km", 
-                lat: 45.75, lng: 26.65, colorClass: "border-red", badgeClass: "bg-red"
-            },
-            { 
-                id: 2, title: "Inundație Severă", filterType: "monitorizare", status: "MONITORIZARE",
-                location: "Galați, România", details: "09:20, Ieri • Cote de atenție depășite pe râul Siret", 
-                lat: 45.43, lng: 28.05, colorClass: "border-orange", badgeClass: "bg-orange"
-            },
-            { 
-                id: 3, title: "Incendiu de Vegetație", filterType: "rezolvat", status: "REZOLVAT",
-                location: "Brașov, România", details: "18:50, 7 Apr • Focar stins, echipe în retragere", 
-                lat: 45.65, lng: 25.60, colorClass: "border-teal", badgeClass: "bg-teal"
-            }
-        ];
-
         var listContainer = document.getElementById('events-list');
 
-        events.forEach(function(ev) {
-            var marker = L.marker([ev.lat, ev.lng]).addTo(map);
-            marker.bindPopup(`<b>${ev.title}</b><br>${ev.location}`);
+        // Apelăm endpoint-ul unificat pentru evenimente
+        fetch('../../../api/events.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(events => {
+                
+                if (events.error) {
+                    console.error("Eroare DB: ", events.error);
+                    listContainer.innerHTML = '<p>Eroare la încărcarea evenimentelor.</p>';
+                    return;
+                }
 
-            var cardHTML = `
-                <div class="card ${ev.colorClass}" data-type="${ev.filterType}">
-                    <div class="card-badges">
-                        <span class="badge ${ev.badgeClass}">${ev.status}</span>
+                if (events.length === 0) {
+                    listContainer.innerHTML = '<p>Nu s-au găsit evenimente.</p>';
+                    return;
+                }
+
+            // Array pentru a ține evidența markerelor de pe hartă
+            var allMarkers = [];
+
+            events.forEach(function(ev) {
+                // Determinăm clasele CSS pe frontend (UI logic), nu în PHP
+                let filtertype = 'rezolvat', colorclass = 'border-teal', badgeclass = 'bg-teal';
+                if (ev.status) {
+                    let stat = ev.status.toLowerCase();
+                    if (stat.includes('activ')) {
+                        filtertype = 'activ'; colorclass = 'border-red'; badgeclass = 'bg-red';
+                    } else if (stat.includes('monitorizare')) {
+                        filtertype = 'monitorizare'; colorclass = 'border-orange'; badgeclass = 'bg-orange';
+                    }
+                }
+
+                var marker = L.marker([parseFloat(ev.lat), parseFloat(ev.lng)]).addTo(map);
+                marker.bindPopup(`<b>${ev.title}</b><br>${ev.location}`);
+
+                // Salvăm referința markerului pentru a-l filtra mai jos
+                allMarkers.push({
+                    marker: marker,
+                    filterType: filtertype
+                });
+
+                var cardHTML = `
+                    <div class="card ${colorclass}" data-type="${filtertype}">
+                        <div class="card-badges">
+                            <span class="badge ${badgeclass}">${ev.status ? ev.status.toUpperCase() : ''}</span>
+                        </div>
+                        <h3>${ev.title}</h3>
+                        <p class="location"> ${ev.location}</p>
+                        <p class="time"> ${ev.details}</p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                            <a href="details_public.php?id=${ev.id}&type=${ev.type}" class="btn-link" style="margin-top: 0;">Vezi detalii</a>
+                            <a href="#" class="btn-link" style="margin-top: 0;" onclick="map.setView([${ev.lat}, ${ev.lng}], 10); return false;">Vezi pe hartă &rarr;</a>
+                        </div>
                     </div>
-                    <h3>${ev.title}</h3>
-                    <p class="location"> ${ev.location}</p>
-                    <p class="time"> ${ev.details}</p>
-                    <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                        <a href="details_public.php?id=${ev.id}" class="btn-link" style="margin-top: 0;">Vezi detalii</a>
-                        <a href="#" class="btn-link" style="margin-top: 0;" onclick="map.setView([${ev.lat}, ${ev.lng}], 10); return false;">Vezi pe hartă &rarr;</a>
-                    </div>
-                </div>
-            `;
-            
-            listContainer.innerHTML += cardHTML;
+                `;
+                
+                listContainer.innerHTML += cardHTML;
+            });
+
+            // FILTRARE BUTOANE
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Schimbăm clasa 'active' pe butoane
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Filtrăm cardurile
+                    const cards = document.querySelectorAll('#events-list .card');
+                    cards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-type') === filterValue) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    // Filtrăm markerele de pe hartă
+                    allMarkers.forEach(item => {
+                        if (filterValue === 'all' || item.filterType === filterValue) {
+                            if (!map.hasLayer(item.marker)) map.addLayer(item.marker);
+                        } else {
+                            if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
+                        }
+                    });
+                });
+            });
+        })
+        .catch(error => {
+            console.error("Eroare la preluarea datelor:", error);
+            listContainer.innerHTML = `<p>Nu s-au putut încărca evenimentele. Verificați conexiunea.</p>`;
         });
     </script>
     
-    <script src="/CoA-project/public/js/main.js"></script>
+    <script src="../../../public/js/main.js"></script>
+
+  
 </body>
 </html>
