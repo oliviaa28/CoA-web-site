@@ -9,7 +9,7 @@
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="events.php">Evenimente</a></li>
             <li><a href="shelters.php">Adaposturi</a></li>
-            <li><a href="alerts.php">Alerte CAP</a></li>
+            <li><a href="alerts.php">Alerte </a></li>
             <li><a href="users.php">Utilizatori</a></li>
             <li><a href="import-export.php">Import/Export</a></li>
         </ul>

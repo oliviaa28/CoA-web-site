@@ -1,5 +1,4 @@
 /* ________________ DETAILS PUBLIC PAGE DESIGN ____________________*/
-
 .inapoi-btn {
     font-size: 0.95rem;
     color: #64748b;
@@ -127,8 +126,7 @@
     .status-cards {
         flex-direction: column;
         gap: 1rem;
-    }
-    
+    } 
     .event-map {
         min-height: 300px;
     }

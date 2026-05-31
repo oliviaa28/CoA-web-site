@@ -55,34 +55,11 @@
 
 
 
-            <div class="status-cards">
-                
-                <!--Evenimente active -->
-                <div class="status-card" > 
-                    <span class="status-label">Evenimente active</span>
-                    <span class="status-number">10 </span>
-                </div>
-
-                <!--Evenimente monotorizate -->
-                <div class="status-card">
-                    <span class="status-label">Alerte trimise azi</span>
-                    <span class="status-number">7888</span>
-                </div>
-
-                <!--Evenimente rezolvate(in ultimele 30 dezile )-->
-                <div class="status-card">
-                    <span class="status-label">Adaposturi disponibile</span>
-                    <span class="status-number">0</span>
-                </div>
-
-            </div>
-
-
             <table class="list-events">
 
                 <thead class="header-list-events">
                    <tr>
-                    <th scope="col">Status</th>
+                    <th scope="col">Status eveniment</th>
                     <th scope="col">Tip</th>
                     <th scope="col">Titlu</th>
                     <th scope="col">Locație</th>
@@ -136,25 +113,7 @@
 
 
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6">
-                          <div class="pagination">
-                                <a href="#" class="pagination-btn"> <- Previous</a>
-                
-                            <div class="pagination-numbers">
-                                <a href="#" class="pagination-num active">1</a>
-                                <a href="#" class="pagination-num">2</a>
-                                <a href="#" class="pagination-num">3</a>
-                            </div>
-                
-                            <a href="#" class="pagination-btn">Next → </a>
-                        </div>
-                      </td>
-                    </tr>
-                </tfoot>
-
-
+        
             </table>
         </main>
     </div>

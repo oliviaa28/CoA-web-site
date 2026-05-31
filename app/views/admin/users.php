@@ -42,18 +42,9 @@
                         <input type="password" id="user_password" name="user_password" placeholder="••••••••">
                     </div>
 
-                    <div class="coords-row">
-                        <div class="form-field" style="flex:1">
-                            <label for="user_role">Rol</label>
-                            <select id="user_role" name="user_role" required>
-                                <option value="">Selectează</option>
-                                <option value="admin">Admin</option>
-                                <option value="operator">Operator</option>
-                                <option value="readonly">Readonly</option>
-                            </select>
-                        </div>
-                        <div class="form-field" style="flex:1">
-                            <label for="user_county">Județ</label>
+        
+                    <div class="form-field" >
+                        <label for="user_county">Județ</label>
                             <select id="user_county" name="user_county" required>
                                 <option value="">Selectează</option>
                                 <option value="braila">j1</option>
@@ -64,7 +55,7 @@
                                 <option value="bacau">j5</option>
                             </select>
                         </div>
-                    </div>
+            
 
                     <div class="modal-footer">
                         <button type="button" class="btn-cancel" onclick="closeModal('modal-user')">Anulează</button>
@@ -84,27 +75,11 @@
                 </button>
             </div>
 
-            <div class="status-cards">
-                <div class="status-card">
-                    <span class="status-label">Total utilizatori</span>
-                    <span class="status-number">24</span>
-                </div>
-                <div class="status-card">
-                    <span class="status-label">Activi acum</span>
-                    <span class="status-number">5</span>
-                </div>
-                <div class="status-card">
-                    <span class="status-label">Administratori</span>
-                    <span class="status-number">3</span>
-                </div>
-            </div>
-
             <table class="list-events">
                 <thead>
                     <tr>
                         <th scope="col">Nume</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Rol</th>
                         <th scope="col">Județ</th>
                         <th scope="col">Ultima activitate</th>
                         <th scope="col">Acțiuni</th>
@@ -114,7 +89,6 @@
                     <tr>
                         <td>Ion Popescu</td>
                         <td>ion.popescu@gmail.ro</td>
-                        <td><span class="badge bg-red">Admin</span></td>
                         <td>judet </td>
                         <td>Acum 5 min</td>
                         <td class="actions">
@@ -125,7 +99,6 @@
                     <tr>
                         <td>Maria Ionescu</td>
                         <td>maria.ionescu@gmail.ro</td>
-                        <td><span class="badge bg-orange">Operator</span></td>
                         <td>Vrancea</td>
                         <td>Acum 12 min</td>
                         <td class="actions">
@@ -136,7 +109,6 @@
                     <tr>
                         <td>Andrei Georgescu</td>
                         <td>andrei.g@gmail.ro</td>
-                        <td><span class="badge bg-orange">Operator</span></td>
                         <td>Buzău</td>
                         <td>Acum 1 oră</td>
                         <td class="actions">
@@ -147,7 +119,6 @@
                     <tr>
                         <td>Elena Dumitrescu</td>
                         <td>elena.d@galati.ro</td>
-                        <td><span class="badge bg-teal"> Readonly</span></td>
                         <td>Galați</td>
                         <td>Acum 2 ore</td>
                         <td class="actions">
@@ -158,7 +129,6 @@
                     <tr>
                         <td>Cristian Popa</td>
                         <td>cristian.popa@gmail.ro</td>
-                        <td><span class="badge bg-orange">Operator</span></td>
                         <td>Tulcea</td>
                         <td>Acum 3 ore</td>
                         <td class="actions">
@@ -167,21 +137,6 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6">
-                            <div class="pagination">
-                                <a href="#" class="pagination-btn"> <- Previous</a>
-                                <div class="pagination-numbers">
-                                    <a href="#" class="pagination-num active">1</a>
-                                    <a href="#" class="pagination-num">2</a>
-                                    <a href="#" class="pagination-num">3</a>
-                                </div>
-                                <a href="#" class="pagination-btn">Next  -> </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
 
         </main>

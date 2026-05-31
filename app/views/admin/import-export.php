@@ -43,7 +43,6 @@
                         <div class="ie-btns">
                             <button class="ie-btn">JSON</button>
                             <button class="ie-btn">CSV</button>
-                            <button class="ie-btn">XML</button>
                         </div>
                     </div>
 
@@ -58,7 +57,6 @@
                         <div class="ie-btns">
                             <button class="ie-btn">JSON</button>
                             <button class="ie-btn">CSV</button>
-                            <button class="ie-btn">GeoJSON</button>
                         </div>
                     </div>
 
@@ -66,13 +64,15 @@
                         <div class="ie-item-info">
                             <span class="ie-item-icon">🗐</span>
                             <div>
-                                <strong>Export alerte CAP</strong>
-                                <p>Exportă alertele CAP trimise</p>
+                                <strong>Export alerte</strong>
+                                <p>Exportă alertele trimise</p>
                             </div>
                         </div>
                         <div class="ie-btns">
                             <button class="ie-btn">XML</button>
                             <button class="ie-btn">JSON</button>
+                             <button class="ie-btn">CSV</button>
+
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                             <span class="ie-item-icon">🗐</span>
                             <div>
                                 <strong>Export utilizatori</strong>
-                                <p>Exportă lista de utilizatori și roluri (Admin only)</p>
+                                <p>Exportă lista de utilizatori și roluri</p>
                             </div>
                         </div>
                         <div class="ie-btns">
@@ -110,22 +110,6 @@
                         Selectează fișier
                     </button>
 
-                    <!-- Integari active -->
-                    <div class="ie-integrations">
-                        <h3>Integrări active</h3>
-                        <div class="ie-integration-row">
-                            <span>INFP (Seismic data)</span>
-                            <span class="ie-status-dot">● Conectat</span>
-                        </div>
-                        <div class="ie-integration-row">
-                            <span>USGS API</span>
-                            <span class="ie-status-dot">● Conectat</span>
-                        </div>
-                        <div class="ie-integration-row">
-                            <span>Copernicus Emergency</span>
-                            <span class="ie-status-dot">● Conectat</span>
-                        </div>
-                    </div>
                 </div>
 
             </div>

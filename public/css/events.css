@@ -90,41 +90,6 @@
    border: 1px solid #BC2F2F;
 }
 
-/*tabel footer*/
-
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-}
-
-.pagination-numbers {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.pagination-num {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    text-decoration: none;
-    color: #1e293b;
-}
-
-.pagination-num.active {
-    background-color: #1e293b;
-    color: #fff;
-}
-
-.pagination-btn {
-    text-decoration: none;
-    color: #1e293b;
-}
-
 /*pagina adaugare evenimente, pe deasupra paginii */
 
 .modal-overlay {
@@ -134,7 +99,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);  /* fundalul din spate devine semitransparent */
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;        /* deasupra tuturor elementelor */
