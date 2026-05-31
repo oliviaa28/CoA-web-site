@@ -7,13 +7,13 @@
     <title>Evenimente și Alerte - CoA</title>
     
     <!-- css global -->
-    <link rel="stylesheet" href="/CoA-project/public/css/global.css">
+    <link rel="stylesheet" href="../../../public/css/global.css">
     
     <!-- leaflet pt harta -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- css layout harta + lista -->
-    <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
+    <link rel="stylesheet" href="../../../public/css/map-page.css">
 </head>
 <body>
     <?php
@@ -59,7 +59,7 @@
         var listContainer = document.getElementById('events-list');
 
         // Apelăm endpoint-ul unificat pentru evenimente
-        fetch('/CoA-project/api/events.php')
+        fetch('../../../api/events.php')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -158,7 +158,7 @@
         });
     </script>
     
-    <script src="/CoA-project/public/js/main.js"></script>
+    <script src="../../../public/js/main.js"></script>
 
   
 </body>

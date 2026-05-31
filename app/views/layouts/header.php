@@ -8,15 +8,23 @@
   </button>
 
   <ul class="nav-links" id="nav-links">
-    <li><a href="/CoA-project/app/views/public/events_public.php" class="<?php echo (isset($active_page) && $active_page === 'events') ? 'active' : ''; ?>">Hartă & Evenimente</a></li>
-    <li><a href="/CoA-project/app/views/public/shelter_public.php" class="<?php echo (isset($active_page) && $active_page === 'shelters') ? 'active' : ''; ?>">Adăposturi</a></li>
-    <li><a href="#" class="<?php echo (isset($active_page) && $active_page === 'alerts') ? 'active' : ''; ?>">Alerte</a></li>
-    <li class="mobile-login">
-      <button class="btn-login">Login</button>
+    <li><a href="events_public.php" 
+          class="<?php echo (isset($active_page) && $active_page === 'events') ? 'active' : ''; ?>">Hartă & Evenimente</a>
     </li>
-  </ul>
+    <li>
+      <a href="shelter_public.php" 
+         class="<?php echo (isset($active_page) && $active_page === 'shelters') ? 'active' : ''; ?>">Adăposturi</a>
+    </li>
+    <li><a href="#" 
+         class="<?php echo (isset($active_page) && $active_page === 'alerts') ? 'active' : ''; ?>">Alerte</a>
+    </li>
+      
+    <li class="mobile-login">
+        <a href="login.html" class="btn-login">Login</a>
+      </li>
+    </ul>
 
-  <div class="desktop-login">
-    <button class="btn-login">Login</button>
-  </div>
+    <div class="desktop-login">
+      <a href="login.html" class="btn-login">Login</a>
+    </div>
 </nav>

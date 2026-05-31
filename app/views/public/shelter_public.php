@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adăposturi și Puncte de Sprijin - CoA</title>
     
-    <link rel="stylesheet" href="/CoA-project/public/css/global.css">
+    <link rel="stylesheet" href="../../../public/css/global.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <link rel="stylesheet" href="/CoA-project/public/css/map-page.css">
+    <link rel="stylesheet" href="../../../public/css/map-page.css">
 </head>
 <body>
     <?php
@@ -47,7 +47,7 @@
         var listContainer = document.getElementById('shelters-list');
 
         // fetch date db
-            fetch('/CoA-project/api/shelters.php')
+            fetch('../../../api/shelters.php')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -148,6 +148,6 @@
             });
     </script>
     
-    <script src="/CoA-project/public/js/main.js"></script>
+    <script src="../../../public/js/main.js"></script>
 </body>
 </html>

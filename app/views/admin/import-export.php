@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Import/Export - CoA ADMIN</title>
 
-    <link rel="stylesheet" href="/CoA-project/public/css/global.css">
-    <link rel="stylesheet" href="/CoA-project/public/css/forms.css">
-    <link rel="stylesheet" href="/CoA-project/public/css/admin.css">
-    <link rel="stylesheet" href="/CoA-project/public/css/events.css">
-     <link rel="stylesheet" href="/CoA-project/public/css/import-export.css">
+    <link rel="stylesheet" href="../../../public/css/global.css">
+    <link rel="stylesheet" href="../../../public/css/forms.css">
+    <link rel="stylesheet" href="../../../public/css/admin.css">
+    <link rel="stylesheet" href="../../../public/css/events.css">
+     <link rel="stylesheet" href="../../../public/css/import-export.css">
 </head>
 
 <body>
@@ -133,7 +133,7 @@
         </main>
     </div>
 
-    <script src="/CoA-project/public/js/main.js"></script>
+    <script src="../../../public/js/main.js"></script>
 </body>
 
 </html>
