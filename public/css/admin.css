@@ -22,7 +22,6 @@ input, select, textarea, button {
     flex-direction: column;  /*elementele stau unul sub celalalt */
 }
 
-
 .sidebar-list {
     color: #fff;
     display: flex;
@@ -30,7 +29,6 @@ input, select, textarea, button {
     border-bottom: 1px solid #334057;
     flex-direction: column; 
 }
-
 
 .sidebar-list li a {
     text-decoration: none; /*sa nu aiba linkurile underline*/
@@ -126,5 +124,4 @@ input, select, textarea, button {
 .btn-link {
     text-decoration: none;
     color: #3107bc;
-
 }

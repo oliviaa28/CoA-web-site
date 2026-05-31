@@ -1,5 +1,5 @@
     <!-- Modal adaugare eveniment -->
-  <div class="modal-overlay" id="modal-add" style="display:none;">
+  <div class="modal-overlay" id="modal-add" >
        <div class="modal-card">
         
          <div class="modal-header">
@@ -63,7 +63,6 @@
                     <input type="text" name="lat" placeholder="Latitudine" >
                     <input type="text" name="lng" placeholder="Longitudine" >
                 </div>
-                <small>sau selecteaza locatia direct pe harta</small>
             </div>
 
             <div class="modal-footer">

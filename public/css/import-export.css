@@ -127,31 +127,3 @@
 .ie-upload-zone small {
     font-size: 0.8rem;
 }
-
-/* integari */
-.ie-integrations {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 1rem;
-    background-color: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.ie-integrations h3 {
-    font-size: 0.95rem;
-    font-weight: 600;
-}
-
-.ie-integration-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.88rem;
-    color: #1e293b;
-}
-
-.ie-status-dot {
-    color: #0f766e;
-    font-weight: 500;
-}

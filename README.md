@@ -4,8 +4,8 @@ O platformă Web pentru monitorizarea și gestionarea situațiilor de urgență 
 destinată atât autorităților, cât și publicului general.
 
 ## Tech stack 
-- Backend: PHP + PostgreSQL
-- Frontend: HTML + CSS + JavaScript vanilla
+- Backend: PHP + mySql
+- Frontend: HTML + CSS + JavaScript 
 - Hartă: Leaflet.js + OpenStreetMap
 - Arhitectură: MVC
 

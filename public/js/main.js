@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Adaugă sau scoate clasa 'active' pentru a arăta/ascunde meniul
       navLinks.classList.toggle('active');
       
-      // Schimbă iconița din Hamburger (☰) în X (✕)
+      // Schimbă iconița din Hamburger (☰) în X 
       if (navLinks.classList.contains('active')) {
-        menuBtn.innerHTML = '✕';
+        menuBtn.innerHTML = 'X';
       } else {
         menuBtn.innerHTML = '☰';
       }
@@ -28,8 +28,7 @@ function closeModal(id) {
 }
 
 function openModal(id, mode) {
-    document.getElementById(id).style.display = 'flex';
-    
+     document.getElementById(id).style.display = 'flex'; 
     if (mode==='edit') {
         document.getElementById('modal-title').textContent='Editeaza eveniment';
         document.getElementById('modal-btn').textContent='Salveaza modificarile';
@@ -38,6 +37,8 @@ function openModal(id, mode) {
         document.getElementById('modal-btn').textContent ='Salveaza evenimentul';
     }
 }
+
+
 
 function confirmDelete(btn) {
     const td = btn.parentElement;
@@ -50,17 +51,24 @@ function confirmDelete(btn) {
     `;
 }
 
-
   function openUserModal(mode) {
-            document.getElementById('modal-user').style.display = 'flex';
-
+       document.getElementById('modal-user').style.display = 'flex'; 
             if (mode === 'edit') {
                 document.getElementById('modal-user-title').textContent = 'Editează utilizator';
                 document.getElementById('modal-user-btn').textContent = 'Salvează modificările';
-                document.getElementById('password-field').style.display = 'none';
             } else {
                 document.getElementById('modal-user-title').textContent = 'Adaugă utilizator';
                 document.getElementById('modal-user-btn').textContent = 'Salvează';
-                document.getElementById('password-field').style.display = 'flex';
             }
-        }
+  }
+    
+ function openShelterModal(mode){
+   document.getElementById('modal-shelter').style.display = 'flex'; //anuleaza display:none din css pt modal si afiseaza form ul
+            if (mode ==='edit') {
+                document.getElementById('modal-shelter-title').textContent = 'Editeaza adapost';
+                document.getElementById('modal-shelter-btn').textContent = 'Salveaza modificarile';
+            } else {
+                document.getElementById('modal-shelter-title').textContent = 'Adauga adapost';
+                document.getElementById('modal-shelter-btn').textContent = 'Salveaza';
+            }
+  }

@@ -24,9 +24,6 @@
                  <p class="current-date">Marti, 28 Mai 2045</p>
             </div>
 
-            <div class="alert-banner">
-                 1 eveniment activ necesita atentie ->
-            </div>
 
             <div class="status-cards">
                 
