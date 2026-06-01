@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
 });
 
 //pentru add event-> se deschide modular un form 

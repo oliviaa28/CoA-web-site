@@ -30,7 +30,8 @@ class EventModel {
                                         titlu as title, 
                                         stadiu as status, 
                                         localitate as location, 
-                                        descriere as details, 
+                                        descriere as details,
+                                        data_incident as date,
                                         latitudine as lat, 
                                         longitudine as lng 
                                         FROM INCIDENTE_CUTREMUR");
@@ -44,6 +45,7 @@ class EventModel {
                                         stadiu as status, 
                                         localitate as location, 
                                         descriere as details, 
+                                        data_incident as date,
                                         latitudine as lat, 
                                         longitudine as lng FROM INCIDENTE_INUNDATIE");
             $events = array_merge($events, $stmt->fetchAll());
@@ -55,7 +57,8 @@ class EventModel {
                                         titlu as title, 
                                         stadiu as status, 
                                         localitate as location, 
-                                        descriere as details, 
+                                        descriere as details,
+                                        data_incident as date, 
                                         latitudine as lat, 
                                         longitudine as lng FROM INCIDENTE_FOC");
             $events = array_merge($events, $stmt->fetchAll());
