@@ -1,5 +1,6 @@
 let toateEvenimentele = [];
 let toateAdaposturile = [];
+let totiUserii= [];
 
 let editId = null; //salvam info despre evenimentul pe care il editam 
 let editType = null;
@@ -7,6 +8,7 @@ let editType = null;
 document.addEventListener('DOMContentLoaded', function() {
     incarcaEvenimente();
     incarcaAdaposturi(); 
+    incarcaUtilizatori(); 
 });
 
 // DOMContentLoaded asteapta ca pagina sa fie complet incarcata inainte sa apeleze functia
@@ -311,3 +313,119 @@ function golesteFormularAdapost() {
      document.getElementById('shelter_available').value = '';
     document.getElementById('shelter_description').value = '';
 }
+
+// ___________________________ USERS __________________________________
+
+function salveazaUser(){
+    const date = {
+        nume: document.getElementById('user_name').value,
+        email: document.getElementById('user_email').value,   // email ca username
+        password: document.getElementById('user_password').value,
+        judet: document.getElementById('user_county').value
+        };
+
+    let metoda, url;
+     url = '../../../api/users.php';
+
+      if(editId === null){
+        metoda = 'POST';
+      }
+      else{
+         metoda = 'PUT';
+         date.id = editId;      
+      }
+
+    
+    fetch(url, { 
+        method: metoda, 
+        headers: {'Content-Type' : 'application/json'}, 
+        body: JSON.stringify(date)
+    })
+    .then(response =>response.json())
+    .then( data => {
+        console.log('Salvat:', data);
+        editId = null;
+        location.reload(); 
+    })
+    .catch(error => {
+        console.error('Eroare:' , error);
+    });
+
+}
+
+function stergeUser(id){
+    fetch(`../../../api/users.php?id=${id}`, { 
+        method: 'DELETE'
+    })
+    .then(response => response.json() )
+    .then( data => {
+        console.log('Sters:', data);
+        location.reload(); 
+    })
+    .catch(error => {
+        console.error('Eroare:' , error);
+    });
+
+}
+
+function editeazaUser(id){
+
+    let u = null;
+    for (let user of totiUserii) {
+        if (user.id ==id) {
+            u=user;
+            break;
+        }
+    }
+    if (!u) return;
+
+    document.getElementById('user_name').value= u.nume;
+    document.getElementById('user_email').value= u.email;
+    document.getElementById('user_county').value= u.judet;
+
+    editId=id;
+    openUserModal('edit');
+}
+
+function golesteFormularUseri(){
+    editId=null;
+    document.getElementById('user_name').value= '';
+    document.getElementById('user_email').value= '';
+    document.getElementById('user_county').value= '';
+}
+
+function incarcaUtilizatori(){
+    const tbody =document.getElementById('users-tbody');
+    if(!tbody) return;
+
+    fetch('../../../api/users.php')
+    .then(response=>response.json())
+    .then( useri => {
+           totiUserii = useri;
+           tbody.innerHTML = '';
+           
+           for (let u of useri ) {
+            tbody.innerHTML += construiesteRandUser(u);
+          } 
+
+        })
+    .catch(error => console.error('Eroare:', error));
+}
+
+function construiesteRandUser(u) {
+    return `
+        <tr>
+            <td>${u.nume}</td>
+            <td>${u.email}</td>
+            <td>${u.judet}</td>
+            <td>${u.created}</td>
+            <td class="actions">
+                <a href="#" onclick="editeazaUser(${u.id}); return false;">Editeaza</a>
+                <a href="#" class="delete" 
+                   onclick="stergeUser(${u.id}); return false;">Sterge</a>
+            </td>
+        </tr>
+    `;
+}
+
+

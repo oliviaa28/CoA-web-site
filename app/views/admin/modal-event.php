@@ -4,7 +4,7 @@
         
          <div class="modal-header">
             <h2 id="modal-title">Adauga eveniment nou</h2>
-            <button class="modal-close" onclick="closeModal('modal-add')"> ✕ </button>   
+            <button class="modal-close" onclick="closeModal('modal-add')"> X </button>   
          </div>
 
         <form class="modal-form" action="/admin/events/store" method="POST">
@@ -67,7 +67,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="closeModal('modal-add')"> Anuleaza </button>
-                <button type="button" id="modal-btn" onclick="salveazaEveniment()">Salveaza evenimentul</button> <!--id ul vine de la titlul h2 -->
+                <button type="button" id="modal-btn" class="btn-submit" onclick="salveazaEveniment()">Salveaza evenimentul</button> <!--id ul vine de la titlul h2 -->
             </div>
 
         </form>

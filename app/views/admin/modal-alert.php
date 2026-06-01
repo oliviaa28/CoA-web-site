@@ -69,7 +69,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn-cancel" onclick="closeModal('modal-cap')">Anulează</button>
-                        <button type="submit" class="btn-submit">Trimite alerta</button>
+                        <button type="submit" class="btn-submit" >Trimite alerta</button>
                     </div>
 
                 </form>
