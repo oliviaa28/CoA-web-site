@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../../../public/css/forms.css">
   <link rel="stylesheet" href="../../../public/css/admin.css">
   <link rel="stylesheet" href="../../../public/css/events.css">
-  <script src="../../../public/js/main.js"></script>
+
 
 </head>
 
@@ -25,7 +25,8 @@
                <h1>Gestionare evenimente</h1>
 
                 <!--in dreapta numelui ->butonul de adaguare eveniment -->
-            <button class="add-event-btn" onclick= "openModal('modal-add', 'add')" >
+                 <!--ne asiguram ca editId si type sunt null -> daca am editat inainte, sa nu fi ramas valori -->
+            <button class="add-event-btn" onclick="golesteFormular();  openModal('modal-add', 'add')" >
                 + Adauga eveniment
             </button>
 
@@ -67,58 +68,16 @@
                     <th scope="col">Acțiuni</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td class="card-badges">
-                      <span class="badge bg-red">ACTIV </span>
-                    </td>
-                    <td>CUtremur </td>
-                    <td>Cutremur M4.2 Vrancea</td>
-                    <td>Vrancea, România</td>
-                    <td>14:23, azi </td>
-                    <td class="actions">
-                        <a href="event-details.php">Detalii</a>
-                        <a href="#" onclick="openModal('modal-add', 'edit')">Editeaza</a>
-                        <a href="#" class="delete" onclick="confirmDelete(this); return false;">Sterge</a>
-                    </td>
-                  </tr>
-                   <tr>
-                    <td class="card-badges">
-                      <span class="badge bg-orange">Monotorizare</span>
-                    </td>
-                    <td>CUtremur </td>
-                    <td>Cutremur M4.2 Vrancea</td>
-                    <td>Vrancea, România</td>
-                    <td>14:23, azi </td>
-                    <td class="actions">
-                        <a href="#">Detalii</a>
-                        <a href="#" onclick="openModal('modal-add', 'edit')">Editeaza</a>
-                        <a href="#" class="delete">Sterge</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="card-badges">
-                      <span class="badge bg-teal">Rezolvat</span>
-                    </td>
-                    <td>CUtremur </td>
-                    <td>Cutremur Vrancea</td>
-                    <td>România</td>
-                    <td>14:23, azi </td>
-                    <td class="actions">
-                        <a href="#">Detalii</a>
-                        <a href="#" onclick="openModal('modal-add', 'edit')">Editeaza</a>
-                        <a href="#" class="delete">Sterge</a>
-                    </td>
-                  </tr>
-
-
+                
+                <tbody id= "events-tbody">
+                  <!--  -->
                 </tbody>
         
             </table>
         </main>
     </div>
-
-
+  <script src="../../../public/js/main.js"></script>
+  <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

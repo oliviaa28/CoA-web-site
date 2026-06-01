@@ -22,7 +22,7 @@
  
             <div class="header-events">
                 <h1>Adaposturi</h1>
-                <button class="add-event-btn" onclick="openShelterModal('add')">
+                <button class="add-event-btn" onclick="golesteFormularAdapost(); openShelterModal('add')">
                     + Adauga adapost
                 </button>
             </div>
@@ -40,43 +40,8 @@
                         <th scope="col">Actiuni</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Scoala Gimnaziala Ion Creanga</td>
-                        <td>Str. Vasile Lupu nr. 78, Iasi</td>
-                        <td>Buncar</td>
-                        <td>280/350</td>
-                        <td><span class="badge bg-teal">Disponibil</span></td>
-                        <td class="actions">
-                            <a href="shelter-details.php">Detalii</a>
-                            <a href="#" onclick="openShelterModal('edit'); return false;">Editeaza</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Sterge</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Spitalul Clinic Sf. Spiridon</td>
-                        <td>Bd. Independentei nr. 1, Iasi</td>
-                        <td>Punct Medical</td>
-                        <td>12/80</td>
-                        <td><span class="badge bg-orange">Partial</span></td>
-                        <td class="actions">
-                            <a href="shelter-details.php">Detalii</a>
-                            <a href="#" onclick="openShelterModal('edit'); return false;">Editeaza</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Sterge</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Centrul Comunitar Copou</td>
-                        <td>Bd. Carol I nr. 11, Iasi</td>
-                        <td>Provizii</td>
-                        <td>0/200</td>
-                        <td><span class="badge bg-red">Plin</span></td>
-                        <td class="actions">
-                            <a href="shelter-details.php">Detalii</a>
-                            <a href="#" onclick="openShelterModal('edit'); return false;">Editeaza</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Sterge</a>
-                        </td>
-                    </tr>
+                <tbody id="shelters-tbody">
+                    <!-- se cxompleteaza automat din js  -->
                 </tbody>
             </table>
  
@@ -84,6 +49,7 @@
     </div>
  
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 </html>
  

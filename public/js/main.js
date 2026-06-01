@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
 });
 
 //pentru add event-> se deschide modular un form 
@@ -25,6 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
+}
+
+function deschideModalAlerta() {
+    document.getElementById('modal-cap').style.display = 'flex';
 }
 
 function openModal(id, mode) {

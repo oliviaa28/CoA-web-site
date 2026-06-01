@@ -35,7 +35,7 @@
                     <p class="current-date">9 Aprilie 2089, 14:23 EST</p>
                 </div>
                 <div class="event-detail-actions">
-                    <button class="btn-cap"  onclick="openModal('modal-cap')"> Trimite alerta</button>
+                    <button class="btn-cap"  onclick="salveazaAlerta()"> Trimite alerta</button>
                     <button class="btn-edit" onclick="openModal('modal-add', 'edit')"> Editeaza</button>
                     <button class="btn-delete" onclick="confirmDelete(this); return false;" > Sterge</button>
                 </div>
@@ -79,27 +79,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Scoala Generala Nr. 5</td>
-                            <td>Focsani</td>
-                            <td>120/200</td>
-                            <td><span class="badge bg-teal">Disponibil</span></td>
-                            <td><a href="#" class="btn-link">Vezi ruta</a></td>
-                        </tr>
-                        <tr>
-                            <td>ceva sala... </td>
-                            <td>Focsani</td>
-                            <td>45/100</td>
-                            <td><span class="badge bg-orange">Partial</span></td>
-                            <td><a href="#" class="btn-link">Vezi ruta</a></td>
-                        </tr>
-                        <tr>
-                            <td>Centrul Comunitar Sud</td>
-                            <td> judet </td>
-                            <td>85/85</td>
-                            <td><span class="badge bg-red">Plin</span></td>
-                            <td><a href="#" class="btn-link">Vezi ruta</a></td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>

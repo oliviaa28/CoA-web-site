@@ -22,7 +22,7 @@
 
                 <div class="modal-header">
                     <h2 id="modal-user-title">Adaugă utilizator</h2>
-                    <button class="modal-close" onclick="closeModal('modal-user')">✕</button>
+                    <button class="modal-close" onclick="golesteFormularUseri(); closeModal('modal-user')">✕</button>
                 </div>
 
                 <form class="modal-form" action="/admin/users/store" method="POST">
@@ -59,7 +59,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn-cancel" onclick="closeModal('modal-user')">Anulează</button>
-                        <button type="submit" id="modal-user-btn" class="btn-submit">Salvează</button>
+                        <button type="button" id="modal-user-btn" class="btn-submit" onclick="salveazaUser()"  >Salvează</button>
                     </div>
 
                 </form>
@@ -85,57 +85,8 @@
                         <th scope="col">Acțiuni</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Ion Popescu</td>
-                        <td>ion.popescu@gmail.ro</td>
-                        <td>judet </td>
-                        <td>Acum 5 min</td>
-                        <td class="actions">
-                            <a href="#" onclick="openUserModal('edit'); return false;">Editează</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Dezactivează</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Maria Ionescu</td>
-                        <td>maria.ionescu@gmail.ro</td>
-                        <td>Vrancea</td>
-                        <td>Acum 12 min</td>
-                        <td class="actions">
-                            <a href="#" onclick="openUserModal('edit'); return false;">Editează</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Dezactivează</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Andrei Georgescu</td>
-                        <td>andrei.g@gmail.ro</td>
-                        <td>Buzău</td>
-                        <td>Acum 1 oră</td>
-                        <td class="actions">
-                            <a href="#" onclick="openUserModal('edit'); return false;">Editează</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Dezactivează</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Elena Dumitrescu</td>
-                        <td>elena.d@galati.ro</td>
-                        <td>Galați</td>
-                        <td>Acum 2 ore</td>
-                        <td class="actions">
-                            <a href="#" onclick="openUserModal('edit'); return false;">Editează</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Dezactivează</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Cristian Popa</td>
-                        <td>cristian.popa@gmail.ro</td>
-                        <td>Tulcea</td>
-                        <td>Acum 3 ore</td>
-                        <td class="actions">
-                            <a href="#" onclick="openUserModal('edit'); return false;">Editează</a>
-                            <a href="#" class="delete" onclick="confirmDelete(this); return false;">Dezactivează</a>
-                        </td>
-                    </tr>
+                <tbody id='users-tbody'>
+                  
                 </tbody>
             </table>
 
@@ -143,6 +94,7 @@
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

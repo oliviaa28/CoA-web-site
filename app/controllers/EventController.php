@@ -25,15 +25,29 @@ class EventController {
                     echo json_encode(['error' => $e->getMessage()]);
                 }
                 break;
+
             case 'POST':
-                echo json_encode(['message' => 'Endpoint POST pregătit pentru adăugare']);
+                $data = json_decode(file_get_contents('php://input'), true);
+                $type = $data['type'];
+                $this->model->createEvent($type, $data); //apelam modelul
+                echo json_encode(['success' => true ]);
                 break;
+
             case 'PUT':
-                echo json_encode(['message' => 'Endpoint PUT pregătit pentru actualizare']);
+                $data = json_decode(file_get_contents('php://input'), true);
+                $type = $data['type'];
+                $id = $data['id']; //la put, id ul vine in body
+                $this->model->updateEvent($type, $id, $data);
+                echo json_encode(['success' => true ]);
                 break;
+
             case 'DELETE':
-                echo json_encode(['message' => 'Endpoint DELETE pregătit pentru ștergere']);
+                $id = $_GET['id'];
+                $type = $_GET['type'];
+                $this->model->deleteEvent($type, $id);
+                echo json_encode(['success' => true ]);
                 break;
+
             default:
                 http_response_code(405);
                 echo json_encode(['error' => 'Metodă nepermisă']);

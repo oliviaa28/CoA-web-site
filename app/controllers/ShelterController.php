@@ -24,15 +24,26 @@ class ShelterController {
                     echo json_encode(['error' => $e->getMessage()]);
                 }
                 break;
+
             case 'POST':
-                echo json_encode(['message' => 'Endpoint POST pregătit pentru adăugare adăpost']);
+                $data = json_decode(file_get_contents('php://input'), true);
+                $this->model->createShelter( $data); 
+                echo json_encode(['success' => true ]);
                 break;
+
             case 'PUT':
-                echo json_encode(['message' => 'Endpoint PUT pregătit pentru actualizare adăpost']);
+                $data = json_decode(file_get_contents('php://input'), true);
+                $id = $data['id'];
+                $this->model->updateShelter($id, $data);
+                echo json_encode(['success' => true]);
                 break;
+
             case 'DELETE':
-                echo json_encode(['message' => 'Endpoint DELETE pregătit pentru ștergere adăpost']);
+                $id = $_GET['id']; //numele parametrului din url 
+                $this->model->deleteShelter($id);
+                echo json_encode(['success' => true ]);
                 break;
+
             default:
                 http_response_code(405);
                 echo json_encode(['error' => 'Metodă nepermisă']);
