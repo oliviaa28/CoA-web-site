@@ -58,7 +58,7 @@
  
                 <div class="modal-footer">
                     <button type="button" class="btn-cancel" onclick="closeModal('modal-shelter')">Anuleaza</button>
-                    <button type="submit" id="modal-shelter-btn" class="btn-submit">Salveaza</button>
+                    <button type="button" id="modal-shelter-btn" onclick="salveazaAdapost()" >Salveaza</button>
                 </div>
  
          </form>

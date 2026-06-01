@@ -1,12 +1,17 @@
 let toateEvenimentele = [];
+let toateAdaposturile = [];
+
 let editId = null; //salvam info despre evenimentul pe care il editam 
 let editType = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     incarcaEvenimente();
+    incarcaAdaposturi(); 
 });
 
 // DOMContentLoaded asteapta ca pagina sa fie complet incarcata inainte sa apeleze functia
+
+//_________________________________________ EVENIMENTE ______________________________________
 
 //fucntie apelata atunci cand un eveniment nou este creeat  sau editat 
 function salveazaEveniment(){ //post sau put 
@@ -33,8 +38,8 @@ function salveazaEveniment(){ //post sau put
       }
 
 
-    fetch('../../../api/events.php', { //path ul din fetch e relativ la url ul paginii din browser(de unde apelam acesata functie), nu la fiserul js
-        method: 'POST', 
+    fetch(url, { //path ul din fetch e relativ la url ul paginii din browser(de unde apelam acesata functie), nu la fiserul js
+        method: metoda, 
         headers: {'Content-Type' : 'application/json'}, 
         body: JSON.stringify(date)
     })
@@ -52,6 +57,7 @@ function salveazaEveniment(){ //post sau put
 function incarcaEvenimente(){
 
     const tbody= document.getElementById('events-tbody');
+    if (!tbody) return; //cand incarcam si nu gaseste tbody, sa nu dea eroare
     tbody.innerHTML = '';
 
     fetch('../../../api/events.php')     // cere lisat de la endpoint
@@ -60,7 +66,7 @@ function incarcaEvenimente(){
             toateEvenimentele = evenimente; 
             tbody.innerHTML = '';
            for (let ev of evenimente) {
-                tbody.innerHTML += construiesteRand(ev);
+                tbody.innerHTML += construiesteRandEveniment(ev);
             }
 
         })
@@ -70,7 +76,8 @@ function incarcaEvenimente(){
 
 }
 
-function construiesteRand(ev){
+function construiesteRandEveniment(ev){
+
         let badgeClass ='bg-teal'; //default
 
         if(ev.status){
@@ -151,4 +158,156 @@ function golesteFormular() {
     document.getElementById('event_city').value ='';
     document.querySelector('[name="lat"]').value ='';
     document.querySelector('[name="lng"]').value = '';
+}
+
+
+//_________________________________________ ADAPOSTURI ______________________________________
+
+function incarcaAdaposturi(){
+    const tbody = document.getElementById('shelters-tbody');
+    if (!tbody) return;
+
+    fetch('../../../api/shelters.php')
+    .then(response => response.json())
+    .then(adaposturi => {
+        toateAdaposturile = adaposturi;
+        tbody.innerHTML = '';
+
+        for (let ad of adaposturi) {
+            tbody.innerHTML += construiesteRandAdapost(ad);
+        }
+
+    })
+    .catch(error => console.error('Eroare:', error));
+
+}
+
+function construiesteRandAdapost( ad ){
+
+     // calculam statusul si culoarea
+    let badgeClass, statusText;
+    if (ad.available == 0) { //am pus == in loc de === , pt ca == compaar valori indiferent de tip 
+        badgeClass= 'bg-red';
+        statusText = 'Plin';
+    } else 
+        if (ad.available < ad.capacity /2){
+        badgeClass = 'bg-orange';
+        statusText = 'Partial';
+    } else{
+        badgeClass ='bg-teal';
+        statusText ='Disponibil';
+    }
+
+    return `
+        <tr>
+            <td>${ad.name}</td>
+            <td>${ad.address}</td>
+            <td>${ad.type}</td>
+            <td> ${ad.available}/ ${ad.capacity}</td>
+            <td> 
+               <span class="badge ${badgeClass}">${statusText} </span>
+            </td>
+            <td class="actions">
+                <a href="shelter-details.php?id=${ad.id}"> Detalii</a>
+                <a href="#" onclick=" editeazaAdapost( ${ad.id} ); return false;"> Editeaza</a>
+                <a href="#" class="delete" onclick="stergeAdapost(${ad.id}); return false;">Sterge</a>
+            </td>
+        </tr>
+    `;
+     
+}
+
+function stergeAdapost(id){
+
+    fetch(`../../../api/shelters.php?id=${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json() )
+    .then( data => {
+        console.log('Sters:', data);
+        location.reload(); 
+    })
+    .catch(error => {
+        console.error('Eroare:' , error);
+    });
+}
+
+function salveazaAdapost(){
+    const date = {
+        name: document.getElementById('shelter_name').value,
+        address: document.getElementById('shelter_address').value,
+        type: document.getElementById('shelter_type').value,
+        lat: document.querySelector('[name="lat"]').value,
+        lng: document.querySelector('[name="lng"]').value,
+        capacity: document.getElementById('shelter_capacity').value,
+        available: document.getElementById('shelter_available').value,
+        description: document.getElementById('shelter_description').value
+    };
+
+    let metoda, url;
+     url = '../../../api/shelters.php';
+
+      if(editId === null){
+        metoda = 'POST';
+      }
+      else{
+         metoda = 'PUT';
+         date.id = editId;      
+      }
+
+
+    fetch(url, { 
+        method: metoda, 
+        headers: {'Content-Type' : 'application/json'}, 
+        body: JSON.stringify(date)
+    })
+    .then(response =>response.json())
+    .then( data => {
+        console.log('Salvat:', data);
+        editId = null;
+        location.reload(); //reincarca pagina
+    })
+    .catch(error => {
+        console.error('Eroare:' , error);
+    });
+
+}
+
+function editeazaAdapost(id){ //pentru cand deschidem formularul, sa avem deja informatiile precompletate
+    let s = null;
+
+    for(let ad of toateAdaposturile) {
+        if (ad.id == id){
+            s= ad;
+            break;
+        }
+    }
+    
+    if(s == null) 
+        return ;
+
+    document.getElementById('shelter_name').value = s.name;
+    document.getElementById('shelter_address').value = s.address;
+    document.getElementById('shelter_type').value = s.type;
+    document.querySelector('[name="lat"]').value= s.lat;
+    document.querySelector('[name="lng"]').value= s.lng;
+    document.getElementById('shelter_capacity').value =s.capacity;
+    document.getElementById('shelter_available').value =s.available;
+    document.getElementById('shelter_description').value = s.details;  // in getAllShelters avem DESCRIERE AS "details"
+
+ 
+    editId = id;
+    openShelterModal('edit');
+}
+
+function golesteFormularAdapost() {
+     editId=null; 
+     document.getElementById('shelter_name').value = '';
+     document.getElementById('shelter_address').value = '';
+     document.getElementById('shelter_type').value = '';
+     document.querySelector('[name="lat"]').value = '';
+     document.querySelector('[name="lng"]').value = '';
+     document.getElementById('shelter_capacity').value = '';
+     document.getElementById('shelter_available').value = '';
+    document.getElementById('shelter_description').value = '';
 }
