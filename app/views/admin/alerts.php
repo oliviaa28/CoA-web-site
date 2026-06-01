@@ -22,7 +22,7 @@
 
             <div class="header-events">
                 <h1>Alerte </h1>
-                <button class="add-event-btn" onclick="openModal('modal-cap')">
+                <button class="add-event-btn"  onclick="deschideModalAlerta()">
                     + Trimite alertă nouă
                 </button>
             </div>
@@ -37,38 +37,7 @@
                         <th scope="col">Acțiuni</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Cutremur</td>
-                        <td>Extrem</td>
-                        <td>9 Apr 2026, 14:25</td>
-                        <td><span class="badge bg-red">ACTIV</span></td>
-                        <td class="actions">
-                             <a href="cap-details.php">Vezi detalii</a>
-                            <a href="#" class="export">Export XML</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Inundație</td>
-                        <td>Sever</td>
-                        <td>8 Apr 2026, 09:20</td>
-                        <td><span class="badge bg-orange">MONITORIZARE</span></td>
-                        <td class="actions">
-                            <a href="cap-details.php">Vezi detalii</a>
-                            <a href="#" class="export">Export XML</a>
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <td>Incendiu</td>
-                        <td>Moderat</td>
-                        <td>7 Apr 2026, 18:50</td>
-                        <td><span class="badge bg-teal">REZOLVAT</span></td>
-                        <td class="actions">
-                            <a href="cap-details.php">Vezi detalii</a>
-                            <a href="#" class="export">Export XML</a>
-                        </td>
-                    </tr>
+                <tbody id ='alerts-tbody'>
                 </tbody>
 
             </table>
@@ -77,6 +46,7 @@
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

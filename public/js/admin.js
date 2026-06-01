@@ -1,6 +1,7 @@
 let toateEvenimentele = [];
 let toateAdaposturile = [];
 let totiUserii= [];
+let toateAlertele = [];
 
 let editId = null; //salvam info despre evenimentul pe care il editam 
 let editType = null;
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     incarcaEvenimente();
     incarcaAdaposturi(); 
     incarcaUtilizatori(); 
+    incarcaAlerte();
 });
 
 // DOMContentLoaded asteapta ca pagina sa fie complet incarcata inainte sa apeleze functia
@@ -429,3 +431,80 @@ function construiesteRandUser(u) {
 }
 
 
+// ___________________________ ALERTE __________________________________
+
+function incarcaAlerte(){
+    const tbody = document.getElementById('alerts-tbody');
+    if (!tbody) return;
+
+    fetch('../../../api/alerts.php')
+        .then(response => response.json())
+        .then(alerte => {
+            toateAlertele = alerte;
+            tbody.innerHTML = '';
+            for (let a of alerte) {
+                tbody.innerHTML += construiesteRandAlerta(a);
+            }
+        })
+        .catch(error => console.error('Eroare:', error));
+}
+
+function construiesteRandAlerta(a){
+    let badgeClass = 'bg-teal';
+    if (a.status) {
+        let s = a.status.toLowerCase();
+        if (s.includes('activ')) badgeClass = 'bg-red';
+        else if (s.includes('monitorizare')) badgeClass = 'bg-orange';
+    }
+
+    return `
+        <tr>
+            <td>${a.type}</td>
+            <td>${a.severity}</td>
+            <td>${a.sentat}</td>
+            <td><span class="badge ${badgeClass}">${a.status}</span></td>
+            <td class="actions">
+                <a href="cap-details.php?id=${a.id}">Detalii</a>
+                <a href="#" class="delete" onclick="stergeAlerta(${a.id}); return false;">Sterge</a>
+            </td>
+        </tr>
+    `;
+}
+
+function salveazaAlerta(){
+    const date = {
+        id_incident: document.querySelector('[name="id_incident"]').value,
+        tip_incident: document.querySelector('[name="tip_incident"]').value,
+
+        headline: document.getElementById('cap_headline').value,
+        description: document.getElementById('cap_description').value,
+        instruction: document.getElementById('cap_instruction').value,
+        severity: document.getElementById('cap_severity').value,
+        urgency: document.getElementById('cap_urgency').value,
+        zone: document.getElementById('cap_area').value
+    };
+
+    fetch('../../../api/alerts.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(date)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Alerta trimisa:', data);
+        location.reload();
+    })
+    .catch(error => console.error('Eroare:', error));
+}
+
+function stergeAlerta(id){
+    fetch(`../../../api/alerts.php?id=${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Sters:', data);
+        location.reload();
+    })
+    .catch(error => console.error('Eroare:', error));
+}

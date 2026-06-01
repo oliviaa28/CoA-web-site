@@ -35,7 +35,7 @@
                     <p class="current-date">9 Aprilie 2089, 14:23 EST</p>
                 </div>
                 <div class="event-detail-actions">
-                    <button class="btn-cap"  onclick="openModal('modal-cap')"> Trimite alerta</button>
+                    <button class="btn-cap"  onclick="salveazaAlerta()"> Trimite alerta</button>
                     <button class="btn-edit" onclick="openModal('modal-add', 'edit')"> Editeaza</button>
                     <button class="btn-delete" onclick="confirmDelete(this); return false;" > Sterge</button>
                 </div>

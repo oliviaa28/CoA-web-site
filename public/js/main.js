@@ -26,6 +26,10 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
+function deschideModalAlerta() {
+    document.getElementById('modal-cap').style.display = 'flex';
+}
+
 function openModal(id, mode) {
      document.getElementById(id).style.display = 'flex'; 
     if (mode==='edit') {

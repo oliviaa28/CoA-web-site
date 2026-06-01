@@ -64,12 +64,12 @@
                     </div>
 
                     <!-- acestea vor fi populate automat din js -->
-                    <input type="hidden" name="id_incident" value="">
-                    <input type="hidden" name="tip_incident" value="">
+                        <input type="hidden" name="id_incident" id="alert_id_incident" value="">
+                        <input type="hidden" name="tip_incident" id="alert_tip_incident" value="">
 
                     <div class="modal-footer">
                         <button type="button" class="btn-cancel" onclick="closeModal('modal-cap')">Anulează</button>
-                        <button type="submit" class="btn-submit" >Trimite alerta</button>
+                        <button type="button" class="btn-submit" onclick="salveazaAlerta()" >Trimite alerta</button>
                     </div>
 
                 </form>
