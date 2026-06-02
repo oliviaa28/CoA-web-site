@@ -43,6 +43,15 @@
             </div>
 
             <div class="form-field">
+                <label for="event_status">Status</label>
+                <select id="event_status" name="event_status">
+                    <option value="ACTIV">Activ</option>
+                    <option value="MONITORIZARE">Monitorizare</option>
+                    <option value="REZOLVAT">Rezolvat</option>
+                </select>
+            </div>
+
+            <div class="form-field">
                 <label for="event_county">Judet</label>
                 <select id="event_county" name="event_county" required>
                     <option value="">Selecteaza judetul</option>

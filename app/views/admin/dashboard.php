@@ -29,25 +29,25 @@
                 
                 <!--Evenimente active -->
                 <div class="status-card" > 
-                    <span class="status-number">3</span>
+                    <span class="status-number"  id="stat-evenimente">-</span>
                     <span class="status-label">Evenimente active</span>
                 </div>
 
                 <!--Alerte trimise azi -->
                 <div class="status-card">
-                    <span class="status-number">12</span>
+                    <span class="status-number" id="stat-alerte">-</span>
                     <span class="status-label">Alerte trimise azi</span>
                 </div>
 
                 <!--Adaposturi disponibile-->
-                <div class="status-card">
-                    <span class="status-number">847</span>
+                <div class="status-card" >
+                    <span class="status-number" id="stat-adaposturi" >-</span>
                     <span class="status-label">Adaposturi disponibile</span>
                 </div>
 
                 <!--Utilizatori activi-->
                 <div class="status-card">
-                    <span class="status-number">1542</span>
+                    <span class="status-number"  id="stat-utilizatori" > - </span>
                     <span class="status-label">Utilizatori activi</span>
                 </div>
             </div>
@@ -92,6 +92,9 @@
            
         </main>
     </div>
+
+    <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

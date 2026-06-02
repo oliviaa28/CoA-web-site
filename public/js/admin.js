@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     incarcaAdaposturi(); 
     incarcaUtilizatori(); 
     incarcaAlerte();
+    incarcaStatistici();
 
     // asculta filtrele (daca exista)
     const filterTip= document.getElementById('filter_type');
@@ -34,7 +35,7 @@ function salveazaEveniment(){ //post sau put
             localitate: document.getElementById('event_city').value,
             lat: document.querySelector('[name="lat"]').value,  //deoarece nu avem id la inputul pt lat si lng, folosim querySelector cu selector de atribut(CSS)
             lng: document.querySelector('[name="lng"]').value,
-            stadiu: 'ACTIV' //nu avem in form, setam default 
+            stadiu: document.getElementById('event_status').value
      };
 
      let metoda, url;
@@ -169,6 +170,7 @@ function editeaza(id, type){
     document.getElementById('event_city').value = ev.location;
     document.querySelector('[name="lat"]').value = ev.lat;
     document.querySelector('[name="lng"]').value = ev.lng;
+    document.getElementById('event_status').value = ev.status;
 
     editId= id;
     editType= type;
@@ -186,6 +188,7 @@ function golesteFormular() {
     document.getElementById('event_city').value ='';
     document.querySelector('[name="lat"]').value ='';
     document.querySelector('[name="lng"]').value = '';
+    document.getElementById('event_status').value = 'ACTIV'; //default
 }
 
 
@@ -536,4 +539,51 @@ function stergeAlerta(id){
         location.reload();
     })
     .catch(error => console.error('Eroare:', error));
+}
+
+
+// _______________________________ DASH BOARD -> statistici ______________________________________
+
+
+function incarcaStatistici() {
+
+    //verificam daca suntem in pagina dashboard
+    const cardEvenimente = document.getElementById('stat-evenimente');
+    if(!cardEvenimente)
+        return;
+
+    //evenimente active 
+    fetch('../../../api/events.php?status=activ')
+     .then(response => response.json())
+     .then( evenimente =>{ 
+         cardEvenimente.textContent = evenimente.length;} // length = nr de elemente din array
+     );
+
+     //alerte
+    fetch('../../../api/alerts.php')
+      .then(response => response.json())
+       .then(alerte => {
+            document.getElementById('stat-alerte').textContent = alerte.length;
+        });
+
+    //adaposturi disponibile 
+    fetch('../../../api/shelters.php')
+       .then(response => response.json())
+       .then(adaposturi => {
+           let nr=0;
+           for( let a of adaposturi)
+              if( a.available > 0 )// datele returnate de api 
+                nr++;
+
+            document.getElementById('stat-adaposturi').textContent = nr;
+        });
+
+    fetch('../../../api/users.php')
+      .then(response => response.json())
+       .then(users => {
+           document.getElementById('stat-utilizatori').textContent = users.length;
+        });
+
+
+
 }
