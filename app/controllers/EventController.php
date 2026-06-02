@@ -17,8 +17,9 @@ class EventController {
         switch ($method) {
             case 'GET':
                 $type = $_GET['type'] ?? 'all';
+                $status = $_GET['status'] ?? ''; //daca nu estia status in url, uil foloseste gol(adica nu exista filtru)
                 try {
-                    $events = $this->model->getAllEvents($type);
+                    $events = $this->model->getAllEvents($type, $status);
                     echo json_encode($events);
                 } catch (\PDOException $e) {
                     http_response_code(500);

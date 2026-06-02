@@ -42,18 +42,6 @@ function openModal(id, mode) {
 }
 
 
-
-function confirmDelete(btn) {
-    const td = btn.parentElement;
-    td.innerHTML = `
-        <div class="inline-table">
-          <span >Sigur?</span>
-          <a href="#" class="delete">Da </a>
-          <a href="#" onclick="location.reload()">Nu</a>
-        </div>
-    `;
-}
-
   function openUserModal(mode) {
        document.getElementById('modal-user').style.display = 'flex'; 
             if (mode === 'edit') {

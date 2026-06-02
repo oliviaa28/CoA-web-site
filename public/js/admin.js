@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     incarcaAdaposturi(); 
     incarcaUtilizatori(); 
     incarcaAlerte();
+
+    // asculta filtrele (daca exista)
+    const filterTip= document.getElementById('filter_type');
+    const filterStatus= document.getElementById('filter_status');
+    if (filterTip) 
+        filterTip.addEventListener('change', incarcaEvenimente);
+    if (filterStatus) 
+        filterStatus.addEventListener('change', incarcaEvenimente);
 });
 
 // DOMContentLoaded asteapta ca pagina sa fie complet incarcata inainte sa apeleze functia
@@ -64,7 +72,21 @@ function incarcaEvenimente(){
     if (!tbody) return; //cand incarcam si nu gaseste tbody, sa nu dea eroare
     tbody.innerHTML = '';
 
-    fetch('../../../api/events.php')     // cere lisat de la endpoint
+    //citim filtrele , daca exita
+    let tip ='all'; //default
+    let status = '';
+    const filterTip = document.getElementById('filter_type'); 
+    const filterStatus = document.getElementById('filter_status');
+
+    if ( filterTip && filterTip.value !== '') 
+        tip = filterTip.value;
+
+    if (filterStatus) 
+        status =filterStatus.value;
+
+    let url = `../../../api/events.php?type=${tip}&status=${status}`;
+
+    fetch(url)     // cere lisat de la endpoint
         .then(response => response.json() )
         .then(evenimente => { //construim html
             toateEvenimentele = evenimente; 

@@ -25,7 +25,6 @@
                <h1>Gestionare evenimente</h1>
 
                 <!--in dreapta numelui ->butonul de adaguare eveniment -->
-                 <!--ne asiguram ca editId si type sunt null -> daca am editat inainte, sa nu fi ramas valori -->
             <button class="add-event-btn" onclick="golesteFormular();  openModal('modal-add', 'add')" >
                 + Adauga eveniment
             </button>
@@ -35,8 +34,8 @@
             <div class="filter-event-banner">
                   <div class="filter-event-field">
                     <label for="event_type">Tip eveniment</label>
-                         <select  id="event_type" name="event_type" required>
-                            <option value="">Selecteaza tipul</option>
+                         <select  id="filter_type" id="filter_type">
+                            <option value="">Selecteaza tipul</option> 
                             <option value="cutremur">Cutremur</option>
                             <option value="inundatie">Inundatie</option>
                             <option value="incendiu">Incendiu</option>
@@ -45,7 +44,7 @@
                 
                    <div class="filter-event-field">
                     <label for="event_type">Status</label>
-                         <select  id="event_type" name="event_type" required>
+                         <select  id="filter_status" name="filter_status" >
                             <option value="">Selecteaza statusul</option>
                             <option value="activ">Activ</option>
                             <option value="monitorizare">Monitorizare</option>
