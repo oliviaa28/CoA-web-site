@@ -112,6 +112,8 @@ function construiesteRandEveniment(ev){
 }
 
 function sterge(id, type){
+    if (!confirm('Sigur vrei să ștergi acest eveniment?')) //returns true if the user clicked "OK", otherwise false.
+         return;
 
     fetch(`../../../api/events.php?id=${id}&type=${type}`, { // in controller avem $id = $_GET['id']; , care ia paraemtrii din url 
         method: 'DELETE'
@@ -222,6 +224,7 @@ function construiesteRandAdapost( ad ){
 }
 
 function stergeAdapost(id){
+    if (!confirm('Sigur vrei să ștergi acest adapost?')) return;
 
     fetch(`../../../api/shelters.php?id=${id}`, {
         method: 'DELETE'
@@ -356,6 +359,8 @@ function salveazaUser(){
 }
 
 function stergeUser(id){
+    if (!confirm('Sigur vrei să ștergi acest utilizator?')) return;
+
     fetch(`../../../api/users.php?id=${id}`, { 
         method: 'DELETE'
     })
@@ -498,6 +503,8 @@ function salveazaAlerta(){
 }
 
 function stergeAlerta(id){
+    if (!confirm('Sigur vrei să ștergi aceasta alerta?')) return;
+
     fetch(`../../../api/alerts.php?id=${id}`, {
         method: 'DELETE'
     })
