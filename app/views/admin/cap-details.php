@@ -1,3 +1,8 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
+
 <!DOCTYPE html>
 <html lang="ro">
 
@@ -30,7 +35,7 @@
                     <p class="current-date" id="alert-sent"></p>
                 </div>
                 <div class="event-detail-actions">
-                    <button class="btn-edit">Export XML</button>
+                    <button class="btn-edit"onclick="exportaAlerta()">Export XML</button>
                     <button class="btn-delete" onclick="anuleazaAlerta()">Anulează alerta</button>
                 </div>
             </div>

@@ -70,6 +70,12 @@ class UserModel {
         return true;
     }
 
+    public function getUserByEmail($email) {
+        $sql = $this->pdo->prepare("SELECT * FROM ADMINISTRATORI WHERE email = :email");
+        $sql->execute(['email' => $email]);
+     return $sql->fetch();
+    }
+
 
 }
 

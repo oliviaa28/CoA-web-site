@@ -1,3 +1,8 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
+
 <!DOCTYPE html>
 <html lang="ro">
 

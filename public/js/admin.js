@@ -411,7 +411,7 @@ function editeazaUser(id){
     }
     if (!u) return;
 
-    document.getElementById('user_name').value= u.nume;
+    document.getElementById('user_name').value=u.nume;
     document.getElementById('user_email').value= u.email;
     document.getElementById('user_county').value= u.judet;
 
@@ -511,6 +511,7 @@ function salveazaAlerta(){
         instruction: document.getElementById('cap_instruction').value,
         severity: document.getElementById('cap_severity').value,
         urgency: document.getElementById('cap_urgency').value,
+        certainty: document.getElementById('cap_certainty').value,
         zone: document.getElementById('cap_area').value
     };
 

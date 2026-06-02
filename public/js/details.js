@@ -283,3 +283,8 @@ function anuleazaAlerta(){
     .catch(error => console.error('Eroare:', error));
 
 }
+
+function exportaAlerta() { 
+    //navigheaza la endpoint, care va raspunde cu headers pt descarcare
+    window.location.href= `/CoA-project/api/alerts.php?action=export&id=${alertaCurentId}`;
+}
