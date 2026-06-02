@@ -44,5 +44,38 @@ class AlertModel {
         return true;
     }
 
+    
+    public function getAlertsByEvent($idIncident, $tipIncident) { //pentru tabelul cu alertele fiecarui eveniment
+        $sql = $this->pdo->prepare('SELECT 
+                                    id_alerta AS "id",
+                                    headline AS "headline",
+                                    severitate AS "severity",
+                                    urgenta AS "urgency",
+                                    status AS "status",
+                                    trimis_la AS "sentat"
+                                    FROM ALERTE 
+                                   WHERE id_incident = :id AND tip_incident = :tip');
+    
+    $sql->execute( ['id' => $idIncident, 'tip' => $tipIncident] );
+    return $sql->fetchAll();
+   }
+
+   public function getAlertById($id) {
+       $sql= $this->pdo->prepare('SELECT 
+                                    id_alerta AS "id",
+                                    tip_incident AS "type",
+                                    id_incident AS "incidentId",
+                                    headline AS "headline",
+                                    descriere AS "description",
+                                    instructiuni AS "instruction",
+                                    severitate AS "severity",
+                                    urgenta AS "urgency",
+                                    zona AS "zone",
+                                    status AS "status",
+                                    trimis_la AS "sentat"
+                                FROM ALERTE WHERE id_alerta = :id');
+    $sql->execute( ['id' => $id]);
+    return $sql->fetch();
+  }
 
 }

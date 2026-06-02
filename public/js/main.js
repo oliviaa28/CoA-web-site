@@ -41,8 +41,7 @@ function openModal(id, mode) {
     }
 }
 
-
-  function openUserModal(mode) {
+function openUserModal(mode) {
        document.getElementById('modal-user').style.display = 'flex'; 
             if (mode === 'edit') {
                 document.getElementById('modal-user-title').textContent = 'Editează utilizator';
@@ -53,7 +52,7 @@ function openModal(id, mode) {
             }
   }
     
- function openShelterModal(mode){
+function openShelterModal(mode){
    document.getElementById('modal-shelter').style.display = 'flex'; //anuleaza display:none din css pt modal si afiseaza form ul
             if (mode ==='edit') {
                 document.getElementById('modal-shelter-title').textContent = 'Editeaza adapost';

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../../public/css/admin.css">
     <link rel="stylesheet" href="../../../public/css/events.css">
 
+
     <!-- Leaflet  -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
@@ -25,24 +26,21 @@
 
         <main class="events-content">
 
-            <!-- Breadcrumb -->
-            <nav class="inapoi-btn">
-                <a href="shelters.php">Adaposturi</a>
-                <span> > </span>
-                <span>NUMEW</span>
-            </nav>
+        <nav class="inapoi-btn">
+            <a href="shelters.php"> <- Înapoi la adăposturi</a>
+        </nav>
 
             <!-- Header adapost -->
             <div class="event-detail-header">
                 <div class="event-detail-left">
-                    <span class="badge bg-teal">DISPONIBIL</span>
-                    <h1>Scoala Gimnaziala Ion Creanga</h1>
-                    <p class="current-date">Str. Vasile Lupu nr. 78, Iasi</p>
+                    <span class="badge" id="shelter-badge">...</span>
+                    <h1 id="shelter-name">...</h1>
+                    <p class="current-date" id="shelter-address-header">...</p>
                 </div>
               
                   <div class="event-detail-actions">
-                    <button class="btn-edit" onclick="openShelterModal( 'edit')"> Editeaza</button>
-                    <button class="btn-delete" onclick="confirmDelete(this); return false;"> Sterge</button>
+                    <button class="btn-edit" onclick="editeazaAdapostDetalii()"> Editeaza</button>
+                    <button class="btn-delete" onclick="stergeAdapostDetalii()"> Sterge</button>
                 </div>
             </div>
 
@@ -60,14 +58,25 @@
                 <!-- Detalii dreapta -->
                 <div class="event-detail-panels">
 
-                    <div class="detail-panel">
-                        <h3>Detalii adapost</h3>
-                        <p>Tip: Buncar</p>
-                        <p>Adresa:  Str. Vasile Lupu nr. 78, Iasi</p>
-                        <p>Capacitate totala: 350 persoane</p>
-                        <p>Locuri disponibile: 280</p>
-                        <p>Descriere:  Sala de sport reamenajata. Apa potabila, electricitate de rezerva, grupuri sanitare.</p>
-                    </div>
+                <div class="detail-panel">
+                    <h3>Detalii adapost</h3>
+                    <p> <strong>Tip:</strong>
+                         <span id="shelter-type"></span>
+                    </p>
+                    <p>  <strong> Adresa:  </strong>
+                        <span id="shelter-address"></span>
+                    </p>
+                    <p>  <strong> Capacitate totala:  </strong>
+                         <span id="shelter-capacity"></span> 
+                      persoane
+                    </p>
+                    <p>  <strong> Locuri disponibile:  </strong>
+                         <span id="shelter-available"></span>
+                    </p>
+                    <p>  <strong> Descriere:  </strong>
+                        <span id="shelter-description"></span>
+                    </p>
+                </div>
 
                     <div class="detail-panel">
                         <h3>Ruta de evacuare</h3>
@@ -83,6 +92,8 @@
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
+    <script src="../../../public/js/details.js"></script>
 </body>
 
 </html>

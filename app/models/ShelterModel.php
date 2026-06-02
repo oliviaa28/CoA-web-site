@@ -62,4 +62,22 @@ class ShelterModel {
        return true;
 
     }
+
+
+    public function getShelterById($id){
+        $sql =$this->pdo->prepare( 
+          'SELECT  id_adapost AS "id",
+                nume AS "name",
+                adresa AS "address",
+                tip AS "type",
+                capacitate AS "capacity",
+                locuri_disponibile AS "available",
+                descriere AS "details",
+                latitudine AS "lat",
+                longitudine AS "lng"
+            FROM ADAPOSTURI WHERE id_adapost = :id');
+
+        $sql->execute( ['id' => $id] );
+        return $sql->fetch();         
+    }
 }

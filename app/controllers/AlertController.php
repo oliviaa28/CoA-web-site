@@ -20,8 +20,20 @@ class AlertController{
         switch ($method) {
             case 'GET':
                 try {
-                    $alerts = $this->model->getAllAlerts();
-                    echo json_encode($alerts);
+                    if ( isset($_GET['id_incident']) && isset($_GET['tip_incident']) ) {
+                        // alertele unui eveniment
+                        $alerts= $this->model->getAlertsByEvent($_GET['id_incident'], $_GET['tip_incident']);
+                        echo json_encode($alerts);
+                     } else
+                      if ( isset($_GET['id']) ) {
+                            // o singura alerta (pentru cap-details)
+                         $alert = $this->model->getAlertById($_GET['id']);
+                         echo json_encode($alert);}
+                     else {
+                         // toate alertele
+                         $alerts = $this->model->getAllAlerts();
+                         echo json_encode($alerts);
+                     }
                 } 
                 catch (\PDOException $e) {
                     http_response_code(500);

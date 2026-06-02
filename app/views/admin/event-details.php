@@ -20,24 +20,21 @@
 
         <main class="events-content">
 
-            <!-- buton de mers inapoi la evenimente -->
-            <nav class="inapoi-btn">
-                <a href="events.php">Evenimente</a>
-                <span> > </span>
-                <span>Cutremur  .... </span>
-            </nav>
+        <nav class="inapoi-btn">
+            <a href="events.php"> <- Înapoi la evenimente</a>
+        </nav>
 
             <!-- Header eveniment -->
             <div class="event-detail-header">
                 <div class="event-detail-left">
-                    <span class="badge bg-red"> EVENIMENT ACTIV</span>
-                    <h1>Cutremur M4.2 Vrancea</h1>
-                    <p class="current-date">9 Aprilie 2089, 14:23 EST</p>
+                    <span class="badge" id="event-badge">...</span>
+                    <h1 id="event-name">...</h1>
+                    <p class="current-date" id="event-address-header">...</p>
                 </div>
                 <div class="event-detail-actions">
-                    <button class="btn-cap"  onclick="salveazaAlerta()"> Trimite alerta</button>
-                    <button class="btn-edit" onclick="openModal('modal-add', 'edit')"> Editeaza</button>
-                    <button class="btn-delete" onclick="confirmDelete(this); return false;" > Sterge</button>
+                    <button class="btn-cap"  onclick="deschideAlertaDinEveniment()"> Trimite alerta</button>
+                    <button class="btn-edit" onclick="editeazaEvenimentDetalii()"> Editeaza</button>
+                    <button class="btn-delete" onclick="stergeEvenimentDetalii()" > Sterge</button>
                 </div>
             </div>
 
@@ -65,29 +62,30 @@
                 </div>
             </div>
 
-            <!-- Tabel adaposturi recomandate -->
-            <div class="shelters-section">
-                <h2>Adaposturi recomandate in zona</h2>
+            <div class="alerts-section">
+                <h2>Alerte trimise pentru acest eveniment</h2>
                 <table class="list-events">
-                    <thead>
+                     <thead>
                         <tr>
-                            <th scope="col">Nume</th>
-                            <th scope="col">Localitate</th>
-                            <th scope="col">Capacitate</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Ruta</th>
+                         <th>Titlu</th>
+                         <th>Severitate</th>
+                         <th>Trimis la</th>
+                         <th>Status</th>
+                         <th>Acțiuni</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
                     </tbody>
                 </table>
             </div>
+
 
         </main>
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
+    <script src="../../../public/js/details.js"></script>
 </body>
 
 </html>

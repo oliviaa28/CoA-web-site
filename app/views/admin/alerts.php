@@ -22,9 +22,6 @@
 
             <div class="header-events">
                 <h1>Alerte </h1>
-                <button class="add-event-btn"  onclick="deschideModalAlerta()">
-                    + Trimite alertă nouă
-                </button>
             </div>
 
             <table class="list-events">
