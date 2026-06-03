@@ -322,7 +322,7 @@ function stergeAdapost(id){
     .then(response => response.json() )
     .then( data => {
        arataToast('Adapost șters!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaAdaposturi();
     })
     .catch(error => {
         arataToast('Eroare la stergerea adapostului');
@@ -363,7 +363,7 @@ function salveazaAdapost(){
     .then( data => {
         editId = null;
         arataToast('Adapost salvat!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaAdaposturi();
     })
     .catch(error => {
          arataToast('Eroare la salvarea adapostului!');
@@ -443,7 +443,7 @@ function salveazaUser(){
         
         editId = null;
         arataToast('User salvat!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaUtilizatori();
     })
     .catch(error => {
         arataToast('Eroare la  salvare user!');
@@ -461,7 +461,7 @@ function stergeUser(id){
     .then(response => response.json() )
     .then( data => {
         arataToast('User sters!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaUtilizatori();
     })
     .catch(error => {
         arataToast('Eroare stergere user!');
@@ -593,7 +593,7 @@ function salveazaAlerta(){
     .then(response => response.json())
     .then(data => {
         arataToast('Alerta trimisa!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaAlerte();
     })
     .catch(error =>{
             arataToast('eroare trimitere alerta!');
@@ -610,7 +610,7 @@ function stergeAlerta(id){
     .then(response => response.json())
     .then(data => {
         arataToast('Alerta stearsa!');
-        setTimeout(() => location.reload(), 1000);
+        incarcaAlerte();
     })
     .catch(error =>{
             arataToast('eroare stergere alerta!');
