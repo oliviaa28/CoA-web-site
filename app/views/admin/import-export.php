@@ -45,8 +45,8 @@ AuthController::requireAuth();
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">JSON</button>
-                            <button class="ie-btn">CSV</button>
+                            <button class="ie-btn" onclick="exportData('events', 'json')">JSON</button>
+                            <button class="ie-btn" onclick="exportData('events', 'csv')" >CSV</button>
                         </div>
                     </div>
 
@@ -59,8 +59,8 @@ AuthController::requireAuth();
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">JSON</button>
-                            <button class="ie-btn">CSV</button>
+                            <button class="ie-btn" onclick="exportData('shelters', 'json')" >JSON</button>
+                            <button class="ie-btn" onclick="exportData('shelters', 'csv')" >CSV</button>
                         </div>
                     </div>
 
@@ -73,26 +73,12 @@ AuthController::requireAuth();
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">XML</button>
-                            <button class="ie-btn">JSON</button>
-                             <button class="ie-btn">CSV</button>
+                            <button class="ie-btn"  onclick="exportData('alerts', 'json')">JSON</button>
+                             <button class="ie-btn"  onclick="exportData('alerts', 'csv')" >CSV</button>
 
                         </div>
                     </div>
 
-                    <div class="ie-item">
-                        <div class="ie-item-info">
-                            <span class="ie-item-icon">🗐</span>
-                            <div>
-                                <strong>Export utilizatori</strong>
-                                <p>Exportă lista de utilizatori și roluri</p>
-                            </div>
-                        </div>
-                        <div class="ie-btns">
-                            <button class="ie-btn">CSV</button>
-                            <button class="ie-btn">JSON</button>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Coloana dreapta: Import -->
@@ -122,6 +108,7 @@ AuthController::requireAuth();
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

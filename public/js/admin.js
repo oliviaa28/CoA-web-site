@@ -589,3 +589,10 @@ function incarcaStatistici() {
 
 
 }
+
+//____________________ import export _________________
+
+function exportData(type, format){
+    //relativ la url ul paginii import-export.php din admin
+    window.location.href= `../../../api/import-export.php?action=export&type=${type}&format=${format}`;
+}
