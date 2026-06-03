@@ -18,14 +18,15 @@ class EventController {
             case 'GET':
                 $type = $_GET['type'] ?? 'all';
                 $status = $_GET['status'] ?? ''; //daca nu estia status in url, il foloseste gol(adica nu exista filtru)
-                
+                $year = $_GET['year'] ?? '';
+
                 try {
                      if ( isset($_GET['id']) ) { // un singur eveniment (pentru pagina de detalii)
                          $event = $this->model->getEventDetails($_GET['id'], $type);
                          echo json_encode($event);
                       } 
                       else { //lista cu filtre 
-                        $events = $this->model->getAllEvents($type, $status);
+                        $events = $this->model->getAllEvents($type, $status, $year);
                         echo json_encode($events);
                     }
                 } catch (\PDOException $e) {

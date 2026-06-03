@@ -10,6 +10,7 @@ $n = 0;
 
 while (($r = fgetcsv($f)) !== false) {
 
+
     //coloane 
    //title,magnitude,date_time,cdi,mmi,alert,tsunami,sig,net,nst,dmin,gap,magType,depth,latitude,longitude,location,continent,country
     //"M 6.5 - 42 km W of Sola, Vanuatu",6.5,16-08-2023 12:47,7,4,green,0,657,us,114,7.177,25,mww,192.955,-13.8814,167.158,"Sola, Vanuatu",,Vanuatu

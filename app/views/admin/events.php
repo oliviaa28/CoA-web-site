@@ -37,8 +37,8 @@ AuthController::requireAuth();
 
             <div class="filter-event-banner">
                   <div class="filter-event-field">
-                    <label for="event_type">Tip eveniment</label>
-                         <select  id="filter_type" id="filter_type">
+                    <label for="filter_type">Tip eveniment</label>
+                         <select  id="filter_type" name="filter_type">
                             <option value="">Selecteaza tipul</option> 
                             <option value="cutremur">Cutremur</option>
                             <option value="inundatie">Inundatie</option>
@@ -47,14 +47,18 @@ AuthController::requireAuth();
                    </div>
                 
                    <div class="filter-event-field">
-                    <label for="event_type">Status</label>
+                    <label for="filter_status">Status</label>
                          <select  id="filter_status" name="filter_status" >
                             <option value="">Selecteaza statusul</option>
                             <option value="activ">Activ</option>
                             <option value="monitorizare">Monitorizare</option>
                             <option value="rezolvat">Rezolvat</option>
                         </select>
-                    </div>       
+                    </div>   
+                     <div class="filter-event-field">
+                       <label for="filter_year">An</label>
+                        <input type="number" id="filter_year" min="2012" max="2026" placeholder="An">   
+                     </div>  
             </div>
 
 
