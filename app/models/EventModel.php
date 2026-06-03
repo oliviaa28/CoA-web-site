@@ -21,106 +21,103 @@ class EventModel {
         return $stmt->fetch();
     }
 
-    public function getAllEvents($type = 'all', $status = '' ) { //status pentru filtararea la pagina de admini 
-        $events = [];
+    
+
+    private function filtreaza($query, $status, $year) {
+         $conditii = [];   // lista de conditii WHERE
+         $valori = [];     // valorile pentru prepared statement
+
+         // adauga conditie status daca exista
+         if ($status !== '') {
+            $conditii[] = "LOWER(stadiu) = ?";
+            $valori[] = $status;
+         }
+
+         // adauga conditie an daca exista
+         if ($year !== '') {
+            $conditii[] = "YEAR(data_incident) = ?";
+            $valori[] = $year;
+        }
+
+        // daca avem conditii, le lipim cu AND
+         if ( count($conditii) > 0) {
+             $query .= " WHERE ";
+             $query .= implode(' AND ', $conditii);
+         }
+
+        $query .= " ORDER BY data_incident DESC LIMIT 100";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($valori);
+        return $stmt->fetchAll();
+    }
+
+   public function getAllEvents($type = 'all', $status = '', $year = '') {
+    $events = [];
 
         if ($type === 'cutremur' || $type === 'all') {
-             $query = "SELECT id_cutremur as id, 
-                              'cutremur' as type,
-                               titlu as title, 
-                                stadiu as status, 
-                                localitate as location, 
-                                descriere as details,
-                                data_incident as date,
-                                latitudine as lat, 
-                                longitudine as lng 
-                        FROM INCIDENTE_CUTREMUR";
+             $query = "SELECT id_cutremur as id, 'cutremur' as type, titlu as title, 
+                         stadiu as status, localitate as location, descriere as details,
+                          data_incident as date, latitudine as lat, longitudine as lng 
+                  FROM INCIDENTE_CUTREMUR";
 
-            if ($status !== '') {
-                $query .= " WHERE LOWER(stadiu) =?";
-                $query .= " ORDER BY data_incident DESC LIMIT 100";
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute( [$status] );       
-            } else {
-                $query .= " ORDER BY data_incident DESC LIMIT 100";
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute();                   
-            }
+            $events = array_merge($events, $this->filtreaza($query, $status, $year));
+         }
 
-             $events = array_merge($events, $stmt->fetchAll());
-        }
-        
         if ($type === 'inundatie' || $type === 'all') {
-                 $query = "SELECT id_inundatie as id, 
-                                        'inundatie' as type, 
-                                        titlu as title, 
-                                        stadiu as status, 
-                                        localitate as location, 
-                                        descriere as details, 
-                                        data_incident as date,
-                                        latitudine as lat, 
-                                        longitudine as lng FROM INCIDENTE_INUNDATIE";
+                $query = "SELECT id_inundatie as id, 'inundatie' as type, titlu as title, 
+                         stadiu as status, localitate as location, descriere as details, 
+                         data_incident as date, latitudine as lat, longitudine as lng 
+                  FROM INCIDENTE_INUNDATIE";
 
-            if ($status !== '') {
-                $query .= " WHERE LOWER(stadiu) =?";
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute( [$status] );       
-            } else {
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute();                   
-            }
+          $events = array_merge($events, $this->filtreaza($query, $status, $year));
+         }   
 
-            $events = array_merge($events, $stmt->fetchAll());
-        }
-        
-        if ($type === 'incendiu' || $type === 'all') {
-                 $query ="SELECT id_foc as id, 
-                                        'incendiu' as type, 
-                                        titlu as title, 
-                                        stadiu as status, 
-                                        localitate as location, 
-                                        descriere as details,
-                                        data_incident as date, 
-                                        latitudine as lat, 
-                                        longitudine as lng FROM INCIDENTE_FOC";
+         if ($type === 'incendiu' || $type === 'all') {
+                $query = "SELECT id_foc as id, 'incendiu' as type, titlu as title, 
+                         stadiu as status, localitate as location, descriere as details,
+                         data_incident as date, latitudine as lat, longitudine as lng 
+                  FROM INCIDENTE_FOC";
 
-            if ($status !== '') {
-                $query .= " WHERE LOWER(stadiu) =?";
-                $query .= " ORDER BY data_incident DESC LIMIT 100";
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute( [$status] );       
-            } else {
-                $query .= " ORDER BY data_incident DESC LIMIT 100";
-                $stmt = $this->pdo->prepare($query);
-                $stmt->execute();                   
-            }
-            $events = array_merge($events, $stmt->fetchAll());
-        }
+            $events = array_merge($events, $this->filtreaza($query, $status, $year));
+             }
 
         return $events;
     }
- 
-    // ------ insert ---- update --- delete -------------
 
-    public function createEvent($type, $data){ 
-        $tabele = [
-          'cutremur' => 'INCIDENTE_CUTREMUR',
-          'inundatie' => 'INCIDENTE_INUNDATIE',
-          'incendiu' => 'INCIDENTE_FOC'
-        ];
+    public function createEvent($type, $data){
+         $tabele = [
+             'cutremur' => 'INCIDENTE_CUTREMUR',
+             'inundatie' => 'INCIDENTE_INUNDATIE',
+             'incendiu' => 'INCIDENTE_FOC'
+         ];
 
-        if (!array_key_exists($type, $tabele)) return false;
+        if (!array_key_exists($type, $tabele))
+             return false;
+        
         $tabela = $tabele[$type];
 
-        $sql = $this->pdo->prepare("INSERT INTO $tabela (titlu, descriere, localitate, latitudine, longitudine, stadiu) 
-                                    VALUES (?, ?, ?, ?, ?, ?)");
-    
-        $sql->execute([
-            $data['titlu'], $data['descriere'],
-            $data['localitate'], $data['lat'], $data['lng'],
-            $data['stadiu']
-         ]);
+         // daca avem data(la import)
+         if ( isset($data['data_incident']) && $data['data_incident'] !== null )
+         {
+                $sql = $this->pdo->prepare("INSERT INTO $tabela 
+                                                (titlu, descriere, localitate, latitudine, longitudine, stadiu, data_incident) 
+                                                VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $sql->execute([
+                     $data['titlu'], $data['descriere'], $data['localitate'],
+                    $data['lat'], $data['lng'], $data['stadiu'], $data['data_incident']
+                 ]);
 
+         } else {
+                // creare normala (formular) 
+             $sql = $this->pdo->prepare("INSERT INTO $tabela 
+                                        (titlu, descriere, localitate, latitudine, longitudine, stadiu) 
+                                         VALUES (?, ?, ?, ?, ?, ?)");
+             $sql->execute([
+                    $data['titlu'], $data['descriere'], $data['localitate'],
+                     $data['lat'], $data['lng'], $data['stadiu']
+                  ]);
+             }
     return true;
     }
 

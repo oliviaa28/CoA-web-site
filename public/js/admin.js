@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // asculta filtrele de pe pagina de evenimente (daca exista)
     const filterTip= document.getElementById('filter_type');
     const filterStatus= document.getElementById('filter_status');
+    const filterYear = document.getElementById('filter_year');
+    
+    if (filterYear) 
+        filterYear.addEventListener('change', incarcaEvenimente);
     if (filterTip) 
         filterTip.addEventListener('change', incarcaEvenimente);
     if (filterStatus) 
@@ -119,8 +123,14 @@ function incarcaEvenimente(){
     //citim filtrele , daca exita
     let tip ='all'; //default
     let status = '';
+    let year = '';
+
     const filterTip = document.getElementById('filter_type'); 
     const filterStatus = document.getElementById('filter_status');
+    const filterYear = document.getElementById('filter_year');
+    
+    if (filterYear) 
+        year= filterYear.value;
 
     if ( filterTip && filterTip.value !== '') 
         tip = filterTip.value;
@@ -128,7 +138,7 @@ function incarcaEvenimente(){
     if (filterStatus) 
         status =filterStatus.value;
 
-    let url = `../../../api/events.php?type=${tip}&status=${status}`;
+    let url = `../../../api/events.php?type=${tip}&status=${status}&year=${year}`;
 
     fetch(url)     // cere lisat de la endpoint
         .then(response => response.json() )
