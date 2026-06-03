@@ -17,7 +17,7 @@
 
     <div class="sidebar-footer" >
 <!--Deconectarea schimba starea serverului-> distruge sesiunea => trebuie facut cu POST -->
-      <form action="../admin/logout.php" method="POST">
+      <form action="../../../api/logout.php" method="POST">
          <button class="btn-logout" type="submit">Deconectare</button>
       </form>
     </div>

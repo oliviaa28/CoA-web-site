@@ -424,6 +424,7 @@ function golesteFormularUseri(){
     document.getElementById('user_name').value= '';
     document.getElementById('user_email').value= '';
     document.getElementById('user_county').value= '';
+    document.getElementById('user_password').value= '';
 }
 
 function incarcaUtilizatori(){

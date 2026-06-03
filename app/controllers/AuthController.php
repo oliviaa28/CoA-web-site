@@ -27,16 +27,15 @@ class AuthController{
             header( 'Location: ../app/views/admin/dashboard.php');
             exit;
         }else {
-             header( 'Location: ../app/views/public/login.html?error=1');
+             header( 'Location: ../app/views/public/login.html');
             exit;
-
         }
     }
 
     public function logout() {
         session_start();
         session_destroy();
-        header('Location: ../app/views/public/login.html');
+        header('Location: ../app/views/public/events_public.php');
         exit;
     }
 

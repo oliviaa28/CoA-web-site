@@ -1,6 +1,8 @@
 <?php 
 require_once __DIR__ . '/../../controllers/AuthController.php';
 AuthController::requireAuth();
+
+$numeAdmin =$_SESSION['nume'] ?? 'Administrator';
 ?>
 <!DOCTYPE html>
 <html lang="ro">
@@ -20,11 +22,11 @@ AuthController::requireAuth();
         
         <main class="admin-content">
 
-            <!-- mesaj personalizat cu numele userului + data din ziua curent 
-             nu am adaugat stilizare additionala inca pentru ele, dar le-am dat clase-->
+            <!-- mesaj personalizat cu numele userului, luat din sesiune-->
             <div class="greet-user">
-                 <h1 class="hello-user">Buna ziua, Administrator!</h1>
-                 <p class="current-date">Marti, 28 Mai 2045</p>
+                 <h1 class="hello-user">Bine ai venit,
+                                     <?php echo htmlspecialchars($numeAdmin); ?> ! 
+                 </h1>
             </div>
 
 
@@ -70,7 +72,7 @@ AuthController::requireAuth();
 
              <div class="form-field">
                 <label for="event_title"> Titlu </label>
-                    <input type="text" id="event_title" name="event_title" placeholder="ex: Cutremur  Vrancea" required>
+                    <input type="text" id="event_title" name="event_title" placeholder="ex: Cutremur " required>
              </div>
                 
              <div class="form-field">
@@ -91,8 +93,7 @@ AuthController::requireAuth();
 
             <button type="submit" class="btn-submit">Adauga eveniment</button>
    
-          </form>
-           
+          </form>    
         </main>
     </div>
 
@@ -101,4 +102,3 @@ AuthController::requireAuth();
 </body>
 
 </html>
-

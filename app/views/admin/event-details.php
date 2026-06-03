@@ -60,7 +60,7 @@ AuthController::requireAuth();
 
                     <div class="detail-panel">
                         <h3>Descriere</h3>
-                        <p>Seism .............. </p>
+                        <p>.............. </p>
                     </div>
 
                 </div>
