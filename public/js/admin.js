@@ -60,8 +60,6 @@ function arataToast(mesaj, tip ='success'){
      setTimeout(() => toast.style.display = 'none', 3000); //on cat timp dispare
 }
 
-
-
 //_________________________________________ EVENIMENTE ______________________________________
 
 //fucntie apelata atunci cand un eveniment nou este creeat  sau editat 
@@ -96,9 +94,15 @@ function salveazaEveniment(){ //post sau put
     })
     .then(response =>response.json())
     .then( data => {
-        arataToast('Eveniment salvat!');
-        editId = editType = null;
-        setTimeout( () => location.reload(), 1000);
+           arataToast('Eveniment salvat!');
+            if (editId !== null) {
+                actualizeazaRandEveniment(editId, editType, date);
+            } else {
+                incarcaEvenimente();
+            }
+
+         editId = editType = null;
+         closeModal('modal-add');
     })
     .catch(error => {
         arataToast('Eroare la salvare', 'error');
@@ -142,6 +146,28 @@ function incarcaEvenimente(){
 
 }
 
+function actualizeazaRandEveniment(id, type, date){
+
+    for (let i = 0; i <toateEvenimentele.length; i++){
+        if (toateEvenimentele[i].id === id && toateEvenimentele[i].type === type){
+
+            // modificam direct campurile care s-au schimbat
+            toateEvenimentele[i].title= date.titlu;
+            toateEvenimentele[i].status = date.stadiu;
+            toateEvenimentele[i].location = date.localitate;
+            toateEvenimentele[i].details= date.descriere;
+            toateEvenimentele[i].lat= date.lat;
+            toateEvenimentele[i].lng= date.lng;
+
+            // inlocuim randul din DOM
+            const rand = document.getElementById(`ev-${type}-${id}`);
+            if (rand) //construim din nou, d ela 0 noul rand 
+                rand.outerHTML= construiesteRandEveniment(toateEvenimentele[i]);
+            break;
+        }
+    }
+}
+
 function construiesteRandEveniment(ev){
 
         let badgeClass ='bg-teal'; //default
@@ -155,8 +181,8 @@ function construiesteRandEveniment(ev){
                  badgeClass ='bg-orange';
         }
 
-        return `
-         <tr>
+        return ` 
+         <tr  id="ev-${ev.type}-${ev.id}"> 
             <td class = "card-badges">
                <span class= "badge ${badgeClass}"> ${curata(ev.status)} </span>
             </td>
@@ -182,8 +208,10 @@ function sterge(id, type){
     })
     .then(response => response.json() )
     .then( data => {
-        arataToast('Eveniment șters!');
-        setTimeout(() => location.reload(), 1000);
+        arataToast('Eveniment șters!');     
+        const rand = document.getElementById(`ev-${type}-${id}`);
+        if (rand)
+             rand.remove();   // dispare doar randul
     })
     .catch(error => {
         arataToast('Eroare la ștergere', 'error');
@@ -279,8 +307,6 @@ function construiesteRandAdapost( ad ){
             </td>
             <td class="actions">
                 <a href="shelter-details.php?id=${ad.id}"> Detalii</a>
-                <a href="#" onclick=" editeazaAdapost( ${ad.id} ); return false;"> Editeaza</a>
-                <a href="#" class="delete" onclick="stergeAdapost(${ad.id}); return false;">Sterge</a>
             </td>
         </tr>
     `;
@@ -540,7 +566,6 @@ function construiesteRandAlerta(a){
             <td><span class="badge ${badgeClass}">${a.status}</span></td>
             <td class="actions">
                 <a href="cap-details.php?id=${a.id}">Detalii</a>
-                <a href="#" class="delete" onclick="stergeAlerta(${a.id}); return false;">Sterge</a>
             </td>
         </tr>
     `;

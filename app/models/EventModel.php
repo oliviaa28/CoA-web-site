@@ -38,9 +38,11 @@ class EventModel {
 
             if ($status !== '') {
                 $query .= " WHERE LOWER(stadiu) =?";
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute( [$status] );       
             } else {
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute();                   
             }
@@ -84,9 +86,11 @@ class EventModel {
 
             if ($status !== '') {
                 $query .= " WHERE LOWER(stadiu) =?";
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute( [$status] );       
             } else {
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute();                   
             }
