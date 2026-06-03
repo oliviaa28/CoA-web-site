@@ -57,43 +57,35 @@ $numeAdmin =$_SESSION['nume'] ?? 'Administrator';
                 </div>
             </div>
             
-           <form class="add-event-fast" action="/admin/events/store" method="POST">
-            <p class="form-title">Adaugati un eveniment rapid</p>
-             <div class="form-field">
-                    <label for="event_type">Tip eveniment</label>
-                         <select id="event_type" name="event_type" required>
-                            <option value="">Selecteaza tipul</option>
-                            <option value="cutremur">Cutremur</option>
-                            <option value="inundatie">Inundatie</option>
-                            <option value="incendiu">Incendiu</option>
-                            <option value="altele">Altele</option>
-                        </select>
-             </div>
-
-             <div class="form-field">
-                <label for="event_title"> Titlu </label>
-                    <input type="text" id="event_title" name="event_title" placeholder="ex: Cutremur " required>
-             </div>
-                
-             <div class="form-field">
-                <label for="event_severity">Severitate</label>
-                    <select id="event_severity" name="event_severity" required>
-                            <option value="">Selecteaza severitatea</option>
-                            <option value="scazut">Scazut</option>
-                            <option value="mediu">Mediu</option>
-                            <option value="ridicat">Ridicat</option>
-                            <option value="critic">Critic</option>
-                    </select>
+           <!-- scurtaturi spre pagini (refolosesc status-card) -->
+            <h2 class="greet-user">Acces rapid</h2>
+            <div class="status-cards">
+                <a href="events.php" class="status-card btn-link">
+                    <span class="status-number">🗐</span>
+                    <span class="status-label">Gestionare evenimente</span>
+                </a>
+                <a href="alerts.php" class="status-card btn-link">
+                    <span class="status-number">🕭</span>
+                    <span class="status-label">Alerte</span>
+                </a>
+                <a href="shelters.php" class="status-card btn-link">
+                    <span class="status-number">🏠︎</span>
+                    <span class="status-label">Adaposturi</span>
+                </a>
+                <a href="import-export.php" class="status-card btn-link">
+                    <span class="status-number">🗁</span>
+                    <span class="status-label">Import / Export</span>
+                </a>
             </div>
 
-            <div class="form-field">
-               <label for="event_description">Descriere</label>
-                    <textarea id="event_description" name="event_description" rows="4" placeholder="Detalii eveniment..."> </textarea>
+            <!-- info despre platforma   -->
+            <div class="info">
+                <p class="form-title">Despre platforma CoA </p>
+                <p>Acesta este panoul de administrare CoA. De aici poti gestiona evenimentele de urgenta 
+                    (cutremure, inundatii, incendii), trimite alerte CAP catre populatia afectata si coordona 
+                    adaposturile disponibile. </p>
+                <p>Verifica periodic evenimentele active si starea adaposturilor. </p>
             </div>
-
-            <button type="submit" class="btn-submit">Adauga eveniment</button>
-   
-          </form>    
         </main>
     </div>
 

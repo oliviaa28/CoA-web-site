@@ -109,7 +109,7 @@ AuthController::requireAuth();
                     <button type="submit" class="btn-submit">Importă</button>
                 
                    </form>
-                   <small>Formate acceptate: JSON, CSV, XML(doar alerte)</small>
+                   <small>Formate acceptate: JSON, CSV</small>
                 </div>
 
             </div>

@@ -23,3 +23,6 @@
     </div>
 
 </aside>
+
+<!-- container pentru notificari toast-->
+<div id="toast" class="toast" style="display:none;"></div>

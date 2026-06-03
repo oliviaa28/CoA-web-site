@@ -20,9 +20,47 @@ document.addEventListener('DOMContentLoaded', function() {
         filterTip.addEventListener('change', incarcaEvenimente);
     if (filterStatus) 
         filterStatus.addEventListener('change', incarcaEvenimente);
+
+    // verifica parametrii din URL pentru toast (dupa redirect import)
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get('success')) 
+        arataToast('Import realizat cu succes!');
+    else if (params.get('error') === '1') 
+        arataToast('Niciun fișier selectat.', 'error');
+     else if (params.get('error') === '2') 
+        arataToast('Format invalid', 'error');
+     else if (params.get('error') === '3') 
+        arataToast('Fișierul nu corespunde tipului de eveniment', 'error');
+
 });
 
+//pentru protectie impotriva XSS
+function curata(text) {
+    //creeare div artificial
+    const div= document.createElement('div');  
+
+    //transformam textul in string si il punem in div-> daca era un script in el, acum e safe
+    div.textContent = text ?? '';     
+               
+    return div.innerHTML;                       
+}
+
 // DOMContentLoaded asteapta ca pagina sa fie complet incarcata inainte sa apeleze functia
+
+function arataToast(mesaj, tip ='success'){
+    const container =document.getElementById('toast');
+    if (!container) 
+        return;
+
+    toast.textContent = mesaj;
+    toast.className= `toast toast-${tip}`; //pt stilizare
+    toast.style.display = 'block';
+
+     setTimeout(() => toast.style.display = 'none', 3000); //on cat timp dispare
+}
+
+
 
 //_________________________________________ EVENIMENTE ______________________________________
 
@@ -58,11 +96,12 @@ function salveazaEveniment(){ //post sau put
     })
     .then(response =>response.json())
     .then( data => {
-        console.log('Salvat:', data);
+        arataToast('Eveniment salvat!');
         editId = editType = null;
-        location.reload(); //reincarca pagina
+        setTimeout( () => location.reload(), 1000);
     })
     .catch(error => {
+        arataToast('Eroare la salvare', 'error');
         console.error('Eroare:' , error);
     })
 }
@@ -119,12 +158,12 @@ function construiesteRandEveniment(ev){
         return `
          <tr>
             <td class = "card-badges">
-               <span class= "badge ${badgeClass}"> ${ev.status} </span>
+               <span class= "badge ${badgeClass}"> ${curata(ev.status)} </span>
             </td>
-            <td>${ev.type}</td>
-            <td>${ev.title}</td>
-            <td>${ev.location}</td>
-            <td>${ev.date}</td>
+            <td>${curata(ev.type)}</td>
+            <td>${curata(ev.title)}</td>
+            <td>${curata(ev.location)}</td>
+            <td>${curata(ev.date)}</td>
              <td class="actions">
                 <a href="event-details.php?id=${ev.id}&type=${ev.type}"> Detalii</a>
                 <a href="#" onclick="editeaza(${ev.id}, '${ev.type}'); return false;"> Editeaza</a>
@@ -143,10 +182,11 @@ function sterge(id, type){
     })
     .then(response => response.json() )
     .then( data => {
-        console.log('Sters:', data);
-        location.reload(); //reincarca pagina
+        arataToast('Eveniment șters!');
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
+        arataToast('Eroare la ștergere', 'error');
         console.error('Eroare:' , error);
     });
 }
@@ -177,7 +217,6 @@ function editeaza(id, type){
 
     //  deschidem modalul in modul edit
     openModal('modal-add', 'edit');
-
 }
 
 function golesteFormular() {
@@ -231,9 +270,9 @@ function construiesteRandAdapost( ad ){
 
     return `
         <tr>
-            <td>${ad.name}</td>
-            <td>${ad.address}</td>
-            <td>${ad.type}</td>
+            <td>${curata(ad.name)}</td>
+            <td>${curata(ad.address)}</td>
+            <td>${curata(ad.type)}</td>
             <td> ${ad.available}/ ${ad.capacity}</td>
             <td> 
                <span class="badge ${badgeClass}">${statusText} </span>
@@ -256,10 +295,11 @@ function stergeAdapost(id){
     })
     .then(response => response.json() )
     .then( data => {
-        console.log('Sters:', data);
-        location.reload(); 
+       arataToast('Adapost șters!');
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
+        arataToast('Eroare la stergerea adapostului');
         console.error('Eroare:' , error);
     });
 }
@@ -295,11 +335,12 @@ function salveazaAdapost(){
     })
     .then(response =>response.json())
     .then( data => {
-        console.log('Salvat:', data);
         editId = null;
-        location.reload(); //reincarca pagina
+        arataToast('Adapost salvat!');
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
+         arataToast('Eroare la salvarea adapostului!');
         console.error('Eroare:' , error);
     });
 
@@ -373,11 +414,13 @@ function salveazaUser(){
     })
     .then(response =>response.json())
     .then( data => {
-        console.log('Salvat:', data);
+        
         editId = null;
-        location.reload(); 
+        arataToast('User salvat!');
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
+        arataToast('Eroare la  salvare user!');
         console.error('Eroare:' , error);
     });
 
@@ -391,10 +434,11 @@ function stergeUser(id){
     })
     .then(response => response.json() )
     .then( data => {
-        console.log('Sters:', data);
-        location.reload(); 
+        arataToast('User sters!');
+        setTimeout(() => location.reload(), 1000);
     })
     .catch(error => {
+        arataToast('Eroare stergere user!');
         console.error('Eroare:' , error);
     });
 
@@ -448,10 +492,10 @@ function incarcaUtilizatori(){
 function construiesteRandUser(u) {
     return `
         <tr>
-            <td>${u.nume}</td>
-            <td>${u.email}</td>
-            <td>${u.judet}</td>
-            <td>${u.created}</td>
+            <td>${curata(u.nume)}</td>
+            <td>${curata(u.email)}</td>
+            <td>${curata(u.judet)}</td>
+            <td>${curata(u.created)}</td>
             <td class="actions">
                 <a href="#" onclick="editeazaUser(${u.id}); return false;">Editeaza</a>
                 <a href="#" class="delete" 
@@ -490,9 +534,9 @@ function construiesteRandAlerta(a){
 
     return `
         <tr>
-            <td>${a.type}</td>
-            <td>${a.severity}</td>
-            <td>${a.sentat}</td>
+            <td>${curata(a.type)}</td>
+            <td>${curata(a.severity)}</td>
+            <td>${curata(a.sentat)}</td>
             <td><span class="badge ${badgeClass}">${a.status}</span></td>
             <td class="actions">
                 <a href="cap-details.php?id=${a.id}">Detalii</a>
@@ -523,10 +567,13 @@ function salveazaAlerta(){
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Alerta trimisa:', data);
-        location.reload();
+        arataToast('Alerta trimisa!');
+        setTimeout(() => location.reload(), 1000);
     })
-    .catch(error => console.error('Eroare:', error));
+    .catch(error =>{
+            arataToast('eroare trimitere alerta!');
+            console.error('Eroare:', error)}
+          );
 }
 
 function stergeAlerta(id){
@@ -537,10 +584,13 @@ function stergeAlerta(id){
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Sters:', data);
-        location.reload();
+        arataToast('Alerta stearsa!');
+        setTimeout(() => location.reload(), 1000);
     })
-    .catch(error => console.error('Eroare:', error));
+    .catch(error =>{
+            arataToast('eroare stergere alerta!');
+            console.error('Eroare:', error)}
+          );
 }
 
 
@@ -593,6 +643,7 @@ function incarcaStatistici() {
 //____________________ import export _________________________
 
 function exportData(type, format){
+    arataToast('Se descarcă fișierul...');
     //relativ la url ul paginii import-export.php din admin
     window.location.href= `../../../api/import-export.php?action=export&type=${type}&format=${format}`;
 }
