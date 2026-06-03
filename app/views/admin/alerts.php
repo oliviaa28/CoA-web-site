@@ -1,3 +1,7 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
 <!DOCTYPE html>
 <html lang="ro">
 
@@ -22,9 +26,6 @@
 
             <div class="header-events">
                 <h1>Alerte </h1>
-                <button class="add-event-btn"  onclick="deschideModalAlerta()">
-                    + Trimite alertă nouă
-                </button>
             </div>
 
             <table class="list-events">

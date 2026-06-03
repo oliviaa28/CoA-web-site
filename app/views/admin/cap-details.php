@@ -1,3 +1,8 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
+
 <!DOCTYPE html>
 <html lang="ro">
 
@@ -18,23 +23,20 @@
 
         <main class="events-content">
 
-            <!-- Breadcrumb -->
-            <nav class="inapoi-btn">
-                <a href="alerts.php">Alerte</a>
-                <span> > </span>
-                <span>Nume</span>
-            </nav>
+        <nav class="inapoi-btn">
+            <a href="alerts.php"> <- Înapoi la alerte</a>
+        </nav>
 
             <!-- Header -->
             <div class="event-detail-header">
                 <div class="event-detail-left">
-                    <span class="badge bg-red">ACTIV</span>
-                    <h1>Cutremur puternic în zona Vrancea</h1>
-                    <p class="current-date">Trimis: 9 Aprilie 2026, 14:25</p>
+                    <span class="badge" id="alert-badge"></span>
+                    <h1 id="alert-detail-headline">...</h1>
+                    <p class="current-date" id="alert-sent"></p>
                 </div>
                 <div class="event-detail-actions">
-                    <button class="btn-edit">Export XML</button>
-                    <button class="btn-delete" onclick="confirmDelete(this); return false;">Anulează alerta</button>
+                    <button class="btn-edit"onclick="exportaAlerta()">Export XML</button>
+                    <button class="btn-delete" onclick="anuleazaAlerta()">Anulează alerta</button>
                 </div>
             </div>
 
@@ -42,15 +44,15 @@
             <div class="status-cards">
                 <div class="status-card dark">
                     <span class="status-label">Severitate</span>
-                    <span class="status-number">Extreme</span>
+                    <span class="status-number" id="alert-severity">...</span>
                 </div>
                 <div class="status-card dark">
                     <span class="status-label">Urgență</span>
-                    <span class="status-number">Immediate</span>
+                    <span class="status-number" id="alert-urgency">...</span>
                 </div>
                 <div class="status-card dark">
-                    <span class="status-label">Certitudine</span>
-                    <span class="status-number">Observed</span>
+                    <span class="status-label">Zona</span>
+                    <span class="status-number" id="alert-area">...</span>
                 </div>
             </div>
 
@@ -58,24 +60,28 @@
             <div class="event-detail-body">
 
                 <!-- Stanga: Descriere + Instructiuni -->
-                <div class="event-detail-panels" style="flex:2">
-                    <div class="detail-panel">
-                        <h3>Descriere</h3>
-                        <p>muncitori la ap de sus</p>
-                    </div>
-                    <div class="detail-panel">
-                        <h3>Instrucțiuni pentru populație</h3>
-                        <p>puteti dormi linistiti.....</p>
-                    </div>
+                <div class="detail-panel">
+                    <h3>Descriere</h3>
+                    <p id="alert-description">...</p>
+                </div>
+                <div class="detail-panel">
+                    <h3>Instrucțiuni pentru populație</h3>
+                    <p id="alert-instruction">...</p>
                 </div>
 
-
+                <div class="detail-panel">
+                    <h3>Eveniment asociat</h3>
+                    <p id="alert-event-info">...</p>
+                    <a id="alert-event-link" href="#" class="btn-link">Vezi evenimentul -></a>
+                </div>
             </div>
 
         </main>
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
+    <script src="../../../public/js/details.js"></script>
 </body>
 
 </html>

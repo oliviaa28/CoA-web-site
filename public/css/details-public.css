@@ -113,6 +113,11 @@
     font-size: 1.15rem;
 }
 
+.detail-panel p {
+    color: var(--text-main);
+    font-size: 1.10rem;
+}
+
 .cap-panel {
     border-left: 4px solid var(--color-activ);
 }

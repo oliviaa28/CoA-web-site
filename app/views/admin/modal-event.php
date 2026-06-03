@@ -1,4 +1,5 @@
     <!-- Modal adaugare eveniment -->
+<?php include 'judete.php'; ?>
   <div class="modal-overlay" id="modal-add" >
        <div class="modal-card">
         
@@ -43,13 +44,26 @@
             </div>
 
             <div class="form-field">
-                <label for="event_county">Judet</label>
-                <select id="event_county" name="event_county" required>
-                    <option value="">Selecteaza judetul</option>
-                    <option value="alba">Alba</option>
-                    <option value="vrancea">Vrancea</option>
-                    <option value="bacau">Bacau</option>
+                <label for="event_status">Status</label>
+                <select id="event_status" name="event_status">
+                    <option value="ACTIV">Activ</option>
+                    <option value="MONITORIZARE">Monitorizare</option>
+                    <option value="REZOLVAT">Rezolvat</option>
                 </select>
+            </div>
+
+            <div class="form-field">
+               <div class="form-field">
+                 <label for="event_county">Judet</label>
+                    <select id="event_county" name="event_county" required>
+                            <option value="">Selecteaza judetul</option>
+                             <?php foreach ($judete as $judet): ?>
+                                    <option value="<?php echo $judet; ?>">
+                                             <?php echo $judet; ?>
+                                    </option>
+                            <?php endforeach; ?>
+                     </select>
+                </div>
             </div>
 
             <div class="form-field">

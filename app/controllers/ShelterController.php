@@ -17,9 +17,16 @@ class ShelterController {
         switch ($method) {
             case 'GET':
                 try {
+                    if ( isset($_GET['id']) ){ //daca avem in url si id ul, returnam un singur adapost
+                        $shelter = $this->model->getShelterById($_GET['id']);
+                        echo json_encode($shelter);
+                    }
+                    else {
                     $shelters = $this->model->getAllShelters();
                     echo json_encode($shelters);
-                } catch (\PDOException $e) {
+                    }  
+                }
+                 catch (\PDOException $e) {
                     http_response_code(500);
                     echo json_encode(['error' => $e->getMessage()]);
                 }

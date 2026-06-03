@@ -75,12 +75,21 @@
     background-color: #f8fafc;
 }
 
+.list-events td {
+    vertical-align: middle;
+}
+
+.list-events .actions {
+    white-space: nowrap;   /* tine butoanele pe o linie, fara flex */
+}
+
 .list-events .actions a {
     font-weight:600;
     color:#043582 ;
     text-decoration: none;
-    margin: 0.4rem;
     border-radius: 8px;
+    white-space: nowrap;
+    display: inline-block;
      border: 1px solid #c8c8c8;
      padding: 0.3rem;
 }

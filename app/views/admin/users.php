@@ -1,3 +1,7 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
 <!DOCTYPE html>
 <html lang="ro">
 
@@ -15,6 +19,7 @@
 <body>
     <div class="admin-layout">
         <?php include '../layouts/sidebar.php'; ?>
+        <?php include 'judete.php'; ?>
 
         <!-- Modal adauga/editeaza utilizator -->
         <div class="modal-overlay" id="modal-user" style="display:none;">
@@ -22,19 +27,19 @@
 
                 <div class="modal-header">
                     <h2 id="modal-user-title">Adaugă utilizator</h2>
-                    <button class="modal-close" onclick="golesteFormularUseri(); closeModal('modal-user')">✕</button>
+                    <button class="modal-close" onclick="closeModal('modal-user')">✕</button>
                 </div>
 
                 <form class="modal-form" action="/admin/users/store" method="POST">
 
                     <div class="form-field">
                         <label for="user_name">Nume</label>
-                        <input type="text" id="user_name" name="user_name" placeholder="ex: Ion Popescu" required>
+                        <input type="text" id="user_name" name="user_name" placeholder="ex: Coca Aleaxndru" required>
                     </div>
 
                     <div class="form-field">
                         <label for="user_email">Email</label>
-                        <input type="email" id="user_email" name="user_email" placeholder="ex: ion@autoritate.ro" required>
+                        <input type="email" id="user_email" name="user_email" placeholder="ex: alex@politist.ro" required>
                     </div>
 
                     <div class="form-field" id="password-field">
@@ -44,17 +49,16 @@
 
         
                     <div class="form-field" >
-                        <label for="user_county">Județ</label>
-                            <select id="user_county" name="user_county" required>
-                                <option value="">Selectează</option>
-                                <option value="braila">j1</option>
-                                <option value="vrancea">j2</option>
-                                <option value="buzau">j3</option>
-                                <option value="galati">j4</option>
-                                <option value="tulcea">j6</option>
-                                <option value="bacau">j5</option>
-                            </select>
-                        </div>
+                        <label for="user_county">Judet</label>
+                             <select id="user_county" name="user_county" required>
+                                    <option value="">Selecteaza judetul</option>
+                                        <?php foreach ($judete as $judet): ?>
+                                                <option value="<?php echo $judet; ?>">
+                                                        <?php echo $judet; ?>
+                                                </option>
+                                        <?php endforeach; ?>
+                             </select>
+                    </div>
             
 
                     <div class="modal-footer">
@@ -70,7 +74,7 @@
 
             <div class="header-events">
                 <h1>Gestionare utilizatori</h1>
-                <button class="add-event-btn" onclick="openUserModal('add')">
+                <button class="add-event-btn" onclick="golesteFormularUseri(); openUserModal('add')">
                     + Adaugă utilizator
                 </button>
             </div>
@@ -85,8 +89,8 @@
                         <th scope="col">Acțiuni</th>
                     </tr>
                 </thead>
-                <tbody id='users-tbody'>
-                  
+                 <tbody id='users-tbody'>
+                        <!-- completet in JS-->
                 </tbody>
             </table>
 

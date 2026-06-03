@@ -41,20 +41,7 @@ function openModal(id, mode) {
     }
 }
 
-
-
-function confirmDelete(btn) {
-    const td = btn.parentElement;
-    td.innerHTML = `
-        <div class="inline-table">
-          <span >Sigur?</span>
-          <a href="#" class="delete">Da </a>
-          <a href="#" onclick="location.reload()">Nu</a>
-        </div>
-    `;
-}
-
-  function openUserModal(mode) {
+function openUserModal(mode) {
        document.getElementById('modal-user').style.display = 'flex'; 
             if (mode === 'edit') {
                 document.getElementById('modal-user-title').textContent = 'Editează utilizator';
@@ -65,7 +52,7 @@ function confirmDelete(btn) {
             }
   }
     
- function openShelterModal(mode){
+function openShelterModal(mode){
    document.getElementById('modal-shelter').style.display = 'flex'; //anuleaza display:none din css pt modal si afiseaza form ul
             if (mode ==='edit') {
                 document.getElementById('modal-shelter-title').textContent = 'Editeaza adapost';

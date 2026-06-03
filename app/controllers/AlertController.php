@@ -14,14 +14,34 @@ class AlertController{
 
     
      public function handleApiRequest() {
+        
+        //export CAP -> tratam separat
+        if( isset($_GET['action']) && $_GET['action'] === 'export'){
+            $this->exportCAP($_GET['id']);
+            return;
+        }
+
+        //restul -> raspunsuri json normale 
         header('Content-Type: application/json');
         $method = $_SERVER['REQUEST_METHOD'];
 
         switch ($method) {
             case 'GET':
                 try {
-                    $alerts = $this->model->getAllAlerts();
-                    echo json_encode($alerts);
+                    if ( isset($_GET['id_incident']) && isset($_GET['tip_incident']) ) {
+                        // alertele unui eveniment
+                        $alerts= $this->model->getAlertsByEvent($_GET['id_incident'], $_GET['tip_incident']);
+                        echo json_encode($alerts);
+                     } else
+                      if ( isset($_GET['id']) ) {
+                            // o singura alerta (pentru cap-details)
+                         $alert = $this->model->getAlertById($_GET['id']);
+                         echo json_encode($alert);}
+                     else {
+                         // toate alertele
+                         $alerts = $this->model->getAllAlerts();
+                         echo json_encode($alerts);
+                     }
                 } 
                 catch (\PDOException $e) {
                     http_response_code(500);
@@ -48,8 +68,25 @@ class AlertController{
         }
      }
 
+     private function exportCAP($id) {
+        //luam alerat din bd 
+        $alerta = $this->model->getAlertById($id);
 
-    
-}
+        if( $alerta == null){
+            http_response_code(404);
+            echo 'Alerta nu a fost gasita';
+            return;
+        }
 
+        //generare xml 
+        $xml = $this->model->genereazaCAP($alerta);
+
+
+        //headers 
+        header('Content-Type: application/xml; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="alerta_' . $id . '.xml" ');
+
+        echo $xml;
+     }  
+ }
 ?>

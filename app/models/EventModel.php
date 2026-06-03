@@ -21,25 +21,37 @@ class EventModel {
         return $stmt->fetch();
     }
 
-    public function getAllEvents($type = 'all') {
+    public function getAllEvents($type = 'all', $status = '' ) { //status pentru filtararea la pagina de admini 
         $events = [];
 
         if ($type === 'cutremur' || $type === 'all') {
-            $stmt = $this->pdo->query("SELECT id_cutremur as id, 
-                                        'cutremur' as type,
-                                        titlu as title, 
-                                        stadiu as status, 
-                                        localitate as location, 
-                                        descriere as details,
-                                        data_incident as date,
-                                        latitudine as lat, 
-                                        longitudine as lng 
-                                        FROM INCIDENTE_CUTREMUR");
-            $events = array_merge($events, $stmt->fetchAll());
+             $query = "SELECT id_cutremur as id, 
+                              'cutremur' as type,
+                               titlu as title, 
+                                stadiu as status, 
+                                localitate as location, 
+                                descriere as details,
+                                data_incident as date,
+                                latitudine as lat, 
+                                longitudine as lng 
+                        FROM INCIDENTE_CUTREMUR";
+
+            if ($status !== '') {
+                $query .= " WHERE LOWER(stadiu) =?";
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute( [$status] );       
+            } else {
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute();                   
+            }
+
+             $events = array_merge($events, $stmt->fetchAll());
         }
         
         if ($type === 'inundatie' || $type === 'all') {
-            $stmt = $this->pdo->query("SELECT id_inundatie as id, 
+                 $query = "SELECT id_inundatie as id, 
                                         'inundatie' as type, 
                                         titlu as title, 
                                         stadiu as status, 
@@ -47,12 +59,22 @@ class EventModel {
                                         descriere as details, 
                                         data_incident as date,
                                         latitudine as lat, 
-                                        longitudine as lng FROM INCIDENTE_INUNDATIE");
+                                        longitudine as lng FROM INCIDENTE_INUNDATIE";
+
+            if ($status !== '') {
+                $query .= " WHERE LOWER(stadiu) =?";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute( [$status] );       
+            } else {
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute();                   
+            }
+
             $events = array_merge($events, $stmt->fetchAll());
         }
         
         if ($type === 'incendiu' || $type === 'all') {
-            $stmt = $this->pdo->query("SELECT id_foc as id, 
+                 $query ="SELECT id_foc as id, 
                                         'incendiu' as type, 
                                         titlu as title, 
                                         stadiu as status, 
@@ -60,7 +82,18 @@ class EventModel {
                                         descriere as details,
                                         data_incident as date, 
                                         latitudine as lat, 
-                                        longitudine as lng FROM INCIDENTE_FOC");
+                                        longitudine as lng FROM INCIDENTE_FOC";
+
+            if ($status !== '') {
+                $query .= " WHERE LOWER(stadiu) =?";
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute( [$status] );       
+            } else {
+                $query .= " ORDER BY data_incident DESC LIMIT 100";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute();                   
+            }
             $events = array_merge($events, $stmt->fetchAll());
         }
 

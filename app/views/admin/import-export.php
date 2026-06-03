@@ -1,3 +1,7 @@
+<?php 
+require_once __DIR__ . '/../../controllers/AuthController.php';
+AuthController::requireAuth();
+?>
 <!DOCTYPE html>
 <html lang="ro">
 
@@ -41,8 +45,8 @@
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">JSON</button>
-                            <button class="ie-btn">CSV</button>
+                            <button class="ie-btn" onclick="exportData('events', 'json')">JSON</button>
+                            <button class="ie-btn" onclick="exportData('events', 'csv')" >CSV</button>
                         </div>
                     </div>
 
@@ -55,8 +59,8 @@
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">JSON</button>
-                            <button class="ie-btn">CSV</button>
+                            <button class="ie-btn" onclick="exportData('shelters', 'json')" >JSON</button>
+                            <button class="ie-btn" onclick="exportData('shelters', 'csv')" >CSV</button>
                         </div>
                     </div>
 
@@ -69,26 +73,12 @@
                             </div>
                         </div>
                         <div class="ie-btns">
-                            <button class="ie-btn">XML</button>
-                            <button class="ie-btn">JSON</button>
-                             <button class="ie-btn">CSV</button>
+                            <button class="ie-btn"  onclick="exportData('alerts', 'json')">JSON</button>
+                             <button class="ie-btn"  onclick="exportData('alerts', 'csv')" >CSV</button>
 
                         </div>
                     </div>
 
-                    <div class="ie-item">
-                        <div class="ie-item-info">
-                            <span class="ie-item-icon">🗐</span>
-                            <div>
-                                <strong>Export utilizatori</strong>
-                                <p>Exportă lista de utilizatori și roluri</p>
-                            </div>
-                        </div>
-                        <div class="ie-btns">
-                            <button class="ie-btn">CSV</button>
-                            <button class="ie-btn">JSON</button>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Coloana dreapta: Import -->
@@ -99,17 +89,27 @@
                     </div>
                     <p class="ie-subtitle">Importă date din surse externe în sistemul CoA</p>
 
-                    <!-- Zona upload -->
-                    <div class="ie-upload-zone" onclick="document.getElementById('file-input').click()">
-                        <span class="ie-upload-icon">⬇</span>
-                        <p>Trage fișiere aici sau click pentru a încărca</p>
-                        <small>Formate acceptate: JSON, CSV, XML</small>
-                        <input type="file" id="file-input" accept=".json,.csv,.xml" style="display:none">
-                    </div>
-                    <button class="btn-submit" onclick="document.getElementById('file-input').click()" >
-                        Selectează fișier
-                    </button>
+                    <form action ="../../../api/import-export.php?action=import" method="POST" enctype="multipart/form-data">
+                        <div class="form-field">
+                              <label for="import-type">Tip date</label>
+                                <select id="import-type" name="type" required>
+                                        <option value="">Selectează tipul</option>
+                                        <option value="events">Evenimente</option>
+                                        <option value="shelters">Adăposturi</option>
+                                        <option value="alerts">Alerte</option>
+                                </select>
+                        </div>
 
+                    <div class="form-field">
+                        <label for="file-input">Fișier</label>
+                        <input type="file" id="file-input" name="fisier" accept=".json,.csv,.xml" required>
+                        
+                    </div>
+
+                    <button type="submit" class="btn-submit">Importă</button>
+                
+                   </form>
+                   <small>Formate acceptate: JSON, CSV</small>
                 </div>
 
             </div>
@@ -118,6 +118,7 @@
     </div>
 
     <script src="../../../public/js/main.js"></script>
+    <script src="../../../public/js/admin.js"></script>
 </body>
 
 </html>

@@ -57,6 +57,18 @@ input, select, textarea, button {
     border-top: 1px solid #2d394d;
 }
 
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    z-index: 1000;
+}
+.toast-success { background: #1e773f; }
+.toast-error { background: #da1d1d; }
+
 .btn-logout {
     color:#1E293B;
     width: 100%;
@@ -114,7 +126,7 @@ input, select, textarea, button {
      margin: 1%;
 }
 
-.add-event-fast{
+.info{
     margin: 1%;
     background-color: #fff;
     padding: 2%;
