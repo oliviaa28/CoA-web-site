@@ -89,17 +89,27 @@ AuthController::requireAuth();
                     </div>
                     <p class="ie-subtitle">Importă date din surse externe în sistemul CoA</p>
 
-                    <!-- Zona upload -->
-                    <div class="ie-upload-zone" onclick="document.getElementById('file-input').click()">
-                        <span class="ie-upload-icon">⬇</span>
-                        <p>Trage fișiere aici sau click pentru a încărca</p>
-                        <small>Formate acceptate: JSON, CSV, XML</small>
-                        <input type="file" id="file-input" accept=".json,.csv,.xml" style="display:none">
-                    </div>
-                    <button class="btn-submit" onclick="document.getElementById('file-input').click()" >
-                        Selectează fișier
-                    </button>
+                    <form action ="../../../api/import-export.php?action=import" method="POST" enctype="multipart/form-data">
+                        <div class="form-field">
+                              <label for="import-type">Tip date</label>
+                                <select id="import-type" name="type" required>
+                                        <option value="">Selectează tipul</option>
+                                        <option value="events">Evenimente</option>
+                                        <option value="shelters">Adăposturi</option>
+                                        <option value="alerts">Alerte</option>
+                                </select>
+                        </div>
 
+                    <div class="form-field">
+                        <label for="file-input">Fișier</label>
+                        <input type="file" id="file-input" name="fisier" accept=".json,.csv,.xml" required>
+                        
+                    </div>
+
+                    <button type="submit" class="btn-submit">Importă</button>
+                
+                   </form>
+                   <small>Formate acceptate: JSON, CSV, XML(doar alerte)</small>
                 </div>
 
             </div>

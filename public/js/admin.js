@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     incarcaAlerte();
     incarcaStatistici();
 
-    // asculta filtrele (daca exista)
+    // asculta filtrele de pe pagina de evenimente (daca exista)
     const filterTip= document.getElementById('filter_type');
     const filterStatus= document.getElementById('filter_status');
     if (filterTip) 
@@ -590,7 +590,7 @@ function incarcaStatistici() {
 
 }
 
-//____________________ import export _________________
+//____________________ import export _________________________
 
 function exportData(type, format){
     //relativ la url ul paginii import-export.php din admin
