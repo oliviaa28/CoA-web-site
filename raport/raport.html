@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoA - Crisis Containment Service - SRS</title>
+    <link rel="stylesheet" href="raport.css">
+  </head>
+  <body>
+
+    <article>
+
+      <header>
+        <p>Software Requirements Specification - Tehnologii Web 2025-2026</p>
+        <h1>CoA - Crisis Containment Service</h1>
+        <p>Platforma web pentru gestionarea situatiilor de urgenta de catre autoritati</p>
+
+        <div role="contentinfo">
+          <p> Zaharia Stefan Octavian , Gavril Olivia-Alexandra</p>
+          <p><strong>Grupa:</strong> 2E3
+          <p>
+             <strong>Repository:</strong> <a href="https://github.com/EatBreadMan/Proiect-web">github.com/Proiect-web</a></p>
+        </div>
+      </header>
+
+      <nav aria-label="Cuprins">
+        <h2>Cuprins</h2>
+        <ol>
+          <li><a href="#s1">Introducere</a>
+            <ol>
+              <li><a href="#s1-1">Scop</a></li>
+              <li><a href="#s1-2">Scopul produsului</a></li>
+              <li><a href="#s1-3">Referinte</a></li>
+            </ol>
+          </li>
+          <li><a href="#s2">Descriere generala</a>
+            <ol>
+              <li><a href="#s2-1">Perspectiva produsului</a></li>
+              <li><a href="#s2-2">Functiile principale</a></li>
+              <li><a href="#s2-3">Utilizatori</a></li>
+              <li><a href="#s2-4">Mediul de operare</a></li>
+              <li><a href="#s2-5">Constrangeri de implementare</a></li>
+              <li><a href="#s2-6">Dependente</a></li>
+            </ol>
+          </li>
+          <li><a href="#s3">Interfete externe</a>
+            <ol>
+              <li><a href="#s3-1">Interfata utilizator</a></li>
+              <li><a href="#s3-2">Interfete software</a></li>
+              <li><a href="#s3-3">Interfete de comunicare</a></li>
+            </ol>
+          </li>
+          <li><a href="#s4">Functionalitati</a>
+            <ol>
+              <li><a href="#s4-1">Autentificare si sesiuni</a></li>
+              <li><a href="#s4-2">Gestionare evenimente</a></li>
+              <li><a href="#s4-3">Gestionare adaposturi</a></li>
+              <li><a href="#s4-4">Alerte CAP</a></li>
+              <li><a href="#s4-5">Harta interactiva</a></li>
+              <li><a href="#s4-6">Import si export date</a></li>
+              <li><a href="#s4-7">Gestionare utilizatori</a></li>
+              <li><a href="#s4-8">Interfata publica</a></li>
+            </ol>
+          </li>
+          <li><a href="#s5">Cerinte non-functionale</a></li>
+          <li><a href="#s6">Arhitectura aplicatiei</a></li>
+          <li><a href="#s7">Structura bazei de date</a></li>
+          <li><a href="#sa">Appendix A - Glosar</a></li>
+          <li><a href="#sb">Appendix B - Modele de analiza</a></li>
+        </ol>
+      </nav>
+
+      <section id="s1">
+        <h2>1. Introducere</h2>
+
+        <section id="s1-1">
+          <h3>1.1 Scop</h3>
+          <p>
+            Acest document reprezinta Specificatia de Cerinte Software pentru aplicatia web
+            <strong>CoA - Crisis Containment Service</strong>, realizata in cadrul cursului de
+            Tehnologii Web, anul universitar 2025-2026. Documentul descrie cerintele functionale
+            si non-functionale ale platformei, arhitectura adoptata si principalele decizii de implementare.
+          </p>
+        </section>
+
+        <section id="s1-2">
+          <h3>1.2 Scopul produsului</h3>
+          <p>
+            CoA este o platforma web pentru gestionarea situatiilor de urgenta (cutremure, inundatii, incendii)
+            de catre autoritatile competente. Aplicatia ofera un panou de administrare complet,
+            vizualizare geografica a evenimentelor si adaposturilor, emiterea de alerte in format
+            CAP (Common Alerting Protocol), import de date istorice din seturi de date publice
+            si export in formate deschise. Totodata, pune la dispozitia cetatenilor o interfata
+            publica de informare, fara autentificare.
+          </p>
+        </section>
+
+        <section id="s1-3">
+          <h3>1.3 Referinte</h3>
+          <ul>
+            <li>OASIS CAP v1.2 - <a href="http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html">docs.oasis-open.org</a></li>
+            <li>Kaggle - Global Earthquake Events Dataset - <a href="https://www.kaggle.com/datasets/zahranusratt/global-earthquake-events-dataset">kaggle.com</a></li>
+            <li>Kaggle - Cutremure Romania 2012-2024 - <a href="https://www.kaggle.com/datasets/stefancomanita/earthquakes-in-romania-from-2012-to-2024">kaggle.com</a></li>
+            <li>W3C Scholarly HTML - <a href="https://w3c.github.io/scholarly-html/">w3c.github.io/scholarly-html</a></li>
+            <li>IEEE SRS Template - <a href="https://github.com/rick4470/IEEE-SRS-Tempate">github.com</a></li>
+            <li>Open-Meteo Weather API - <a href="https://open-meteo.com/">open-meteo.com</a></li>
+            <li>Leaflet.js - <a href="https://leafletjs.com/">leafletjs.com</a></li>
+          </ul>
+        </section>
+      </section>
+
+      <section id="s2">
+        <h2>2. Descriere generala</h2>
+
+        <section id="s2-1">
+          <h3>2.1 Perspectiva produsului</h3>
+          <p>
+            CoA este o aplicatie web independenta, construita fara framework-uri externe la nivel
+            de client sau server. Arhitectura urmeaza pattern-ul MVC cu Page Controller: fiecare
+            pagina are propriul controller PHP, cu modele separate pentru accesul la date si view-uri
+            HTML pentru prezentare.
+          </p>
+          <p>
+            Comunicarea dintre frontend si backend se realizeaza asincron prin Fetch API,
+            serverul expunand endpoint-uri JSON pentru toate operatiile CRUD. Aceasta plaseaza
+            aplicatia in categoria arhitecturii bazate pe servicii web.
+          </p>
+        </section>
+
+        <section id="s2-2">
+          <h3>2.2 Functiile principale</h3>
+          <ul>
+            <li>Autentificare si gestionarea sesiunilor pentru administratori</li>
+            <li>CRUD complet pentru evenimente (cutremure, inundatii, incendii)</li>
+            <li>CRUD complet pentru adaposturi cu localizare geografica</li>
+            <li>Creare si export de alerte in format CAP (XML)</li>
+            <li>Harta interactiva cu Leaflet.js pentru vizualizarea evenimentelor si adaposturilor</li>
+            <li>Import si export de date in format JSON si CSV</li>
+            <li>Import de date istorice despre cutremure din seturi de date Kaggle</li>
+            <li>Gestionarea conturilor de administrator</li>
+            <li>Interfata publica de informare pentru cetateni</li>
+          </ul>
+        </section>
+
+        <section id="s2-3">
+          <h3>2.3 Utilizatori</h3>
+          <p>
+            Aplicatia are doua tipuri de utilizatori. <strong>Administratorul</strong> este o autoritate
+            acreditata care are acces complet la panoul de administrare si poate gestiona toate entitatile
+            platformei. <strong>Publicul</strong> reprezinta orice persoana care acceseaza platforma
+            pentru informatii, fara autentificare si fara posibilitatea de a modifica date.
+          </p>
+        </section>
+
+        <section id="s2-4">
+          <h3>2.4 Mediul de operare</h3>
+          <p>
+            Aplicatia ruleaza pe un server Apache cu suport PHP, folosind MySQL ca baza de date
+            relationala, accesat prin PDO. In dezvoltare am folosit XAMPP local. Interfata
+            functioneaza in orice browser modern pe desktop, tableta sau telefon.
+          </p>
+        </section>
+
+        <section id="s2-5">
+          <h3>2.5 Constrangeri de implementare</h3>
+          <ul>
+            <li>Fara framework-uri frontend - JavaScript fara librarii externe</li>
+            <li>Fara framework-uri backend - PHP cu MVC implementat manual</li>
+            <li>HTML si CSS valide conform specificatiilor W3C</li>
+            <li>Toate interogarile SQL folosesc PDO cu prepared statements</li>
+            <li>Comunicarea asincrona prin Fetch API pentru operatii CRUD</li>
+            <li>Cod gestionat prin Git cu branch-uri separate per functionalitate</li>
+          </ul>
+        </section>
+
+        <section id="s2-6">
+          <h3>2.6 Dependente</h3>
+          <ul>
+            <li><strong>Leaflet.js</strong> - biblioteca open-source pentru harti interactive</li>
+            <li><strong>Open-Meteo API</strong> - date meteo in timp real, acces public</li>
+            <li><strong>ip-api.com</strong> - geolocalizare dupa IP, acces public</li>
+            <li><strong>ipify.org</strong> - detectarea IP-ului public</li>
+            <li><strong>Date Kaggle</strong> - importate o singura data prin scripturi PHP dedicate</li>
+          </ul>
+        </section>
+      </section>
+
+      <section id="s3">
+        <h2>3. Interfete externe</h2>
+
+        <section id="s3-1">
+          <h3>3.1 Interfata utilizator</h3>
+          <p>Aplicatia are doua seturi de interfete distincte.</p>
+
+          <h4>Interfata publica</h4>
+          <ul>
+            <li><code>events_public.php</code> - lista evenimentelor cu filtrare si harta</li>
+            <li><code>details_public.php</code> - detalii eveniment individual</li>
+            <li><code>shelter_public.php</code> - lista adaposturilor cu localizare</li>
+          </ul>
+
+          <h4>Panoul de administrare</h4>
+          <ul>
+            <li><code>login.html</code> - autentificare</li>
+            <li><code>dashboard.php</code> - statistici generale</li>
+            <li><code>events.php</code> - gestionare evenimente</li>
+            <li><code>shelters.php</code> - gestionare adaposturi</li>
+            <li><code>alerts.php</code> - gestionare alerte si export CAP</li>
+            <li><code>users.php</code> - gestionare administratori</li>
+            <li><code>import-export.php</code> - import si export fisiere</li>
+          </ul>
+
+          <p>
+            Toate paginile sunt responsive. Notificarile de succes si eroare sunt afisate prin componente toast generate dinamic in JavaScript.
+          </p>
+        </section>
+
+        <section id="s3-2">
+          <h3>3.2 Interfete software</h3>
+          <figure typeof="sa:table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Componenta</th>
+                  <th>Scop</th>
+                  <th>Integrare</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>MySQL</td>
+                  <td>Stocare date relationale</td>
+                  <td>PDO PHP</td>
+                </tr>
+                <tr>
+                  <td>Leaflet.js</td>
+                  <td>Harti interactive</td>
+                  <td>CDN, JavaScript</td>
+                </tr>
+                <tr>
+                  <td>Open-Meteo API</td>
+                  <td>Date meteo curente</td>
+                  <td>file_get_contents PHP</td>
+                </tr>
+                <tr>
+                  <td>ip-api.com</td>
+                  <td>Geolocalizare IP</td>
+                  <td>file_get_contents PHP</td>
+                </tr>
+              </tbody>
+            </table>
+          </figure>
+        </section>
+
+        <section id="s3-3">
+          <h3>3.3 Interfete de comunicare</h3>
+          <ul>
+            <li><strong>HTTP</strong> - protocolul de transfer intre browser si serverul Apache</li>
+            <li><strong>Fetch API</strong> - comunicare asincrona pentru CRUD, date serializate JSON</li>
+            <li><strong>CAP over XML</strong> - alertele exportate ca XML conform OASIS CAP 1.2</li>
+            <li><strong>multipart/form-data</strong> - upload fisiere la import</li>
+            <li><strong>Sesiuni PHP</strong> - autentificarea mentinuta prin cookie <code>PHPSESSID</code></li>
+          </ul>
+        </section>
+      </section>
+
+      <section id="s4">
+        <h2>4. Functionalitati</h2>
+
+        <section id="s4-1">
+          <h3>4.1 Autentificare si sesiuni</h3>
+          <p>
+            Sistemul de autentificare este bazat pe sesiuni PHP. Utilizatorul completeaza
+            emailul si parola in formularul de login, browserul trimite un request POST,
+            serverul verifica credentialele si creaza sesiunea daca sunt corecte.
+          </p>
+          <ul>
+            <li>Parolele sunt stocate exclusiv ca hash prin <code>password_hash()</code></li>
+            <li>Verificarea parolei se face cu <code>password_verify()</code></li>
+            <li>Datele sesiunii sunt stocate server-side, clientul primeste doar cookie-ul <code>PHPSESSID</code></li>
+            <li>Toate paginile admin verifica sesiunea activa prin <code>AuthController::requireAuth()</code></li>
+            <li>La logout, sesiunea este distrusa complet cu <code>session_destroy()</code></li>
+          </ul>
+        </section>
+
+        <section id="s4-2">
+          <h3>4.2 Gestionare evenimente</h3>
+          <p>
+            Functionalitate centrala a platformei - CRUD pe trei tipuri de incidente:
+            cutremur, inundatie, incendiu.
+          </p>
+          <ul>
+            <li>Fiecare tip de eveniment are tabel propriu in baza de date</li>
+            <li>Toate evenimentele au coordonate GPS pentru afisare pe harta</li>
+            <li>Filtrarea functioneaza combinat dupa tip, status si an</li>
+            <li>Un singur modal cu schimbare de mod (adaugare vs editare) gestionat prin JavaScript</li>
+            <li>Datele Kaggle sunt importate prin scripturi dedicate (<code>import_kaggle.php</code>, <code>import_ro.php</code>)</li>
+            <li>Toate operatiile CRUD se realizeaza asincron prin Fetch API</li>
+          </ul>
+        </section>
+
+        <section id="s4-3">
+          <h3>4.3 Gestionare adaposturi</h3>
+          <p>
+            CRUD pe adaposturi cu informatii despre capacitate si localizare geografica.
+          </p>
+          <ul>
+            <li>Fiecare adapost are: nume, adresa, tip, capacitate totala, locuri disponibile, coordonate GPS, descriere</li>
+            <li>Adaposturile sunt vizibile public fara autentificare</li>
+            <li>Localizarea geografica permite afisarea pe harta interactiva</li>
+          </ul>
+        </section>
+
+        <section id="s4-4">
+          <h3>4.4 Alerte CAP</h3>
+          <p>
+            Creare si export de alerte de urgenta conform standardului international OASIS CAP 1.2.
+          </p>
+          <ul>
+            <li>O alerta contine: tip incident, headline, descriere, instructiuni, severitate, urgenta, certitudine, zona</li>
+            <li>Exportul genereaza un document XML well-formed cu namespace <code>urn:oasis:names:tc:emergency:cap:1.2</code></li>
+            <li>Documentul include elementele obligatorii: <code>identifier</code>, <code>sender</code>, <code>sent</code>, <code>status</code>, <code>msgType</code>, <code>scope</code> si blocul <code>info</code></li>
+            <li>Tipul incidentului se mapeaza la categoriile CAP: cutremur - Geo, inundatie - Met, incendiu - Fire</li>
+            <li>Data este formatata conform ISO 8601 cu timezone</li>
+            <li>XML-ul este generat prin DOMDocument PHP, garantand well-formedness</li>
+          </ul>
+          </section>
+
+        <section id="s4-5">
+          <h3>4.5 Harta interactiva</h3>
+          <p>
+            Vizualizare geografica a evenimentelor si adaposturilor prin Leaflet.js.
+          </p>
+          <ul>
+            <li>Harta afiseaza markere pentru evenimentele active, diferentiate vizual dupa tip</li>
+            <li>Click pe marker deschide un popup cu informatii si link spre pagina de detalii</li>
+            <li>Datele pentru harta sunt preluate asincron prin Fetch API</li>
+            <li>Harta este responsiva si functioneaza pe dispozitive mobile</li>
+          </ul>
+        </section>
+
+        <section id="s4-6">
+          <h3>4.6 Import si export date</h3>
+          <p>
+            Transfer de date in formate deschise.
+          </p>
+          <ul>
+            <li>Export JSON cu indentare si suport unicode, descarcat direct din browser</li>
+            <li>Export CSV cu header pe prima linie, generat prin <code>fputcsv()</code> direct in output stream</li>
+            <li>Import JSON prin <code>json_decode()</code> aplicat pe fisierul uploadat</li>
+            <li>Import CSV cu citire linie cu linie si mapare chei-valori prin <code>array_combine()</code></li>
+            <li>Validare structurala a fisierelor inainte de insertie in baza de date</li>
+            <li>Export alerte in format CAP (XML) prin DOMDocument</li>
+          </ul>
+        </section>
+
+        <section id="s4-7">
+          <h3>4.7 Gestionare utilizatori</h3>
+          <p>
+            CRUD pe conturile de administrator ale platformei.
+          </p>
+          <ul>
+            <li>La creare, parola este hashata cu <code>password_hash()</code></li>
+            <li>La editare, parola se re-hasheaza doar daca a fost introdusa una noua</li>
+            <li>Stergerea unui utilizator este ireversibila</li>
+          </ul>
+        </section>
+
+        <section id="s4-8">
+          <h3>4.8 Interfata publica</h3>
+          <p>
+            Acces public la informatii despre urgente, fara autentificare.
+          </p>
+          <ul>
+            <li>Lista evenimentelor cu filtrare si harta, vizibila oricui</li>
+            <li>Pagina de detalii per eveniment cu statistici specifice tipului</li>
+            <li>Lista adaposturilor cu localizare si capacitate disponibila</li>
+            <li>Nicio operatie de scriere nu este accesibila fara autentificare</li>
+          </ul>
+        </section>
+      </section>
+
+      <section id="s5">
+        <h2>5. Cerinte non-functionale</h2>
+
+        <h3>5.1 Securitate</h3>
+        <ul>
+          <li><strong>SQL Injection</strong> - toate interogarile folosesc PDO cu prepared statements</li>
+          <li><strong>XSS</strong> - datele dinamice inserate in DOM folosesc <code>textContent</code> in loc de <code>innerHTML</code>; server-side se foloseste <code>htmlspecialchars()</code></li>
+          <li><strong>Parole</strong> - stocate exclusiv ca hash, verificate cu <code>password_verify()</code></li>
+          <li><strong>Sesiuni</strong> - date stocate server-side, clientul detine doar identificatorul de sesiune</li>
+        </ul>
+
+        <h3>5.2 Responsivitate</h3>
+        <p>
+          Toate paginile includ meta viewport si folosesc CSS Flexbox si Grid pentru adaptare
+          la rezolutii diferite. Sidebar-ul admin se adapteaza pe ecrane mici.
+        </p>
+
+        <h3>5.3 Calitate cod</h3>
+        <ul>
+          <li>Arhitectura MVC cu separare clara Model, View, Controller</li>
+          <li>Pattern Table Data Gateway pentru accesul la date</li>
+          <li>Cod comentat </li>
+          <li>Gestionare prin Git cu branch-uri per functionalitate</li>
+          <li>HTML validat prin W3C Markup Validation Service</li>
+        </ul>
+
+        <h3>5.4 Portabilitate</h3>
+        <p>
+          Include-urile PHP folosesc  cai absolute, iar configuratia
+          bazei de date este centralizata in <code>config/database.php</code>.
+        </p>
+      </section>
+
+      <section id="s6">
+        <h2>6. Arhitectura aplicatiei</h2>
+
+        <h3>6.1 Structura folderelor</h3>
+       
+
+        <h3>6.2 Fluxul unui request AJAX</h3>
+        <p>Exemplu pentru crearea unui eveniment nou din panoul admin:</p>
+        <figure typeof="schema:SoftwareSourceCode">
+          <pre><code>1. Admin completeaza formularul modal si apasa "Salveaza"
+                        2. admin.js - fetch POST /api/events.php cu body JSON
+                        3. Apache primeste request-ul
+                        4. api/events.php - new EventController() - handleApiRequest()
+                        5. EventController - json_decode(php://input) - model->createEvent()
+                        6. EventModel - PDO prepare INSERT - execute()
+                        7. MySQL inserteaza randul in baza de date
+                        8. EventController - echo json_encode(['success' => true])
+                        9. admin.js - arataToast('Eveniment salvat!') - reincarcare lista</code></pre>
+        </figure>
+
+      </section>
+
+      <section id="s7">
+        <h2>7. Structura bazei de date</h2>
+        <p>
+          Baza de date <code>coa_db</code> contine tabele separate pentru fiecare tip de incident,
+          permitand campuri specifice (de exemplu, magnitudine doar pentru cutremure).
+        </p>
+
+        <h3>ADMINISTRATORI</h3>
+        <figure typeof="sa:table">
+          <table>
+            <thead>
+              <tr><th>Coloana</th><th>Tip</th><th>Observatii</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id_admin</td><td>INT PK</td><td>Auto-increment</td></tr>
+              <tr><td>nume</td><td>VARCHAR</td><td>Numele complet</td></tr>
+              <tr><td>email</td><td>VARCHAR UNIQUE</td><td>Folosit la autentificare</td></tr>
+              <tr><td>parola</td><td>VARCHAR</td><td>Hash parola</td></tr>
+              <tr><td>judet</td><td>VARCHAR</td><td>Judetul autoritatii</td></tr>
+              <tr><td>creat_la</td><td>TIMESTAMP</td><td>Data crearii contului</td></tr>
+            </tbody>
+          </table>
+        </figure>
+
+        <h3>INCIDENTE_CUTREMUR</h3>
+        <figure typeof="sa:table">
+          <table>
+            <thead>
+              <tr><th>Coloana</th><th>Tip</th><th>Observatii</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id_cutremur</td><td>INT PK</td><td>Auto-increment</td></tr>
+              <tr><td>titlu</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>descriere</td><td>TEXT</td><td></td></tr>
+              <tr><td>localitate</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>latitudine, longitudine</td><td>DECIMAL</td><td>Coordonate GPS</td></tr>
+              <tr><td>stadiu</td><td>VARCHAR</td><td>ACTIV, MONITORIZARE, REZOLVAT</td></tr>
+              <tr><td>magnitudine</td><td>DECIMAL</td><td>Specific cutremur</td></tr>
+              <tr><td>adancime</td><td>DECIMAL</td><td>Adancime in km</td></tr>
+              <tr><td>data_incident</td><td>DATETIME</td><td></td></tr>
+            </tbody>
+          </table>
+        </figure>
+
+        <h3>ADAPOSTURI</h3>
+        <figure typeof="sa:table">
+          <table>
+            <thead>
+              <tr><th>Coloana</th><th>Tip</th><th>Observatii</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id_adapost</td><td>INT PK</td><td>Auto-increment</td></tr>
+              <tr><td>nume</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>adresa</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>tip</td><td>VARCHAR</td><td>Tipul adapostului</td></tr>
+              <tr><td>capacitate</td><td>INT</td><td>Numar total locuri</td></tr>
+              <tr><td>locuri_disponibile</td><td>INT</td><td>Locuri libere curent</td></tr>
+              <tr><td>latitudine, longitudine</td><td>DECIMAL</td><td>Coordonate GPS</td></tr>
+              <tr><td>descriere</td><td>TEXT</td><td></td></tr>
+            </tbody>
+          </table>
+        </figure>
+
+        <h3>ALERTE</h3>
+        <figure typeof="sa:table">
+          <table>
+            <thead>
+              <tr><th>Coloana</th><th>Tip</th><th>Observatii</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id_alerta</td><td>INT PK</td><td>Auto-increment</td></tr>
+              <tr><td>tip_incident</td><td>VARCHAR</td><td>cutremur, inundatie, incendiu</td></tr>
+              <tr><td>id_incident</td><td>INT</td><td>Referinta spre tabelul specific</td></tr>
+              <tr><td>headline</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>descriere</td><td>TEXT</td><td></td></tr>
+              <tr><td>instructiuni</td><td>TEXT</td><td></td></tr>
+              <tr><td>severitate</td><td>VARCHAR</td><td>Extreme, Severe, Moderate, Minor</td></tr>
+              <tr><td>urgenta</td><td>VARCHAR</td><td>Immediate, Expected, Future</td></tr>
+              <tr><td>certitudine</td><td>VARCHAR</td><td>Observed, Likely, Possible</td></tr>
+              <tr><td>zona</td><td>VARCHAR</td><td></td></tr>
+              <tr><td>status</td><td>VARCHAR</td><td>ACTIV, INCHIS</td></tr>
+              <tr><td>trimis_la</td><td>TIMESTAMP</td><td></td></tr>
+            </tbody>
+          </table>
+        </figure>
+      </section>
+
+      <section id="sa">
+        <h2>Appendix A - Glosar</h2>
+        <figure typeof="sa:table">
+          <table>
+            <thead>
+              <tr><th>Termen</th><th>Definitie</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>AJAX</strong></td><td>Asynchronous JavaScript and XML - comunicare asincrona browser-server fara reincarcarea paginii</td></tr>
+              <tr><td><strong>CAP</strong></td><td>Common Alerting Protocol - standard OASIS pentru alerte de urgenta in format XML</td></tr>
+              <tr><td><strong>CRUD</strong></td><td>Create, Read, Update, Delete - operatiile fundamentale pe date persistente</td></tr>
+              <tr><td><strong>DOM</strong></td><td>Document Object Model - reprezentarea arborescenta a unui document HTML/XML</td></tr>
+              <tr><td><strong>MVC</strong></td><td>Model-View-Controller - pattern arhitectural cu separarea datelor, prezentarii si logicii</td></tr>
+              <tr><td><strong>PDO</strong></td><td>PHP Data Objects - extensie PHP pentru acces uniform la baze de date</td></tr>
+              <tr><td><strong>SQL Injection</strong></td><td>Atac prin care input malitios este interpretat ca SQL, prevenibil prin prepared statements</td></tr>
+              <tr><td><strong>XSS</strong></td><td>Cross-Site Scripting - injectare de cod JavaScript in paginile altor utilizatori</td></tr>
+              <tr><td><strong>Well-formed</strong></td><td>Document XML cu sintaxa corecta: element radacina unic, taguri inchise si imbricate corect</td></tr>
+              <tr><td><strong>ISU</strong></td><td>Inspectoratul pentru Situatii de Urgenta</td></tr>
+            </tbody>
+          </table>
+        </figure>
+      </section>
+
+      <section id="sb">
+        <h2>Appendix B - Modele de analiza</h2>
+
+      </section>
+
+    </article>
+
+    <footer>
+      <p>CoA - Crisis Containment Service  - Iunie 2026</p>
+    </footer>
+
+  </body>
+</html>

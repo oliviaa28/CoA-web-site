@@ -1,0 +1,91 @@
+body {
+  font-family: Georgia, serif;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #222;
+  line-height: 1.7;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+h2 {
+  margin-top: 2.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #ccc;
+}
+
+h3 {
+  margin-top: 1.8rem;
+}
+
+h4 {
+  margin-top: 1.2rem;
+  color: #555;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+code {
+  font-family: monospace;
+  background: #f4f4f4;
+  padding: 0.1em 0.3em;
+  font-size: 0.9em;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+}
+
+th {
+  background: #222;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  text-align: left;
+}
+
+td {
+  padding: 0.4rem 0.8rem;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+aside {
+  border-left: 3px solid #999;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  color: #555;
+  font-size: 0.92rem;
+}
+
+nav ol {
+  line-height: 2;
+}
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+  font-size: 0.85rem;
+  color: #777;
+}

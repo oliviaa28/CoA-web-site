@@ -11,6 +11,11 @@ class AuthController{
     }
     
     public function login() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ../app/views/public/login.html');
+            exit;
+        }
+
         session_start();
 
         //preluam datele din formular 
@@ -20,7 +25,7 @@ class AuthController{
         $user = $this->model->getUserByEmail($email);
 
         if( $user && password_verify($password, $user['parola']) ){
-            $_SESSION['user_id'] = $user['id_admin'];
+            $_SESSION['user_id']= $user['id_admin'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['nume'] = $user['nume'];
 
@@ -33,20 +38,24 @@ class AuthController{
     }
 
     public function logout() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE){
+            session_start();
+         }
+
         session_destroy();
         header('Location: ../app/views/public/events_public.php');
         exit;
     }
 
     public static function requireAuth() {
-        session_start();
+         if (session_status() === PHP_SESSION_NONE){
+            session_start();
+         }
+
         if (!isset($_SESSION['user_id'])) {
-            header('Location: ../public/login.html');
+            header( 'Location: ../app/views/public/login.html');
              exit;
         }
     }
-
 }
-
 ?>

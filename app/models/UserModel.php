@@ -8,7 +8,6 @@ class UserModel {
     }
 
     public function getAllUsers(){
-
       $sql = $this->pdo->prepare( 'SELECT  id_admin AS "id",
                                             nume AS "nume",
                                             email AS "email",
@@ -75,7 +74,6 @@ class UserModel {
         $sql->execute(['email' => $email]);
      return $sql->fetch();
     }
-
 
 }
 
