@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../../../public/css/global.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Adaugat pentru Leaflet Routing Machine -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     
     <link rel="stylesheet" href="../../../public/css/map-page.css">
 </head>
@@ -36,6 +38,8 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Adaugat pentru Leaflet Routing Machine -->
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
     <script>
         // init harta
         var map = L.map('shelters-map').setView([47.165, 27.58], 14);
@@ -45,6 +49,9 @@
         }).addTo(map);
 
         var listContainer = document.getElementById('shelters-list');
+
+        // Variabila pentru a stoca controlul de rutare, ca sa il putem sterge/inlocui
+        let routingControl = null;
 
         // fetch date db
             fetch('../../../api/shelters.php')
@@ -104,7 +111,11 @@
                             <h3>${shelter.name}</h3>
                             <p class="location"> ${shelter.address}</p>
                             <p class="time"> ${shelter.details}</p>
-                            <a href="#" class="btn-link" onclick="map.setView([${lat}, ${lng}], 16); return false;">Vezi pe hartă &rarr;</a>
+                            
+                            <div class="card-actions">
+                                <a href="#" class="btn-link" onclick="map.setView([${lat}, ${lng}], 16); return false;">Vezi pe hartă &rarr;</a>
+                                <a href="#" class="btn-link directions-link" data-lat="${lat}" data-lng="${lng}">Obține direcții &rarr;</a>
+                            </div>
                         </div>
                     `;
                     
@@ -140,6 +151,63 @@
                             }
                         });
                     });
+                });
+
+                // GESTIONARE CLICK PE "OBTINE DIRECTII"
+                // Folosim event delegation pe containerul listei
+                listContainer.addEventListener('click', function(e) {
+                    // Verificam daca elementul pe care s-a dat click este link-ul de directii
+                    if (e.target && e.target.classList.contains('directions-link')) {
+                        e.preventDefault(); // Prevenim comportamentul default al link-ului
+
+                        const shelterLat = parseFloat(e.target.getAttribute('data-lat'));
+                        const shelterLng = parseFloat(e.target.getAttribute('data-lng'));
+
+                        // Funcție helper pentru a desena ruta
+                        const drawRoute = (userLat, userLng) => {
+                            if (routingControl) {
+                                map.removeControl(routingControl);
+                            }
+                            routingControl = L.Routing.control({
+                                waypoints: [
+                                    L.latLng(userLat, userLng),      // Punct de start
+                                    L.latLng(shelterLat, shelterLng) // Punct de sosire
+                                ],
+                                routeWhileDragging: true
+                            }).addTo(map);
+                        };
+
+                        // Funcție fallback pentru locația aproximativă prin IP (folosind ipify și ip-api din routes.php)
+                        const fetchIPLocation = () => {
+                            fetch('../../../api/routes.php')
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        drawRoute(data.lat, data.lng);
+                                    } else {
+                                        alert("Eroare API locație: " + data.error);
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error("Eroare la preluarea locației:", err);
+                                    alert("Eroare de rețea. Nu am putut obține locația exactă sau aproximativă.");
+                                });
+                        };
+
+                        // 1. Încercăm locația exactă (GPS/Wi-Fi) prin browser
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                function(position) { drawRoute(position.coords.latitude, position.coords.longitude); },
+                                function(error) { 
+                                    console.warn("Geolocația exactă a eșuat, folosim fallback IP.", error);
+                                    fetchIPLocation(); // Fallback dacă utilizatorul refuză accesul sau e eroare
+                                },
+                                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // Forțăm GPS-ul / acuratețe maximă
+                            );
+                        } else {
+                            fetchIPLocation(); // Browserul nu suportă geolocație
+                        }
+                    }
                 });
             })
             .catch(error => {
