@@ -141,6 +141,27 @@ function incarcaDetaliiEveniment() {
                  badge.className= 'badge bg-orange';
             else 
                 badge.className= 'badge bg-teal';
+
+            // --- HARTĂ INTERACTIVĂ ---
+            const mapContainer = document.getElementById('event-map');
+            if (mapContainer && e.latitudine && e.longitudine) {
+                const lat = parseFloat(e.latitudine);
+                const lng = parseFloat(e.longitudine);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    if (window.eventMap !== undefined) {
+                        window.eventMap.remove();
+                    }
+                    
+                    window.eventMap = L.map('event-map').setView([lat, lng], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(window.eventMap);
+                    
+                    L.marker([lat, lng]).addTo(window.eventMap)
+                        .bindPopup(`<b>${e.titlu}</b><br>${e.localitate}`).openPopup();
+                }
+            }
           }
          );
     

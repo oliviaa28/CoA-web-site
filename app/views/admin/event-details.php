@@ -14,6 +14,8 @@ AuthController::requireAuth();
   <link rel="stylesheet" href="public/css/forms.css">
   <link rel="stylesheet" href="public/css/admin.css">  
   <link rel="stylesheet" href="public/css/events.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -49,7 +51,7 @@ AuthController::requireAuth();
                 <!-- Harta -->
                 <div class="event-map">
                     <!-- Leaflet.js va fi initializat aici -->
-                     
+                    <div id="event-map" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div> 
                     <div class="map-footer">
                         <span> — Raza impact: ~80km</span>
                     </div>
