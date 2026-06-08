@@ -1,5 +1,5 @@
     <!-- Modal adaugare eveniment -->
-<?php include 'judete.php'; ?>
+<?php include __DIR__ . '/judete.php'; ?>
   <div class="modal-overlay" id="modal-add" >
        <div class="modal-card">
         

@@ -6,18 +6,18 @@
 
     <nav>
             <ul class="sidebar-list">
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="events.php">Evenimente</a></li>
-            <li><a href="shelters.php">Adaposturi</a></li>
-            <li><a href="alerts.php">Alerte </a></li>
-            <li><a href="users.php">Utilizatori</a></li>
-            <li><a href="import-export.php">Import/Export</a></li>
+            <li><a href="index.php?route=dashboard">Dashboard</a></li>
+            <li><a href="index.php?route=events">Evenimente</a></li>
+            <li><a href="index.php?route=shelters">Adaposturi</a></li>
+            <li><a href="index.php?route=alerts">Alerte </a></li>
+            <li><a href="index.php?route=users">Utilizatori</a></li>
+            <li><a href="index.php?route=import-export">Import/Export</a></li>
         </ul>
-    </nav>
+    </nav>  
 
     <div class="sidebar-footer" >
 <!--Deconectarea schimba starea serverului-> distruge sesiunea => trebuie facut cu POST -->
-      <form action="../../../api/logout.php" method="POST">
+      <form action="index.php?route=api/logout" method="POST">
          <button class="btn-logout" type="submit">Deconectare</button>
       </form>
     </div>

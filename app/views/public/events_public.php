@@ -7,18 +7,18 @@
     <title>Evenimente și Alerte - CoA</title>
     
     <!-- css global -->
-    <link rel="stylesheet" href="../../../public/css/global.css">
+    <link rel="stylesheet" href="public/css/global.css">
     
     <!-- leaflet pt harta -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <!-- css layout harta + lista -->
-    <link rel="stylesheet" href="../../../public/css/map-page.css">
+    <link rel="stylesheet" href="public/css/map-page.css">
 </head>
 <body>
     <?php
     $active_page = 'events';
-    include '../layouts/header.php';
+    include __DIR__ . '/../layouts/header.php';
     ?>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
@@ -59,7 +59,7 @@
         var listContainer = document.getElementById('events-list');
 
         // Apelăm endpoint-ul unificat pentru evenimente
-        fetch('../../../api/events.php')
+        fetch('index.php?route=api/events')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -112,7 +112,7 @@
                         <p class="location"> ${ev.location}</p>
                         <p class="time"> ${ev.details}</p>
                         <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                            <a href="details_public.php?id=${ev.id}&type=${ev.type}" class="btn-link" style="margin-top: 0;">Vezi detalii</a>
+                            <a href="index.php?route=details-public&id=${ev.id}&type=${ev.type}" class="btn-link" style="margin-top: 0;">Vezi detalii</a>
                             <a href="#" class="btn-link" style="margin-top: 0;" onclick="map.setView([${ev.lat}, ${ev.lng}], 10); return false;">Vezi pe hartă &rarr;</a>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
         });
     </script>
     
-    <script src="../../../public/js/main.js"></script>
+    <script src="public/js/main.js"></script>
 
   
 </body>

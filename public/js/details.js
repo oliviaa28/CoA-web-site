@@ -32,7 +32,7 @@ function incarcaDetaliiAdapost(){
 
     adapostCurentId = id;
 
-    fetch(`../../../api/shelters.php?id=${id}`)
+    fetch(`index.php?route=api/shelters&id=${id}`)
         .then(r => r.json())
         .then( s=> {
             document.getElementById('shelter-name').textContent= s.name;
@@ -65,19 +65,19 @@ function stergeAdapostDetalii() {
     if ( !confirm('Sigur vrei să ștergi acest adăpost?'))
          return;
 
-    fetch(`../../../api/shelters.php?id=${adapostCurentId}`,{
+    fetch(`index.php?route=api/shelters&id=${adapostCurentId}`,{
         method: 'DELETE'
     })
     .then(r => r.json())
     .then(data => {
-        window.location.href = 'shelters.php';  // dupa stergere, mergem al list acu adaposturi 
+        window.location.href = 'index.php?route=shelters';  // dupa stergere, mergem al list acu adaposturi 
     })
     .catch(error => console.error('Eroare:', error));
 }
 
 function editeazaAdapostDetalii() {
     
-    fetch(`../../../api/shelters.php?id=${adapostCurentId}`)
+    fetch(`index.php?route=api/shelters&id=${adapostCurentId}`)
         .then(r => r.json())
         .then(s => {
             document.getElementById('shelter_name').value= s.name;
@@ -116,7 +116,7 @@ function incarcaDetaliiEveniment() {
     evenimentCurentId = id;
     evenimentCurentType = type;
 
-    fetch(`../../../api/events.php?id=${id}&type=${type}`)
+    fetch(`index.php?route=api/events&id=${id}&type=${type}`)
     .then(r =>r.json())
     .then( e => {
             
@@ -151,19 +151,19 @@ function stergeEvenimentDetalii(){
       if ( !confirm('Sigur vrei să ștergi acest eveniment?'))
          return;
 
-    fetch(`../../../api/events.php?id=${evenimentCurentId}&type=${evenimentCurentType}`,{
+    fetch(`index.php?route=api/events&id=${evenimentCurentId}&type=${evenimentCurentType}`,{
         method: 'DELETE'
     })
     .then(r => r.json())
     .then(data => {
-        window.location.href = 'events.php'; 
+        window.location.href = 'index.php?route=events'; 
     })
     .catch(error => console.error('Eroare:', error));
 }
 
 function editeazaEvenimentDetalii(){
 
-    fetch(`../../../api/events.php?id=${evenimentCurentId}&type=${evenimentCurentType}`)
+    fetch(`index.php?route=api/events&id=${evenimentCurentId}&type=${evenimentCurentType}`)
         .then(r => r.json())
         .then(e => {
             document.getElementById('event_type').value= evenimentCurentType;
@@ -199,7 +199,7 @@ function incarcaAlerteEveniment(){
     if (!evenimentCurentId) 
         return;
 
-    fetch(`../../../api/alerts.php?id_incident=${evenimentCurentId}&tip_incident=${evenimentCurentType}`)
+    fetch(`index.php?route=api/alerts&id_incident=${evenimentCurentId}&tip_incident=${evenimentCurentType}`)
         .then(r => r.json())
         .then(alerte => {
             tbody.innerHTML = '';
@@ -211,7 +211,7 @@ function incarcaAlerteEveniment(){
                         <td>${a.severity}</td>
                         <td>${a.sentat}</td>
                         <td><span class="badge bg-red">${a.status}</span></td>
-                        <td><a href="cap-details.php?id=${a.id}" class="btn-link">Detalii</a></td>
+                        <td><a href="index.php?route=cap-details&id=${a.id}" class="btn-link">Detalii</a></td>
                     </tr>
                 `;
             }
@@ -233,7 +233,7 @@ function incarcaDetaliiAlerta() {
 
     alertaCurentId = id;
 
-    fetch(`../../../api/alerts.php?id=${id}`)
+    fetch(`index.php?route=api/alerts&id=${id}`)
         .then(r => r.json())
         .then(a => {
             document.getElementById('alert-detail-headline').textContent = a.headline;
@@ -260,7 +260,7 @@ function incarcaDetaliiAlerta() {
            
             if (a.incidentid && a.type) {
                 eventInfo.textContent = `Tip: ${a.type}`;
-                eventLink.href= `event-details.php?id=${a.incidentid}&type=${a.type}`;
+                eventLink.href= `index.php?route=event-details&id=${a.incidentid}&type=${a.type}`;
             } else {
                 eventInfo.textContent='Fără eveniment asociat';
                 eventLink.style.display='none';
@@ -274,11 +274,11 @@ function anuleazaAlerta(){
     if ( !confirm('Sigur vrei să anulezi această alertă?')) 
         return;
 
-    fetch(`../../../api/alerts.php?id=${alertaCurentId}`, {
+    fetch(`index.php?route=api/alerts&id=${alertaCurentId}`, {
         method: 'DELETE'
     })
     .then(r =>r.json())
-    .then(data =>{ window.location.href = 'alerts.php'; }
+    .then(data =>{ window.location.href = 'index.php?route=alerts'; }
     )
     .catch(error => console.error('Eroare:', error));
 
@@ -286,5 +286,5 @@ function anuleazaAlerta(){
 
 function exportaAlerta() { 
     //navigheaza la endpoint, care va raspunde cu headers pt descarcare
-    window.location.href= `/CoA-project/api/alerts.php?action=export&id=${alertaCurentId}`;
+    window.location.href= `index.php?route=api/alerts&action=export&id=${alertaCurentId}`;
 }

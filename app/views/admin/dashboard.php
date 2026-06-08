@@ -11,14 +11,14 @@ $numeAdmin =$_SESSION['nume'] ?? 'Administrator';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagina Autoritati - CoA</title>
-  <link rel="stylesheet" href="../../../public/css/global.css">
-  <link rel="stylesheet" href="../../../public/css/forms.css">
-    <link rel="stylesheet" href="../../../public/css/admin.css">
+  <link rel="stylesheet" href="public/css/global.css">
+  <link rel="stylesheet" href="public/css/forms.css">
+    <link rel="stylesheet" href="public/css/admin.css">
 </head>
 
 <body>
     <div class="admin-layout">
-        <?php include '../layouts/sidebar.php'; ?> <!-- includem side bar ul -->
+        <?php include __DIR__ . '/../layouts/sidebar.php'; ?> <!-- includem side bar ul -->
         
         <main class="admin-content">
 
@@ -60,19 +60,19 @@ $numeAdmin =$_SESSION['nume'] ?? 'Administrator';
            <!-- scurtaturi spre pagini (refolosesc status-card) -->
             <h2 class="greet-user">Acces rapid</h2>
             <div class="status-cards">
-                <a href="events.php" class="status-card btn-link">
+                <a href="index.php?route=events" class="status-card btn-link">
                     <span class="status-number">🗐</span>
                     <span class="status-label">Gestionare evenimente</span>
                 </a>
-                <a href="alerts.php" class="status-card btn-link">
+                <a href="index.php?route=alerts" class="status-card btn-link">
                     <span class="status-number">🕭</span>
                     <span class="status-label">Alerte</span>
                 </a>
-                <a href="shelters.php" class="status-card btn-link">
+                <a href="index.php?route=shelters" class="status-card btn-link">
                     <span class="status-number">🏠︎</span>
                     <span class="status-label">Adaposturi</span>
                 </a>
-                <a href="import-export.php" class="status-card btn-link">
+                <a href="index.php?route=import-export" class="status-card btn-link">
                     <span class="status-number">🗁</span>
                     <span class="status-label">Import / Export</span>
                 </a>
@@ -89,8 +89,8 @@ $numeAdmin =$_SESSION['nume'] ?? 'Administrator';
         </main>
     </div>
 
-    <script src="../../../public/js/main.js"></script>
-    <script src="../../../public/js/admin.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/admin.js"></script>
 </body>
 
 </html>

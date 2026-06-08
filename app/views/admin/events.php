@@ -10,18 +10,18 @@ AuthController::requireAuth();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagina Autoritati - Evenimente </title>
 
-  <link rel="stylesheet" href="../../../public/css/global.css">
-  <link rel="stylesheet" href="../../../public/css/forms.css">
-  <link rel="stylesheet" href="../../../public/css/admin.css">
-  <link rel="stylesheet" href="../../../public/css/events.css">
+  <link rel="stylesheet" href="public/css/global.css">
+  <link rel="stylesheet" href="public/css/forms.css">
+  <link rel="stylesheet" href="public/css/admin.css">
+  <link rel="stylesheet" href="public/css/events.css">
 
 
 </head>
 
 <body>
     <div class="admin-layout">
-        <?php include '../layouts/sidebar.php'; 
-              include 'modal-event.php'; ?>
+        <?php include __DIR__ . '/../layouts/sidebar.php'; 
+              include __DIR__ . '/modal-event.php'; ?>
         
         <main class="events-content">
     
@@ -83,9 +83,8 @@ AuthController::requireAuth();
             </table>
         </main>
     </div>
-  <script src="../../../public/js/main.js"></script>
-  <script src="../../../public/js/admin.js"></script>
+  <script src="public/js/main.js"></script>
+  <script src="public/js/admin.js"></script>
 </body>
 
 </html>
-

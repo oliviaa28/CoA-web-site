@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../models/UserModel.php';
 
 class AuthController{
-    private $pdo;
+     private $model;
 
     public function __construct() {
         global $pdo;
@@ -12,7 +12,7 @@ class AuthController{
     
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login');
             exit;
         }
 
@@ -24,15 +24,16 @@ class AuthController{
 
         $user = $this->model->getUserByEmail($email);
 
-        if( $user && password_verify($password, $user['parola']) ){
+        // Permitem autentificarea si daca parola este hash (password_verify) dar si daca este text simplu
+        if( $user && (password_verify($password, $user['parola']) || $password === $user['parola']) ){
             $_SESSION['user_id']= $user['id_admin'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['nume'] = $user['nume'];
 
-            header( 'Location: ../app/views/admin/dashboard.php');
+            header('Location: index.php?route=events');
             exit;
         }else {
-             header( 'Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login&error=1');
             exit;
         }
     }
@@ -43,7 +44,7 @@ class AuthController{
          }
 
         session_destroy();
-        header('Location: ../app/views/public/events_public.php');
+        header('Location: index.php?route=events-public');
         exit;
     }
 
@@ -53,7 +54,7 @@ class AuthController{
          }
 
         if (!isset($_SESSION['user_id'])) {
-            header( 'Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login');
              exit;
         }
     }

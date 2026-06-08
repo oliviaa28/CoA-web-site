@@ -11,20 +11,20 @@ AuthController::requireAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalii alertă CAP - CoA ADMIN</title>
 
-    <link rel="stylesheet" href="../../../public/css/global.css">
-    <link rel="stylesheet" href="../../../public/css/forms.css">
-    <link rel="stylesheet" href="../../../public/css/admin.css">
-    <link rel="stylesheet" href="../../../public/css/events.css">
+    <link rel="stylesheet" href="public/css/global.css">
+    <link rel="stylesheet" href="public/css/forms.css">
+    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/css/events.css">
 </head>
 
 <body>
     <div class="admin-layout">
-        <?php include '../layouts/sidebar.php'; ?>
+        <?php include __DIR__ . '/../layouts/sidebar.php'; ?>
 
         <main class="events-content">
 
         <nav class="inapoi-btn">
-            <a href="alerts.php"> <- Înapoi la alerte</a>
+            <a href="index.php?route=alerts"> <- Înapoi la alerte</a>
         </nav>
 
             <!-- Header -->
@@ -79,9 +79,9 @@ AuthController::requireAuth();
         </main>
     </div>
 
-    <script src="../../../public/js/main.js"></script>
-    <script src="../../../public/js/admin.js"></script>
-    <script src="../../../public/js/details.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/admin.js"></script>
+    <script src="public/js/details.js"></script>
 </body>
 
 </html>

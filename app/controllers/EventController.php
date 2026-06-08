@@ -76,7 +76,7 @@ class EventController {
         $is_included = true;
         
         if (!$event) {
-            die("<div style='padding: 3rem; text-align: center; font-family: sans-serif;'><h2>Evenimentul nu a fost găsit!</h2><br><a href='events_public.php'>← Înapoi la hartă</a></div>");
+            die("<div style='padding: 3rem; text-align: center; font-family: sans-serif;'><h2>Evenimentul nu a fost găsit!</h2><br><a href='index.php?route=events-public'>← Înapoi la hartă</a></div>");
         }
 
         // Includem View-ul care doar afișează HTML (folosim require, nu require_once)
