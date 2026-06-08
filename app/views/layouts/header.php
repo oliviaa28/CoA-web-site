@@ -15,7 +15,7 @@
       <a href="index.php?route=shelter-public"
          class="<?php echo (isset($active_page) && $active_page === 'shelters') ? 'active' : ''; ?>">Adăposturi</a>
     </li>
-    <li><a href="#"
+    <li><a href="index.php?route=alerts-public"
          class="<?php echo (isset($active_page) && $active_page === 'alerts') ? 'active' : ''; ?>">Alerte</a>
     </li>
     </ul>

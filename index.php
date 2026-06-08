@@ -23,7 +23,7 @@ $adminRoutes = [
  
 // Rute publice (fara autentificare)
 $publicRoutes = [
-    'login', 'events-public', 'shelter-public', 'details-public', 'documentation',
+    'login', 'events-public', 'shelter-public', 'alerts-public', 'details-public', 'documentation',
 ];
  
 // --- API ---
