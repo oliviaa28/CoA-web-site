@@ -2,12 +2,11 @@
 // config/database.php
 
 $host = 'localhost';
-$port = '3306';
 $db   = 'coa_db';
 $user = 'root';
 $pass = '';
 
-$dsn = "mysql:host=$host;port=$port;dbname=$db";
+$dsn = "mysql:host=$host;dbname=$db";
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

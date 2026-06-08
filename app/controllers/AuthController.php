@@ -24,15 +24,16 @@ class AuthController{
 
         $user = $this->model->getUserByEmail($email);
 
-        if( $user && password_verify($password, $user['parola']) ){
+        // Permitem autentificarea si daca parola este hash (password_verify) dar si daca este text simplu
+        if( $user && (password_verify($password, $user['parola']) || $password === $user['parola']) ){
             $_SESSION['user_id']= $user['id_admin'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['nume'] = $user['nume'];
 
-            header('Location: index.php?route=dashboard');
+            header('Location: index.php?route=events');
             exit;
         }else {
-            header('Location: index.php?route=login');
+            header('Location: index.php?route=login&error=1');
             exit;
         }
     }

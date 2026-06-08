@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Autoritati - CoA</title>
-  <link rel="stylesheet" href="../../../public/css/forms.css">
-  <link rel="stylesheet" href="../../../public/css/login.css">
+  <link rel="stylesheet" href="public/css/forms.css">
+  <link rel="stylesheet" href="public/css/login.css">
 </head>
 
 <body>
@@ -16,8 +16,10 @@
 
         <h1>CoA</h1>
         <h3 class="subtitle">Platformă de management al urgențelor</h3>
+        
+        <div id="error-message" style="color: #BC2F2F; display: none; margin-bottom: 15px; font-weight: 500;">Email sau parolă incorecte!</div>
        
-            <form action="../../../api/login.php" method="POST"> 
+            <form action="index.php?route=api/login" method="POST"> 
               
                 <div class="form-field">
                     <label for="email_authority"> Email</label>
@@ -37,6 +39,14 @@
 
        </div>
     </main>
+
+    <script>
+        // Verificam daca exista 'error=1' in link pentru a afisa mesajul
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === '1') {
+            document.getElementById('error-message').style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>
