@@ -18,7 +18,7 @@ $numeAdmin =$_SESSION['nume'] ?? 'Administrator';
 
 <body>
     <div class="admin-layout">
-        <?php include '../layouts/sidebar.php'; ?> <!-- includem side bar ul -->
+        <?php include __DIR__ . '/../layouts/sidebar.php'; ?> <!-- includem side bar ul -->
         
         <main class="admin-content">
 

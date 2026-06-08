@@ -20,7 +20,7 @@ AuthController::requireAuth();
 
 <body>
     <div class="admin-layout">
-        <?php include '../layouts/sidebar.php'; 
+        <?php include __DIR__ . '/../layouts/sidebar.php'; 
               include 'modal-event.php'; ?>
         
         <main class="events-content">

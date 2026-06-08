@@ -12,7 +12,7 @@ class AuthController{
     
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login');
             exit;
         }
 
@@ -29,10 +29,10 @@ class AuthController{
             $_SESSION['email'] = $user['email'];
             $_SESSION['nume'] = $user['nume'];
 
-            header( 'Location: ../app/views/admin/dashboard.php');
+            header('Location: index.php?route=dashboard');
             exit;
         }else {
-             header( 'Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login');
             exit;
         }
     }
@@ -43,7 +43,7 @@ class AuthController{
          }
 
         session_destroy();
-        header('Location: ../app/views/public/events_public.php');
+        header('Location: index.php?route=events-public');
         exit;
     }
 
@@ -53,7 +53,7 @@ class AuthController{
          }
 
         if (!isset($_SESSION['user_id'])) {
-            header( 'Location: ../app/views/public/login.html');
+            header('Location: index.php?route=login');
              exit;
         }
     }
