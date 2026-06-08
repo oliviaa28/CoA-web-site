@@ -1,30 +1,22 @@
 <nav class="navbar">
-  <div class="logo">
+  <a href="index.php?route=login" class="logo">
     <strong>CoA</strong> <span class="dot"></span>
-  </div>
-  
+  </a>
+
   <button class="menu-toggle" id="mobile-menu-btn">
     ☰
   </button>
 
   <ul class="nav-links" id="nav-links">
-    <li><a href="index.php?route=events-public" 
+    <li><a href="index.php?route=events-public"
           class="<?php echo (isset($active_page) && $active_page === 'events') ? 'active' : ''; ?>">Hartă & Evenimente</a>
     </li>
     <li>
-      <a href="index.php?route=shelter-public" 
+      <a href="index.php?route=shelter-public"
          class="<?php echo (isset($active_page) && $active_page === 'shelters') ? 'active' : ''; ?>">Adăposturi</a>
     </li>
-    <li><a href="#" 
+    <li><a href="#"
          class="<?php echo (isset($active_page) && $active_page === 'alerts') ? 'active' : ''; ?>">Alerte</a>
     </li>
-      
-    <li class="mobile-login">
-        <a href="index.php?route=login" class="btn-login">Login</a>
-      </li>
     </ul>
-
-    <div class="desktop-login">
-      <a href="index.php?route=login" class="btn-login">Login</a>
-    </div>
 </nav>
