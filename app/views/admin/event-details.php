@@ -51,10 +51,7 @@ AuthController::requireAuth();
                 <!-- Harta -->
                 <div class="event-map">
                     <!-- Leaflet.js va fi initializat aici -->
-                    <div id="event-map" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div> 
-                    <div class="map-footer">
-                        <span> — Raza impact: ~80km</span>
-                    </div>
+                    <div id="event-map" style="flex-grow: 1; min-height: 350px; width: 100%; z-index: 1; outline: none; border: none;"></div> 
                 </div>
 
                 <!-- Paneluri dreapta -->

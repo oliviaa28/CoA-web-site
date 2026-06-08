@@ -73,6 +73,8 @@ function incarcaDetaliiAdapost(){
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(window.shelterMap);
                     
+                    L.marker([lat, lng]).addTo(window.shelterMap)
+                        .bindPopup(`<b>${s.name}</b><br>${s.address}`).openPopup();
                     L.marker([lat, lng]).addTo(window.shelterMap);
                 }
             }
@@ -178,6 +180,8 @@ function incarcaDetaliiEveniment() {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(window.eventMap);
                     
+                    L.marker([lat, lng]).addTo(window.eventMap)
+                        .bindPopup(`<b>${e.titlu}</b><br>${e.localitate}`).openPopup();
                     L.marker([lat, lng]).addTo(window.eventMap);
                 }
             }

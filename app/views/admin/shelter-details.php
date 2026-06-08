@@ -54,10 +54,7 @@ AuthController::requireAuth();
 
                 <!-- Harta cu pinul adapostului -->
                 <div class="event-map">
-                    <div id="shelter-map" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div>
-                    <div class="map-footer">
-                        <span>Iasi, Romania</span>
-                    </div>
+                    <div id="shelter-map" style="flex-grow: 1; min-height: 350px; width: 100%; z-index: 1; outline: none; border: none;"></div>
                 </div>
 
                 <!-- Detalii dreapta -->
