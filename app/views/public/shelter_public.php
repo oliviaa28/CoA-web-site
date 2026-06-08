@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adăposturi și Puncte de Sprijin - CoA</title>
     
-    <link rel="stylesheet" href="../../../public/css/global.css">
+    <link rel="stylesheet" href="public/css/global.css">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Adaugat pentru Leaflet Routing Machine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     
-    <link rel="stylesheet" href="../../../public/css/map-page.css">
+    <link rel="stylesheet" href="public/css/map-page.css">
 </head>
 <body>
     <?php
     $active_page = 'shelters';
-    include '../layouts/header.php';
+    include __DIR__ . '/../layouts/header.php';
     ?>
 
     <div style="padding: 0 1rem; max-width: 98%; margin: 0 auto; width: 100%;">
@@ -54,7 +54,7 @@
         let routingControl = null;
 
         // fetch date db
-            fetch('../../../api/shelters.php')
+            fetch('index.php?route=api/shelters')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -179,7 +179,7 @@
 
                         // Funcție fallback pentru locația aproximativă prin IP (folosind ipify și ip-api din routes.php)
                         const fetchIPLocation = () => {
-                            fetch('../../../api/routes.php')
+                            fetch('index.php?route=api/location')
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.success) {
@@ -216,6 +216,6 @@
             });
     </script>
     
-    <script src="../../../public/js/main.js"></script>
+    <script src="public/js/main.js"></script>
 </body>
 </html>

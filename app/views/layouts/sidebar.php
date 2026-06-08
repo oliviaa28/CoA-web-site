@@ -6,12 +6,12 @@
 
     <nav>
             <ul class="sidebar-list">
-            <li><a href="dashboard.php?route=dashbord">Dashboard</a></li>
-            <li><a href="events.php?route=events">Evenimente</a></li>
-            <li><a href="shelters.php?route=shelters">Adaposturi</a></li>
-            <li><a href="alerts.php?route=alerts">Alerte </a></li>
-            <li><a href="users.php?route=users">Utilizatori</a></li>
-            <li><a href="import-export.php?route=import-export">Import/Export</a></li>
+            <li><a href="index.php?route=dashboard">Dashboard</a></li>
+            <li><a href="index.php?route=events">Evenimente</a></li>
+            <li><a href="index.php?route=shelters">Adaposturi</a></li>
+            <li><a href="index.php?route=alerts">Alerte </a></li>
+            <li><a href="index.php?route=users">Utilizatori</a></li>
+            <li><a href="index.php?route=import-export">Import/Export</a></li>
         </ul>
     </nav>  
 

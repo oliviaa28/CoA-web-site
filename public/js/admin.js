@@ -201,7 +201,7 @@ function construiesteRandEveniment(ev){
             <td>${curata(ev.location)}</td>
             <td>${curata(ev.date)}</td>
              <td class="actions">
-                <a href="event-details.php?id=${ev.id}&type=${ev.type}"> Detalii</a>
+                <a href="index.php?route=event-details&id=${ev.id}&type=${ev.type}"> Detalii</a>
                 <a href="#" onclick="editeaza(${ev.id}, '${ev.type}'); return false;"> Editeaza</a>
                 <a href="#" class="delete" onclick="sterge(${ev.id}, '${ev.type}'); return false;"> Sterge</a>
             </td>
@@ -316,7 +316,7 @@ function construiesteRandAdapost( ad ){
                <span class="badge ${badgeClass}">${statusText} </span>
             </td>
             <td class="actions">
-                <a href="shelter-details.php?id=${ad.id}"> Detalii</a>
+                <a href="index.php?route=shelter-details&id=${ad.id}"> Detalii</a>
             </td>
         </tr>
     `;
@@ -575,7 +575,7 @@ function construiesteRandAlerta(a){
             <td>${curata(a.sentat)}</td>
             <td><span class="badge ${badgeClass}">${a.status}</span></td>
             <td class="actions">
-                <a href="cap-details.php?id=${a.id}">Detalii</a>
+                <a href="index.php?route=cap-details&id=${a.id}">Detalii</a>
             </td>
         </tr>
     `;

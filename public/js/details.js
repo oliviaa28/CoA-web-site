@@ -70,7 +70,7 @@ function stergeAdapostDetalii() {
     })
     .then(r => r.json())
     .then(data => {
-        window.location.href = 'shelters.php';  // dupa stergere, mergem al list acu adaposturi 
+        window.location.href = 'index.php?route=shelters';  // dupa stergere, mergem al list acu adaposturi 
     })
     .catch(error => console.error('Eroare:', error));
 }
@@ -156,7 +156,7 @@ function stergeEvenimentDetalii(){
     })
     .then(r => r.json())
     .then(data => {
-        window.location.href = 'events.php'; 
+        window.location.href = 'index.php?route=events'; 
     })
     .catch(error => console.error('Eroare:', error));
 }
@@ -211,7 +211,7 @@ function incarcaAlerteEveniment(){
                         <td>${a.severity}</td>
                         <td>${a.sentat}</td>
                         <td><span class="badge bg-red">${a.status}</span></td>
-                        <td><a href="cap-details.php?id=${a.id}" class="btn-link">Detalii</a></td>
+                        <td><a href="index.php?route=cap-details&id=${a.id}" class="btn-link">Detalii</a></td>
                     </tr>
                 `;
             }
@@ -260,7 +260,7 @@ function incarcaDetaliiAlerta() {
            
             if (a.incidentid && a.type) {
                 eventInfo.textContent = `Tip: ${a.type}`;
-                eventLink.href= `event-details.php?id=${a.incidentid}&type=${a.type}`;
+                eventLink.href= `index.php?route=event-details&id=${a.incidentid}&type=${a.type}`;
             } else {
                 eventInfo.textContent='Fără eveniment asociat';
                 eventLink.style.display='none';
@@ -278,7 +278,7 @@ function anuleazaAlerta(){
         method: 'DELETE'
     })
     .then(r =>r.json())
-    .then(data =>{ window.location.href = 'alerts.php'; }
+    .then(data =>{ window.location.href = 'index.php?route=alerts'; }
     )
     .catch(error => console.error('Eroare:', error));
 

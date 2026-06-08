@@ -10,16 +10,16 @@ AuthController::requireAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Utilizatori - CoA ADMIN</title>
 
-    <link rel="stylesheet" href="../../../public/css/global.css">
-    <link rel="stylesheet" href="../../../public/css/forms.css">
-    <link rel="stylesheet" href="../../../public/css/admin.css">
-    <link rel="stylesheet" href="../../../public/css/events.css">
+    <link rel="stylesheet" href="public/css/global.css">
+    <link rel="stylesheet" href="public/css/forms.css">
+    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/css/events.css">
 </head>
 
 <body>
     <div class="admin-layout">
         <?php include __DIR__ . '/../layouts/sidebar.php'; ?>
-        <?php include 'judete.php'; ?>
+        <?php include __DIR__ . '/judete.php'; ?>
 
         <!-- Modal adauga/editeaza utilizator -->
         <div class="modal-overlay" id="modal-user" style="display:none;">
@@ -97,8 +97,8 @@ AuthController::requireAuth();
         </main>
     </div>
 
-    <script src="../../../public/js/main.js"></script>
-    <script src="../../../public/js/admin.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/admin.js"></script>
 </body>
 
 </html>

@@ -27,6 +27,12 @@ $publicRoutes = [
 ];
  
 // --- API ---
+if ($route === 'api/location') {
+    // Caz special pentru scriptul de geolocație.
+    // Ideal, logica ar trebui mutată într-o metodă de controller.
+    require_once __DIR__ . '/api/routes.php';
+    exit;
+}
 if (isset($apiRoutes[$route])) {
     require_once __DIR__ . '/app/controllers/' . $apiRoutes[$route] . '.php';
     $controllerName = $apiRoutes[$route];

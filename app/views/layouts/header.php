@@ -8,11 +8,11 @@
   </button>
 
   <ul class="nav-links" id="nav-links">
-    <li><a href="events_public.php" 
+    <li><a href="index.php?route=events-public" 
           class="<?php echo (isset($active_page) && $active_page === 'events') ? 'active' : ''; ?>">Hartă & Evenimente</a>
     </li>
     <li>
-      <a href="shelter_public.php" 
+      <a href="index.php?route=shelter-public" 
          class="<?php echo (isset($active_page) && $active_page === 'shelters') ? 'active' : ''; ?>">Adăposturi</a>
     </li>
     <li><a href="#" 
@@ -20,11 +20,11 @@
     </li>
       
     <li class="mobile-login">
-        <a href="login.html" class="btn-login">Login</a>
+        <a href="index.php?route=login" class="btn-login">Login</a>
       </li>
     </ul>
 
     <div class="desktop-login">
-      <a href="login.html" class="btn-login">Login</a>
+      <a href="index.php?route=login" class="btn-login">Login</a>
     </div>
 </nav>

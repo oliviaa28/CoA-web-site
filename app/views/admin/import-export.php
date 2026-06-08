@@ -10,11 +10,11 @@ AuthController::requireAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Import/Export - CoA ADMIN</title>
 
-    <link rel="stylesheet" href="../../../public/css/global.css">
-    <link rel="stylesheet" href="../../../public/css/forms.css">
-    <link rel="stylesheet" href="../../../public/css/admin.css">
-    <link rel="stylesheet" href="../../../public/css/events.css">
-     <link rel="stylesheet" href="../../../public/css/import-export.css">
+    <link rel="stylesheet" href="public/css/global.css">
+    <link rel="stylesheet" href="public/css/forms.css">
+    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/css/events.css">
+     <link rel="stylesheet" href="public/css/import-export.css">
 </head>
 
 <body>
@@ -89,7 +89,7 @@ AuthController::requireAuth();
                     </div>
                     <p class="ie-subtitle">Importă date din surse externe în sistemul CoA</p>
 
-                    <form action ="../../../api/import-export.php?action=import" method="POST" enctype="multipart/form-data">
+                    <form action ="index.php?route=api/import-export&action=import" method="POST" enctype="multipart/form-data">
                         <div class="form-field">
                               <label for="import-type">Tip date</label>
                                 <select id="import-type" name="type" required>
@@ -117,8 +117,8 @@ AuthController::requireAuth();
         </main>
     </div>
 
-    <script src="../../../public/js/main.js"></script>
-    <script src="../../../public/js/admin.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/admin.js"></script>
 </body>
 
 </html>

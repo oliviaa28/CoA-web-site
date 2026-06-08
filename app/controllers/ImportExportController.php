@@ -156,7 +156,7 @@ class ImportExportController{
     private function import($type){
 
          if( !isset( $_FILES['fisier']) || $_FILES['fisier']['error']!== 0 ){
-             header('Location: ../app/views/admin/import-export.php?error=1');
+             header('Location: index.php?route=import-export&error=1');
              exit;
         }
 
@@ -169,17 +169,17 @@ class ImportExportController{
          } else if ($extensie === 'csv') {
              $date= $this->parseazaCSV($_FILES['fisier']['tmp_name']);
          } else {
-            header('Location: ../app/views/admin/import-export.php?error=2');
+            header('Location: index.php?route=import-export&error=2');
             exit;
         }
 
         if ($date === null) {
-           header('Location: ../app/views/admin/import-export.php?error=2');
+           header('Location: index.php?route=import-export&error=2');
            exit;
          }
 
         if( !$this->verificaStructura($date, $type) ){
-            header('Location: ../app/views/admin/import-export.php?error=3');
+            header('Location: index.php?route=import-export&error=3');
             exit;
         }
 
@@ -201,7 +201,7 @@ class ImportExportController{
             }
 
         }
-     header('Location: ../app/views/admin/import-export.php?success=1');
+     header('Location: index.php?route=import-export&success=1');
      exit;
     }
 

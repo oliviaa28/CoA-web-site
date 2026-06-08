@@ -17,8 +17,8 @@ if (!isset($is_included)) {
     <title>Detalii Eveniment - CoA</title>
 
     <!-- CSS Global și CSS specific detaliilor publice -->
-    <link rel="stylesheet" href="../../../public/css/global.css">
-    <link rel="stylesheet" href="../../../public/css/details-public.css">
+    <link rel="stylesheet" href="public/css/global.css">
+    <link rel="stylesheet" href="public/css/details-public.css">
 
     <!-- Leaflet.js CSS pentru hartă -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -27,7 +27,7 @@ if (!isset($is_included)) {
 <body>
     <?php
     $active_page = 'events';
-    include '../layouts/header.php';
+    include __DIR__ . '/../layouts/header.php';
     ?>
 
     <!-- Container principal (centrat) -->
@@ -35,7 +35,7 @@ if (!isset($is_included)) {
         
         <!-- Buton de înapoi -->
         <nav class="inapoi-btn">
-            <a href="events_public.php">← Înapoi la Evenimente</a>
+            <a href="index.php?route=events-public">← Înapoi la Evenimente</a>
         </nav>
 
         <!-- Header eveniment -->
@@ -102,6 +102,6 @@ if (!isset($is_included)) {
         var marker = L.marker([<?php echo $event['lat']; ?>, <?php echo $event['lng']; ?>]).addTo(map);
         marker.bindPopup("<b><?php echo $event['title']; ?></b><br><?php echo $event['epicenter']; ?>, România").openPopup();
     </script>
-    <script src="../../../public/js/main.js"></script>
+    <script src="public/js/main.js"></script>
 </body>
 </html>
