@@ -79,7 +79,7 @@ function salveazaEveniment(){ //post sau put
      };
 
      let metoda, url;
-     url = '../../../api/events.php';
+     url = 'index.php?route=api/events';
 
       if(editId === null){
         metoda = 'POST';
@@ -138,7 +138,7 @@ function incarcaEvenimente(){
     if (filterStatus) 
         status =filterStatus.value;
 
-    let url = `../../../api/events.php?type=${tip}&status=${status}&year=${year}`;
+    let url = `index.php?route=api/events&type=${tip}&status=${status}&year=${year}`;
 
     fetch(url)     // cere lisat de la endpoint
         .then(response => response.json() )
@@ -213,7 +213,7 @@ function sterge(id, type){
     if (!confirm('Sigur vrei să ștergi acest eveniment?')) //returns true if the user clicked "OK", otherwise false.
          return;
 
-    fetch(`../../../api/events.php?id=${id}&type=${type}`, { // in controller avem $id = $_GET['id']; , care ia paraemtrii din url 
+    fetch(`index.php?route=api/events&id=${id}&type=${type}`, { // in controller avem $id = $_GET['id']; , care ia paraemtrii din url 
         method: 'DELETE'
     })
     .then(response => response.json() )
@@ -275,7 +275,7 @@ function incarcaAdaposturi(){
     const tbody = document.getElementById('shelters-tbody');
     if (!tbody) return;
 
-    fetch('../../../api/shelters.php')
+    fetch('index.php?route=api/shelters')
     .then(response => response.json())
     .then(adaposturi => {
         toateAdaposturile = adaposturi;
@@ -326,7 +326,7 @@ function construiesteRandAdapost( ad ){
 function stergeAdapost(id){
     if (!confirm('Sigur vrei să ștergi acest adapost?')) return;
 
-    fetch(`../../../api/shelters.php?id=${id}`, {
+    fetch(`index.php?route=api/shelters&id=${id}`, {
         method: 'DELETE'
     })
     .then(response => response.json() )
@@ -353,7 +353,7 @@ function salveazaAdapost(){
     };
 
     let metoda, url;
-     url = '../../../api/shelters.php';
+     url = 'index.php?route=api/shelters';
 
       if(editId === null){
         metoda = 'POST';
@@ -432,7 +432,7 @@ function salveazaUser(){
         };
 
     let metoda, url;
-     url = '../../../api/users.php';
+     url = 'index.php?route=api/users';
 
       if(editId === null){
         metoda = 'POST';
@@ -465,7 +465,7 @@ function salveazaUser(){
 function stergeUser(id){
     if (!confirm('Sigur vrei să ștergi acest utilizator?')) return;
 
-    fetch(`../../../api/users.php?id=${id}`, { 
+    fetch(`index.php?route=api/users&id=${id}`, { 
         method: 'DELETE'
     })
     .then(response => response.json() )
@@ -511,7 +511,7 @@ function incarcaUtilizatori(){
     const tbody =document.getElementById('users-tbody');
     if(!tbody) return;
 
-    fetch('../../../api/users.php')
+    fetch('index.php?route=api/users')
     .then(response=>response.json())
     .then( useri => {
            totiUserii = useri;
@@ -548,7 +548,7 @@ function incarcaAlerte(){
     const tbody = document.getElementById('alerts-tbody');
     if (!tbody) return;
 
-    fetch('../../../api/alerts.php')
+    fetch('index.php?route=api/alerts')
         .then(response => response.json())
         .then(alerte => {
             toateAlertele = alerte;
@@ -595,7 +595,7 @@ function salveazaAlerta(){
         zone: document.getElementById('cap_area').value
     };
 
-    fetch('../../../api/alerts.php', {
+    fetch('index.php?route=api/alerts', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(date)
@@ -614,7 +614,7 @@ function salveazaAlerta(){
 function stergeAlerta(id){
     if (!confirm('Sigur vrei să ștergi aceasta alerta?')) return;
 
-    fetch(`../../../api/alerts.php?id=${id}`, {
+    fetch(`index.php?route=api/alerts&id=${id}`, {
         method: 'DELETE'
     })
     .then(response => response.json())
@@ -640,21 +640,21 @@ function incarcaStatistici() {
         return;
 
     //evenimente active 
-    fetch('../../../api/events.php?status=activ')
+    fetch('index.php?route=api/events&status=activ')
      .then(response => response.json())
      .then( evenimente =>{ 
          cardEvenimente.textContent = evenimente.length;} // length = nr de elemente din array
      );
 
      //alerte
-    fetch('../../../api/alerts.php')
+    fetch('index.php?route=api/alerts')
       .then(response => response.json())
        .then(alerte => {
             document.getElementById('stat-alerte').textContent = alerte.length;
         });
 
     //adaposturi disponibile 
-    fetch('../../../api/shelters.php')
+    fetch('index.php?route=api/shelters')
        .then(response => response.json())
        .then(adaposturi => {
            let nr=0;
@@ -665,7 +665,7 @@ function incarcaStatistici() {
             document.getElementById('stat-adaposturi').textContent = nr;
         });
 
-    fetch('../../../api/users.php')
+    fetch('index.php?route=api/users')
       .then(response => response.json())
        .then(users => {
            document.getElementById('stat-utilizatori').textContent = users.length;
@@ -680,5 +680,5 @@ function incarcaStatistici() {
 function exportData(type, format){
     arataToast('Se descarcă fișierul...');
     //relativ la url ul paginii import-export.php din admin
-    window.location.href= `../../../api/import-export.php?action=export&type=${type}&format=${format}`;
+    window.location.href= `index.php?route=api/import-export&action=export&type=${type}&format=${format}`;
 }
