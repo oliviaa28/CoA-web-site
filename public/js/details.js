@@ -56,6 +56,27 @@ function incarcaDetaliiAdapost(){
                 badge.textContent='DISPONIBIL';
                 badge.className = 'badge bg-teal';
             }
+            
+            // --- HARTĂ INTERACTIVĂ ADĂPOST ---
+            const mapContainer = document.getElementById('shelter-map');
+            if (mapContainer && s.lat && s.lng) {
+                const lat = parseFloat(s.lat);
+                const lng = parseFloat(s.lng);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    if (window.shelterMap !== undefined) {
+                        window.shelterMap.remove();
+                    }
+                    
+                    window.shelterMap = L.map('shelter-map').setView([lat, lng], 15);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(window.shelterMap);
+                    
+                    L.marker([lat, lng]).addTo(window.shelterMap)
+                        .bindPopup(`<b>${s.name}</b><br>${s.address}`).openPopup();
+                }
+            }
         })
         .catch(error => console.error('Eroare:', error));
        

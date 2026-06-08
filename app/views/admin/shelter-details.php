@@ -18,6 +18,7 @@ AuthController::requireAuth();
 
     <!-- Leaflet  -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </head>
 
@@ -53,7 +54,7 @@ AuthController::requireAuth();
 
                 <!-- Harta cu pinul adapostului -->
                 <div class="event-map">
-                    <div id="shelter-map" ></div>
+                    <div id="shelter-map" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div>
                     <div class="map-footer">
                         <span>Iasi, Romania</span>
                     </div>
