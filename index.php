@@ -7,6 +7,7 @@ $route = $_GET['route'] ?? 'home';
 $apiRoutes = [
     'api/events'        => 'EventController',
     'api/shelters'      => 'ShelterController',
+    'api/location'      => 'LocationController',
     'api/alerts'        => 'AlertController',
     'api/users'         => 'UserController',
     'api/import-export' => 'ImportExportController',
@@ -23,16 +24,10 @@ $adminRoutes = [
  
 // Rute publice (fara autentificare)
 $publicRoutes = [
-    'login', 'events-public', 'shelter-public', 'alerts-public', 'details-public', 'documentation',
+    'login', 'events-public', 'shelter-public', 'details-public',
 ];
  
 // --- API ---
-if ($route === 'api/location') {
-    // Caz special pentru scriptul de geolocație.
-    // Ideal, logica ar trebui mutată într-o metodă de controller.
-    require_once __DIR__ . '/api/routes.php';
-    exit;
-}
 if (isset($apiRoutes[$route])) {
     require_once __DIR__ . '/app/controllers/' . $apiRoutes[$route] . '.php';
     $controllerName = $apiRoutes[$route];
