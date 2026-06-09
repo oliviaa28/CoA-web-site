@@ -13,8 +13,6 @@
     include __DIR__ . '/../layouts/header.php';
     ?>
 
-    
-
     <div class="list-container" id="alerts-list"></div>
 
     <script>
@@ -36,7 +34,7 @@
 
                     var eventLinkHTML = '';
                     if (al.incidentid && al.type) {
-                        eventLinkHTML = `<div style="margin-top: 10px;"><a href="index.php?route=details-public&id=${al.incidentid}&type=${al.type}" class="btn-link" style="font-weight: 600;">Vezi evenimentul asociat &rarr;</a></div>`;
+                        eventLinkHTML = `<div style="margin-top: 10px;"><a href="index.php?route=details-public&id=${al.incidentid}&type=${al.type}" class="btn-link" style="font-weight: 600;">Vezi evenimentul &rarr;</a></div>`;
                     }
 
                     list.innerHTML += `
