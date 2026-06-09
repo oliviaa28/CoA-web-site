@@ -112,9 +112,9 @@
                             <p class="location"> ${shelter.address}</p>
                             <p class="time"> ${shelter.details}</p>
                             
-                            <div class="card-actions">
-                                <a href="#" class="btn-link" onclick="map.setView([${lat}, ${lng}], 16); return false;">Vezi pe hartă &rarr;</a>
-                                <a href="#" class="btn-link directions-link" data-lat="${lat}" data-lng="${lng}">Obține direcții &rarr;</a>
+                            <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                                <a href="#" class="btn-link" style="margin-top: 0;" onclick="map.setView([${lat}, ${lng}], 16); return false;">Vezi pe hartă &rarr;</a>
+                                <a href="#" class="btn-link directions-link" style="margin-top: 0;" data-lat="${lat}" data-lng="${lng}">Obține direcții &rarr;</a>
                             </div>
                         </div>
                     `;
@@ -156,12 +156,13 @@
                 // GESTIONARE CLICK PE "OBTINE DIRECTII"
                 // Folosim event delegation pe containerul listei
                 listContainer.addEventListener('click', function(e) {
+                    const directionsBtn = e.target.closest('.directions-link');
                     // Verificam daca elementul pe care s-a dat click este link-ul de directii
-                    if (e.target && e.target.classList.contains('directions-link')) {
+                    if (directionsBtn) {
                         e.preventDefault(); // Prevenim comportamentul default al link-ului
 
-                        const shelterLat = parseFloat(e.target.getAttribute('data-lat'));
-                        const shelterLng = parseFloat(e.target.getAttribute('data-lng'));
+                        const shelterLat = parseFloat(directionsBtn.getAttribute('data-lat'));
+                        const shelterLng = parseFloat(directionsBtn.getAttribute('data-lng'));
 
                         // Funcție helper pentru a desena ruta
                         const drawRoute = (userLat, userLng) => {
