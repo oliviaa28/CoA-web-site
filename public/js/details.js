@@ -57,6 +57,18 @@ function incarcaDetaliiAdapost(){
                 badge.className = 'badge bg-teal';
             }
             
+            // --- GĂSEȘTE BUTONUL DE RUTĂ DIN PAGINĂ ȘI ATAȘEAZĂ COORDONATELE ---
+            const butoaneRuta = document.querySelectorAll('a, button, [class*="btn"]');
+            butoaneRuta.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes('ruta') || btn.textContent.toLowerCase().includes('rută')) {
+                    btn.removeAttribute('onclick'); // ștergem un posibil onclick gol din HTML
+                    btn.onclick = function(evt) {
+                        evt.preventDefault();
+                        deschideRuta(s.lat, s.lng);
+                    };
+                }
+            });
+
             // --- HARTĂ INTERACTIVĂ ADĂPOST ---
             const mapContainer = document.getElementById('shelter-map');
             if (mapContainer && s.lat && s.lng) {
@@ -73,7 +85,7 @@ function incarcaDetaliiAdapost(){
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(window.shelterMap);
                     
-                const popupContent = `<b>${s.name}</b><br>${s.address}<br><br><a href="#" onclick="deschideRuta('${s.lat}', '${s.lng}'); return false;" style="color: #043582; font-weight: bold; text-decoration: underline;">📍 Vezi ruta pe hartă</a>`;
+                const popupContent = `<b>${s.name}</b><br>${s.address}`;
                 L.marker([lat, lng]).addTo(window.shelterMap)
                     .bindPopup(popupContent).openPopup();
                 }
@@ -142,27 +154,32 @@ function incarcaDetaliiEveniment() {
     .then(r =>r.json())
     .then( e => {
             
-            // numele coloanelor sunt DIN DB (titlu, stadiu) pt ca getEventDetails face SELECT *
-            document.getElementById('event-name').textContent= e.titlu;
-            document.getElementById('event-address-header').textContent= e.localitate;
+            // Protejăm împotriva erorilor JS dacă proprietățile au alte nume sau sunt goale
+            const nameEl = document.getElementById('event-name');
+            if (nameEl) nameEl.textContent = e.titlu || e.title || '';
+            
+            const addrEl = document.getElementById('event-address-header');
+            if (addrEl) addrEl.textContent = e.localitate || e.location || '';
 
             // descriere 
             const descriere = document.querySelector('.detail-panel p'); //descrierea este intr un paragraf (p) si nu i am mai dat id, asa ca selectez cu selectorii css
             if( descriere) 
-                descriere.textContent= e.descriere;
+                descriere.textContent = e.descriere || e.details || '';
 
             // badge status (rosu, potrtocaliu,...)
             const badge = document.getElementById('event-badge');
-            badge.textContent = e.stadiu;
-
-            let s= e.stadiu.toLowerCase();
-            if (s.includes('activ')) 
-                badge.className='badge bg-red';
-            else 
-               if (s.includes('monitorizare')) 
-                 badge.className= 'badge bg-orange';
-            else 
-                badge.className= 'badge bg-teal';
+            const statusStr = e.stadiu || e.status || '';
+            
+            if (badge) {
+                badge.textContent = statusStr;
+                let s = statusStr.toLowerCase();
+                if (s.includes('activ')) 
+                    badge.className = 'badge bg-red';
+                else if (s.includes('monitorizare')) 
+                    badge.className = 'badge bg-orange';
+                else 
+                    badge.className = 'badge bg-teal';
+            }
 
             // --- GĂSEȘTE BUTONUL DE RUTĂ DIN PAGINĂ ȘI ATAȘEAZĂ COORDONATELE ---
             const butoaneRuta = document.querySelectorAll('a, button, [class*="btn"]');
@@ -171,34 +188,39 @@ function incarcaDetaliiEveniment() {
                     btn.removeAttribute('onclick'); // ștergem un posibil onclick gol din HTML
                     btn.onclick = function(evt) {
                         evt.preventDefault();
-                        deschideRuta(e.latitudine, e.longitudine);
+                        deschideRuta(e.lat || e.latitudine, e.lng || e.longitudine);
                     };
                 }
             });
 
             // --- HARTĂ INTERACTIVĂ ---
-            const mapContainer = document.getElementById('event-map');
-            if (mapContainer && e.latitudine && e.longitudine) {
-                const lat = parseFloat(e.latitudine);
-                const lng = parseFloat(e.longitudine);
+            // Caută elementul și după clasă în caz că ID-ul lipsește din HTML-ul PHP-ului
+            const mapContainer = document.getElementById('event-map') || document.querySelector('.event-map');
+            const coordLat = e.lat || e.latitudine;
+            const coordLng = e.lng || e.longitudine;
+            
+            if (mapContainer && coordLat && coordLng) {
+                const lat = parseFloat(coordLat);
+                const lng = parseFloat(coordLng);
                 
                 if (!isNaN(lat) && !isNaN(lng)) {
                     if (window.eventMap !== undefined) {
                         window.eventMap.remove();
                     }
                     
-                    window.eventMap = L.map('event-map').setView([lat, lng], 13);
+                    window.eventMap = L.map(mapContainer).setView([lat, lng], 13);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(window.eventMap);
                     
-                const popupContent = `<b>${e.titlu}</b><br>${e.localitate}<br><br><a href="#" onclick="deschideRuta('${e.latitudine}', '${e.longitudine}'); return false;" style="color: #043582; font-weight: bold; text-decoration: underline;">📍 Vezi ruta</a>`;
+                const popupContent = `<b>${e.titlu || e.title || 'Eveniment'}</b><br>${e.localitate || e.location || ''}`;
                 L.marker([lat, lng]).addTo(window.eventMap)
                     .bindPopup(popupContent).openPopup();
                 }
             }
           }
-         );
+         )
+         .catch(error => console.error('Eroare la procesarea evenimentului (lipsă librărie L?):', error));
     
     incarcaAlerteEveniment(); // trebuie apelata dupa ce evenimentCurentId +  evenimentCurentType sunt setate
 }
@@ -222,13 +244,13 @@ function editeazaEvenimentDetalii(){
     fetch(`index.php?route=api/events&id=${evenimentCurentId}&type=${evenimentCurentType}`)
         .then(r => r.json())
         .then(e => {
-            document.getElementById('event_type').value= evenimentCurentType;
-            document.getElementById('event_title').value= e.titlu;
-            document.getElementById('event_description').value=e.descriere;
-            document.getElementById('event_city').value= e.localitate;
-            document.querySelector('[name="lat"]').value= e.latitudine;
-            document.querySelector('[name="lng"]').value= e.longitudine;
-            document.getElementById('event_status').value= e.stadiu;
+            document.getElementById('event_type').value = evenimentCurentType;
+            document.getElementById('event_title').value = e.titlu || e.title || '';
+            document.getElementById('event_description').value = e.descriere || e.details || '';
+            document.getElementById('event_city').value = e.localitate || e.location || '';
+            document.querySelector('[name="lat"]').value = e.lat || e.latitudine || '';
+            document.querySelector('[name="lng"]').value = e.lng || e.longitudine || '';
+            document.getElementById('event_status').value = e.stadiu || e.status || '';
 
             editId= evenimentCurentId;
             editType=evenimentCurentType;
