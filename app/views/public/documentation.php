@@ -20,7 +20,8 @@
 
         <section>
             <h2>Video prezentare</h2>
-            <p>.....</p>
+            <p><a href="raport/raport.html" target="_blank">Video partea 1 </a></p>
+             <p><a href="raport/raport.html" target="_blank">Video partea 2 </a></p>
         </section>
 
         <p><a href="index.php?route=dashboard"> Înapoi la Dashboard</a></p>
