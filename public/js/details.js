@@ -57,18 +57,6 @@ function incarcaDetaliiAdapost(){
                 badge.className = 'badge bg-teal';
             }
             
-            // --- GĂSEȘTE BUTONUL DE RUTĂ DIN PAGINĂ ȘI ATAȘEAZĂ COORDONATELE ---
-            const butoaneRuta = document.querySelectorAll('a, button, [class*="btn"]');
-            butoaneRuta.forEach(btn => {
-                if (btn.textContent.toLowerCase().includes('ruta') || btn.textContent.toLowerCase().includes('rută')) {
-                    btn.removeAttribute('onclick'); // ștergem un posibil onclick gol din HTML
-                    btn.onclick = function(evt) {
-                        evt.preventDefault();
-                        deschideRuta(s.lat, s.lng);
-                    };
-                }
-            });
-
             // --- HARTĂ INTERACTIVĂ ADĂPOST ---
             const mapContainer = document.getElementById('shelter-map');
             if (mapContainer && s.lat && s.lng) {
