@@ -12,6 +12,8 @@ $apiRoutes = [
     'api/import-export' => 'ImportExportController',
     'api/login'         => 'AuthController',
     'api/logout'        => 'AuthController',
+    'api/location'      => 'LocationController',
+
 ];
  
 
