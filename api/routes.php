@@ -13,7 +13,7 @@ function fetchUrl($url) {
         curl_close($ch);
         return $data;
     } else {
-        $context = stream_context_create(["ssl" => ["verify_p eer" => false, "verify_peer_name" => false]]);
+        $context = stream_context_create(["ssl" => ["verify_peer" => false, "verify_peer_name" => false]]);
         return @file_get_contents($url, false, $context);
     }
 }

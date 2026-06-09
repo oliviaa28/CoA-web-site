@@ -56,6 +56,40 @@ function incarcaDetaliiAdapost(){
                 badge.textContent='DISPONIBIL';
                 badge.className = 'badge bg-teal';
             }
+            
+            // --- GĂSEȘTE BUTONUL DE RUTĂ DIN PAGINĂ ȘI ATAȘEAZĂ COORDONATELE ---
+            const butoaneRuta = document.querySelectorAll('a, button, [class*="btn"]');
+            butoaneRuta.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes('ruta') || btn.textContent.toLowerCase().includes('rută')) {
+                    btn.removeAttribute('onclick'); // ștergem un posibil onclick gol din HTML
+                    btn.onclick = function(evt) {
+                        evt.preventDefault();
+                        deschideRuta(s.lat, s.lng);
+                    };
+                }
+            });
+
+            // --- HARTĂ INTERACTIVĂ ADĂPOST ---
+            const mapContainer = document.getElementById('shelter-map');
+            if (mapContainer && s.lat && s.lng) {
+                const lat = parseFloat(s.lat);
+                const lng = parseFloat(s.lng);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    if (window.shelterMap !== undefined) {
+                        window.shelterMap.remove();
+                    }
+                    
+                    window.shelterMap = L.map('shelter-map').setView([lat, lng], 15);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(window.shelterMap);
+                    
+                const popupContent = `<b>${s.name}</b><br>${s.address}<br><br><a href="#" onclick="deschideRuta('${s.lat}', '${s.lng}'); return false;" style="color: #043582; font-weight: bold; text-decoration: underline;">📍 Vezi ruta pe hartă</a>`;
+                L.marker([lat, lng]).addTo(window.shelterMap)
+                    .bindPopup(popupContent).openPopup();
+                }
+            }
         })
         .catch(error => console.error('Eroare:', error));
        
@@ -141,6 +175,40 @@ function incarcaDetaliiEveniment() {
                  badge.className= 'badge bg-orange';
             else 
                 badge.className= 'badge bg-teal';
+
+            // --- GĂSEȘTE BUTONUL DE RUTĂ DIN PAGINĂ ȘI ATAȘEAZĂ COORDONATELE ---
+            const butoaneRuta = document.querySelectorAll('a, button, [class*="btn"]');
+            butoaneRuta.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes('ruta') || btn.textContent.toLowerCase().includes('rută')) {
+                    btn.removeAttribute('onclick'); // ștergem un posibil onclick gol din HTML
+                    btn.onclick = function(evt) {
+                        evt.preventDefault();
+                        deschideRuta(e.latitudine, e.longitudine);
+                    };
+                }
+            });
+
+            // --- HARTĂ INTERACTIVĂ ---
+            const mapContainer = document.getElementById('event-map');
+            if (mapContainer && e.latitudine && e.longitudine) {
+                const lat = parseFloat(e.latitudine);
+                const lng = parseFloat(e.longitudine);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    if (window.eventMap !== undefined) {
+                        window.eventMap.remove();
+                    }
+                    
+                    window.eventMap = L.map('event-map').setView([lat, lng], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(window.eventMap);
+                    
+                const popupContent = `<b>${e.titlu}</b><br>${e.localitate}<br><br><a href="#" onclick="deschideRuta('${e.latitudine}', '${e.longitudine}'); return false;" style="color: #043582; font-weight: bold; text-decoration: underline;">📍 Vezi ruta</a>`;
+                L.marker([lat, lng]).addTo(window.eventMap)
+                    .bindPopup(popupContent).openPopup();
+                }
+            }
           }
          );
     
@@ -287,4 +355,76 @@ function anuleazaAlerta(){
 function exportaAlerta() { 
     //navigheaza la endpoint, care va raspunde cu headers pt descarcare
     window.location.href= `index.php?route=api/alerts&action=export&id=${alertaCurentId}`;
+}
+
+// ____________________ RUTE SI HARTA _________________________
+
+// Variabilă globală pentru a ține minte ruta curentă desenată pe hartă
+let rutaDesenata = null;
+
+function deschideRuta(lat, lng) {
+    if (!lat || !lng || lat === 'null' || lng === 'null' || lat === 'undefined' || lat === '') {
+        alert('Coordonatele GPS lipsesc pentru acest element!');
+        return;
+    }
+
+    const curatLat = parseFloat(String(lat).replace(',', '.').trim());
+    const curatLng = parseFloat(String(lng).replace(',', '.').trim());
+
+    // Determinăm ce hartă este afișată în pagină (Adăpost sau Eveniment)
+    let activeMap = null;
+    if (window.shelterMap) activeMap = window.shelterMap;
+    else if (window.eventMap) activeMap = window.eventMap;
+
+    if (!activeMap) {
+        // Fallback la Google Maps dacă harta interactivă nu există în pagină
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${curatLat},${curatLng}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+    }
+
+    // Preluăm locația utilizatorului prin browser (GPS)
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                
+                // Ștergem ruta anterioară dacă s-a dat click de mai multe ori
+                if (rutaDesenata) activeMap.removeLayer(rutaDesenata);
+
+                // API Gratuit OSRM pt rute auto (Atenție: coordonatele se trimit sub format LNG, LAT)
+                const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${userLng},${userLat};${curatLng},${curatLat}?overview=full&geometries=geojson`;
+
+                fetch(osrmUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) {
+                            alert("Nu s-a putut genera ruta pe hartă.");
+                            return;
+                        }
+                        
+                        // Desenăm linia rutei pe hartă
+                        rutaDesenata = L.geoJSON(data.routes[0].geometry, {
+                            style: { color: '#043582', weight: 6, opacity: 0.8 }
+                        }).addTo(activeMap);
+
+                        // Adăugăm un marker pentru punctul de start
+                        L.marker([userLat, userLng]).addTo(activeMap).bindPopup("📍 Locația ta curentă").openPopup();
+
+                        // Ajustăm nivelul de zoom pentru a cuprinde tot traseul
+                        activeMap.fitBounds(rutaDesenata.getBounds(), { padding: [30, 30] });
+                    })
+                    .catch(err => console.error("Eroare la generarea rutei:", err));
+            },
+            function(error) {
+                // Dacă nu s-a oferit accesul la GPS
+                alert("Trebuie să acorzi accesul la locație! Te redirecționăm spre Google Maps ca alternativă...");
+                const url = `https://www.google.com/maps/dir/?api=1&destination=${curatLat},${curatLng}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        );
+    } else {
+        alert("Browser-ul tău nu suportă geolocația.");
+    }
 }

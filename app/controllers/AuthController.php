@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../models/UserModel.php';
 
 class AuthController{
-    private $pdo;
+     private $model;
 
     public function __construct() {
         global $pdo;
