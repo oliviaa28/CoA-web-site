@@ -82,8 +82,6 @@ AuthController::requireAuth();
 
                     <div class="detail-panel">
                         <h3>Ruta de evacuare</h3>
-                        <p>Punct de plecare: Piata Unirii, Iasi</p>
-                        <p>Ruta: Bd. Stefan cel Mare, evitand zonele cu cladiri inalte</p>
                         <a href="#" class="btn-link"> Vezi ruta pe harta </a>
                     </div>
 
