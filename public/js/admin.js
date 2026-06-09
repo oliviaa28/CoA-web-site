@@ -201,7 +201,7 @@ function construiesteRandEveniment(ev){
             <td>${curata(ev.location)}</td>
             <td>${curata(ev.date)}</td>
              <td class="actions">
-                <a href="#" onclick="deschideRuta('${ev.lat}', '${ev.lng}'); return false;">Vezi ruta</a>
+                <a href="#" onclick="deschideRuta('${ev.lat}', '${ev.lng}'); return false;">Ruta (Maps)</a>
                 <a href="index.php?route=event-details&id=${ev.id}&type=${ev.type}"> Detalii</a>
                 <a href="#" onclick="editeaza(${ev.id}, '${ev.type}'); return false;"> Editeaza</a>
                 <a href="#" class="delete" onclick="sterge(${ev.id}, '${ev.type}'); return false;"> Sterge</a>
@@ -317,7 +317,6 @@ function construiesteRandAdapost( ad ){
                <span class="badge ${badgeClass}">${statusText} </span>
             </td>
             <td class="actions">
-                <a href="#" onclick="deschideRuta('${ad.lat}', '${ad.lng}'); return false;">Vezi ruta</a>
                 <a href="index.php?route=shelter-details&id=${ad.id}"> Detalii</a>
             </td>
         </tr>
