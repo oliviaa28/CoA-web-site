@@ -21,7 +21,7 @@
         <section>
             <h2>Video prezentare</h2>
             <p><a href="raport/raport.html" target="_blank">Video partea 1 </a></p>
-             <p><a href="raport/raport.html" target="_blank">Video partea 2 </a></p>
+             <p><a href="raport/2026-06-09 14-36-46.mkv" target="_blank">Video partea 2 </a></p>
         </section>
 
         <p><a href="index.php?route=dashboard"> Înapoi la Dashboard</a></p>
