@@ -201,6 +201,7 @@ function construiesteRandEveniment(ev){
             <td>${curata(ev.location)}</td>
             <td>${curata(ev.date)}</td>
              <td class="actions">
+                <a href="#" onclick="deschideRuta('${ev.lat}', '${ev.lng}'); return false;">Vezi ruta</a>
                 <a href="index.php?route=event-details&id=${ev.id}&type=${ev.type}"> Detalii</a>
                 <a href="#" onclick="editeaza(${ev.id}, '${ev.type}'); return false;"> Editeaza</a>
                 <a href="#" class="delete" onclick="sterge(${ev.id}, '${ev.type}'); return false;"> Sterge</a>
@@ -316,6 +317,7 @@ function construiesteRandAdapost( ad ){
                <span class="badge ${badgeClass}">${statusText} </span>
             </td>
             <td class="actions">
+                <a href="#" onclick="deschideRuta('${ad.lat}', '${ad.lng}'); return false;">Vezi ruta</a>
                 <a href="index.php?route=shelter-details&id=${ad.id}"> Detalii</a>
             </td>
         </tr>
@@ -681,4 +683,22 @@ function exportData(type, format){
     arataToast('Se descarcă fișierul...');
     //relativ la url ul paginii import-export.php din admin
     window.location.href= `index.php?route=api/import-export&action=export&type=${type}&format=${format}`;
+}
+
+// ____________________ RUTE SI HARTA _________________________
+
+function deschideRuta(lat, lng) {
+    // 1. Verificăm dacă sunt prezente coordonatele
+    if (!lat || !lng || lat === 'null' || lng === 'null' || lat === 'undefined' || lat === '') {
+        arataToast('Coordonatele GPS lipsesc pentru acest element!', 'error');
+        return;
+    }
+
+    // 2. Înlocuim posibilele virgule (,) cu punct (.) pentru a nu da eroare la Google Maps
+    const curatLat = String(lat).replace(',', '.').trim();
+    const curatLng = String(lng).replace(',', '.').trim();
+
+    // 3. Deschidem tab-ul cu ruta exactă din Google Maps
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${curatLat},${curatLng}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
 }
