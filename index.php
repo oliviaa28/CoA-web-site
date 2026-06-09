@@ -13,7 +13,6 @@ $apiRoutes = [
     'api/login'         => 'AuthController',
     'api/logout'        => 'AuthController',
     'api/location'      => 'LocationController',
-
 ];
  
 

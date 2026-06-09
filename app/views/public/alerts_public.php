@@ -13,6 +13,13 @@
     include __DIR__ . '/../layouts/header.php';
     ?>
 
+    <div class="filters-bar">
+        <button class="filter-btn active" data-filter="all">Toate</button>
+        <button class="filter-btn" data-filter="extrem">Extrem</button>
+        <button class="filter-btn" data-filter="sever">Sever</button>
+        <button class="filter-btn" data-filter="moderat">Moderat</button>
+    </div>
+
     <div class="list-container" id="alerts-list"></div>
 
     <script>
@@ -31,11 +38,6 @@
                     var badgeClass = 'bg-teal', borderClass = 'border-teal';
                     if (sev === 'extrem') { badgeClass = 'bg-red';    borderClass = 'border-red'; }
                     else if (sev === 'sever') { badgeClass = 'bg-orange'; borderClass = 'border-orange'; }
-
-                    var eventLinkHTML = '';
-                    if (al.incidentid && al.type) {
-                        eventLinkHTML = `<div style="margin-top: 10px;"><a href="index.php?route=details-public&id=${al.incidentid}&type=${al.type}" class="btn-link" style="font-weight: 600;">Vezi evenimentul &rarr;</a></div>`;
-                    }
 
                     list.innerHTML += `
                         <div class="card ${borderClass}" data-severity="${sev}">
