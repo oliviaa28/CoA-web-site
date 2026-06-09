@@ -12,7 +12,6 @@ $apiRoutes = [
     'api/import-export' => 'ImportExportController',
     'api/login'         => 'AuthController',
     'api/logout'        => 'AuthController',
-    'api/location'      => 'LocationController',
 ];
  
 
@@ -24,7 +23,7 @@ $adminRoutes = [
  
 // Rute publice (fara autentificare)
 $publicRoutes = [
-    'login', 'events-public', 'shelter-public', 'details-public',
+    'login', 'events-public', 'shelter-public', 'alerts-public', 'details-public', 'documentation',
 ];
  
 // --- API ---

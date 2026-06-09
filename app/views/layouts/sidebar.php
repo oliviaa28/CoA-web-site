@@ -1,8 +1,8 @@
 <aside class="sidebar-layout">
     
-    <div class="logo">
+    <a href="index.php?route=documentation" class="logo">
       <strong>CoA Admin</strong> <span class="dot"></span>
-    </div>
+    </a>
 
     <nav>
             <ul class="sidebar-list">

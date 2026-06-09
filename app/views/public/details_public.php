@@ -47,22 +47,6 @@ if (!isset($is_included)) {
             </div>
         </div>
 
-        <!-- Carduri statistice -->
-        <div class="status-cards" style="margin-bottom: 2rem;">
-            <div class="status-card dark">
-                <span class="status-label"><?php echo $event['stat1_label']; ?></span>
-                <span class="status-number"><?php echo $event['stat1_val']; ?></span>
-            </div>
-            <div class="status-card dark">
-                <span class="status-label"><?php echo $event['stat2_label']; ?></span>
-                <span class="status-number"><?php echo $event['stat2_val']; ?></span>
-            </div>
-            <div class="status-card dark">
-                <span class="status-label"><?php echo $event['stat3_label']; ?></span>
-                <span class="status-number"><?php echo $event['stat3_val']; ?></span>
-            </div>
-        </div>
-
         <!-- Harta + paneluri detalii -->
         <div class="event-detail-body" style="flex-wrap: wrap;">
 
