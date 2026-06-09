@@ -57,11 +57,11 @@ function arataToast(mesaj, tip ='success'){
     if (!container) 
         return;
 
-    toast.textContent = mesaj;
-    toast.className= `toast toast-${tip}`; //pt stilizare
-    toast.style.display = 'block';
+    container.textContent = mesaj;
+    container.className= `toast toast-${tip}`; //pt stilizare
+    container.style.display = 'block';
 
-     setTimeout(() => toast.style.display = 'none', 3000); //on cat timp dispare
+     setTimeout(() => container.style.display = 'none', 3000); //on cat timp dispare
 }
 
 //_________________________________________ EVENIMENTE ______________________________________
@@ -96,7 +96,10 @@ function salveazaEveniment(){ //post sau put
         headers: {'Content-Type' : 'application/json'}, 
         body: JSON.stringify(date)
     })
-    .then(response =>response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+    })
     .then( data => {
            arataToast('Eveniment salvat!');
             if (editId !== null) {
@@ -141,7 +144,10 @@ function incarcaEvenimente(){
     let url = `index.php?route=api/events&type=${tip}&status=${status}&year=${year}`;
 
     fetch(url)     // cere lisat de la endpoint
-        .then(response => response.json() )
+        .then(response => {
+             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+           return response.json();
+       })
         .then(evenimente => { //construim html
             toateEvenimentele = evenimente; 
             tbody.innerHTML = '';
@@ -216,7 +222,10 @@ function sterge(id, type){
     fetch(`index.php?route=api/events&id=${id}&type=${type}`, { // in controller avem $id = $_GET['id']; , care ia paraemtrii din url 
         method: 'DELETE'
     })
-    .then(response => response.json() )
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+    })
     .then( data => {
         arataToast('Eveniment șters!');     
         const rand = document.getElementById(`ev-${type}-${id}`);
@@ -276,7 +285,10 @@ function incarcaAdaposturi(){
     if (!tbody) return;
 
     fetch('index.php?route=api/shelters')
-    .then(response => response.json())
+    .then(response => {
+    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+    return response.json();
+})
     .then(adaposturi => {
         toateAdaposturile = adaposturi;
         tbody.innerHTML = '';
@@ -329,7 +341,10 @@ function stergeAdapost(id){
     fetch(`index.php?route=api/shelters&id=${id}`, {
         method: 'DELETE'
     })
-    .then(response => response.json() )
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+    })
     .then( data => {
        arataToast('Adapost șters!');
         incarcaAdaposturi();
@@ -373,6 +388,7 @@ function salveazaAdapost(){
     .then( data => {
         editId = null;
         arataToast('Adapost salvat!');
+        closeModal('modal-shelter'); 
         incarcaAdaposturi();
     })
     .catch(error => {
@@ -453,6 +469,7 @@ function salveazaUser(){
         
         editId = null;
         arataToast('User salvat!');
+        closeModal('modal-user'); 
         incarcaUtilizatori();
     })
     .catch(error => {
@@ -470,6 +487,10 @@ function stergeUser(id){
     })
     .then(response => response.json() )
     .then( data => {
+        if (!data.success) {
+             arataToast(data.message || 'Eroare', 'error');
+            return;
+        }
         arataToast('User sters!');
         incarcaUtilizatori();
     })
@@ -512,7 +533,10 @@ function incarcaUtilizatori(){
     if(!tbody) return;
 
     fetch('index.php?route=api/users')
-    .then(response=>response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+    })
     .then( useri => {
            totiUserii = useri;
            tbody.innerHTML = '';
@@ -549,7 +573,10 @@ function incarcaAlerte(){
     if (!tbody) return;
 
     fetch('index.php?route=api/alerts')
-        .then(response => response.json())
+        .then(response => {
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                 return response.json();
+        })
         .then(alerte => {
             toateAlertele = alerte;
             tbody.innerHTML = '';
@@ -600,9 +627,13 @@ function salveazaAlerta(){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(date)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+    })
     .then(data => {
         arataToast('Alerta trimisa!');
+        closeModal('modal-cap');
         incarcaAlerte();
     })
     .catch(error =>{
@@ -617,7 +648,10 @@ function stergeAlerta(id){
     fetch(`index.php?route=api/alerts&id=${id}`, {
         method: 'DELETE'
     })
-    .then(response => response.json())
+    .then(response => {
+         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+         return response.json();
+    })
     .then(data => {
         arataToast('Alerta stearsa!');
         incarcaAlerte();
@@ -641,21 +675,30 @@ function incarcaStatistici() {
 
     //evenimente active 
     fetch('index.php?route=api/events&status=activ')
-     .then(response => response.json())
+     .then(response => {
+             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            return response.json();
+    })
      .then( evenimente =>{ 
          cardEvenimente.textContent = evenimente.length;} // length = nr de elemente din array
      );
 
      //alerte
     fetch('index.php?route=api/alerts')
-      .then(response => response.json())
+      .then(response => {
+         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+        })
        .then(alerte => {
             document.getElementById('stat-alerte').textContent = alerte.length;
         });
 
     //adaposturi disponibile 
     fetch('index.php?route=api/shelters')
-       .then(response => response.json())
+       .then(response => {
+             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+             return response.json();
+        })
        .then(adaposturi => {
            let nr=0;
            for( let a of adaposturi)
@@ -666,7 +709,10 @@ function incarcaStatistici() {
         });
 
     fetch('index.php?route=api/users')
-      .then(response => response.json())
+      .then(response => {
+             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        return response.json();
+        })
        .then(users => {
            document.getElementById('stat-utilizatori').textContent = users.length;
         });
