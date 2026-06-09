@@ -289,3 +289,55 @@
     border: 1px solid #0f766e;
 }
  
+@media (max-width: 768px) {
+
+    /* filtrul se pune pe coloana */
+    .filter-event-banner {
+        flex-direction: column;
+    }
+
+    .filter-event-field {
+        margin: 0.5% 0;
+    }
+
+    /* tabelul devine scrollabil orizontal */
+    .list-events {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* modalul ocupa tot ecranul pe mobil */
+    .modal-card {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    /* coordonatele se pun pe coloana */
+    .coords-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    /* event detail body se pune pe coloana */
+    .event-detail-body {
+        flex-direction: column;
+    }
+
+    .event-map {
+        min-height: 250px;
+    }
+
+    /* butoanele de actiune se pun pe coloana */
+    .event-detail-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    /* header eveniment se pune pe coloana */
+    .event-detail-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

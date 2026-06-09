@@ -137,3 +137,50 @@ input, select, textarea, button {
     text-decoration: none;
     color: #3107bc;
 }
+
+@media (max-width: 768px) {
+
+    /* sidebar se ascunde sau devine top bar */
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .sidebar-layout {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sidebar-list {
+        flex-direction: row;
+        border: none;
+        overflow-x: auto;
+    }
+
+    .sidebar-list li a {
+        padding: 0.5rem 1rem;
+        border-left: none;
+        border-bottom: 3px solid #BC2F2F;
+        white-space: nowrap;
+    }
+    
+    .sidebar-footer {
+        display: none;
+    }
+
+    /* status cards se pun pe coloana */
+    .status-cards {
+        flex-direction: column;
+    }
+
+    .status-card {
+        margin: 0.5% 1%;
+    }
+
+    /* continutul sa nu aiba padding mare */
+    .admin-content {
+        padding: 1rem;
+    }
+}

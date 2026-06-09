@@ -127,3 +127,14 @@
 .ie-upload-zone small {
     font-size: 0.8rem;
 }
+
+
+@media (max-width: 768px) {
+    .ie-layout {
+        flex-direction: column;
+    }
+
+    .ie-btns {
+        flex-wrap: wrap;
+    }
+}
