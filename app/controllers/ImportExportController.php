@@ -16,7 +16,7 @@ class ImportExportController{
         $this->alertModel = new AlertModel($pdo);
     }
 
-    public function handleRequest(){ //metoda apelata in api/importexport
+    public function handleApiRequest(){ //metoda apelata in api/importexport
 
          $action = $_GET['action'] ?? ''; //import sau export 
 
